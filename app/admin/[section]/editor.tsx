@@ -7,7 +7,6 @@ import { createClient } from '@/lib/supabase/client'
 import type { Education, Experience, Language, Project, Resume, Skill, Certificate } from '@/types/portfolio'
 
 const booleanFields = new Set(['featured', 'published', 'active', 'currently_working'])
-const numericFields = new Set(['proficiency', 'percentage', 'display_order'])
 const textAreaFields = new Set(['short_description', 'detailed_description', 'description', 'details', 'value'])
 const imageFields = new Set(['thumbnail', 'preview_image', 'image_url'])
 const pdfFields = new Set(['certificate_pdf', 'resume_pdf'])
@@ -47,9 +46,8 @@ export default function Editor({ table, columns, rows }: { table: string; column
   const uploadFile = async (field: string, file: File) => {
     const supabase = createClient()
     const bucket = bucketFor(field, table)
-    const extension = file.name.includes('.') ? file.name.split('.').pop() : 'bin'
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-').replace(/-+/g, '-')
-    const path = `${table}/${crypto.randomUUID()}-${safeName || `upload.${extension}`}`
+    const path = `${table}/${crypto.randomUUID()}-${safeName || 'upload'}`
     const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: false, contentType: file.type || undefined })
     if (error) throw new Error(`${field} upload failed: ${error.message}`)
     return path
