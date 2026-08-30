@@ -1,6 +1,8 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+const ADMIN_EMAIL = 'owaies786@gmail.com'
+
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request })
   const supabase = createServerClient(
@@ -26,7 +28,11 @@ export async function proxy(request: NextRequest) {
 
   if (isProtectedAdminRoute) {
     const { data } = await supabase.auth.getClaims()
-    if (!data?.claims) return NextResponse.redirect(new URL('/admin/login', request.url))
+    const email = typeof data?.claims?.email === 'string' ? data.claims.email.toLowerCase() : ''
+
+    if (!data?.claims || email !== ADMIN_EMAIL) {
+      return NextResponse.redirect(new URL('/admin/login', request.url))
+    }
   }
 
   return response
