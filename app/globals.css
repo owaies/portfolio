@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
+@import "tailwindcss";
 :root { --bg:#05070b; --panel:rgba(13,18,27,.72); --line:rgba(126,177,255,.16); --text:#f4f8ff; --muted:#91a0b8; --cyan:#47e9ff; --blue:#5f8cff; --purple:#a478ff; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
