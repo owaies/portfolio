@@ -28,6 +28,12 @@ async function requireAdmin(){
   return supabase
 }
 
+export async function logoutAdmin(){
+  const supabase=await createClient()
+  await supabase.auth.signOut()
+  redirect('/admin/login')
+}
+
 export async function saveRecord(formData: FormData){
   const table=String(formData.get('table')||'')
   if(!tables.has(table)) throw new Error('Unsupported table')
