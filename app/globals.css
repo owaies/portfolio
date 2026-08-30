@@ -74,3 +74,56 @@ input,textarea,select { color:var(--text); }
 
 @media (max-width: 900px) { .admin-sidebar { position:static; width:100%; height:auto; border-right:0; border-bottom:1px solid rgba(255,255,255,.08); } .admin-shell { display:block; } .admin-brand { height:60px; } .admin-nav { display:flex; overflow-x:auto; padding:10px; } .admin-nav-item { flex:0 0 auto; } .admin-sidebar-bottom { display:flex; gap:5px; margin:0; border-top:1px solid rgba(255,255,255,.06); } .admin-sidebar-bottom form { flex:1; } .admin-sidebar-bottom .admin-nav-item { justify-content:center; } .admin-main { width:100%; margin:0; } .admin-topbar { position:static; } }
 @media (max-width: 640px) { .container { width:min(100%, calc(100% - 24px)); } .admin-content { padding:24px 14px 50px; } .admin-stat-grid { grid-template-columns:1fr; } .admin-form { grid-template-columns:1fr; padding:18px; } .admin-modal-backdrop { padding:10px; } .admin-modal-header { padding:18px; } .admin-record-fields { grid-template-columns:1fr; padding-right:0; } .admin-record-actions { position:static; margin-top:14px; } .admin-toolbar { flex-direction:column; } .admin-search { width:100%; } .admin-add { width:100%; } }
+
+/* Responsive public portfolio: mobile-first navigation and hero */
+main.grid-bg > header { position:sticky; top:0; z-index:50; width:100%; }
+main.grid-bg > header > .container { min-width:0; }
+main.grid-bg > header nav a { white-space:nowrap; }
+
+@media (max-width: 1023px) {
+  main.grid-bg > header > .container { min-height:64px !important; flex-wrap:wrap !important; align-content:center; row-gap:.55rem; padding-top:.55rem; padding-bottom:.55rem; }
+  main.grid-bg > header nav.hidden { display:flex !important; order:3; width:100%; min-width:0; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; justify-content:flex-start; gap:1.25rem; padding:.2rem 0 .55rem; border-top:1px solid rgba(255,255,255,.045); }
+  main.grid-bg > header nav.hidden::-webkit-scrollbar { display:none; }
+  main.grid-bg > header nav a { font-size:.78rem; padding-top:.35rem; }
+  main.grid-bg > header > .container > div:last-child { margin-left:auto; }
+  main.grid-bg > section#home { min-height:calc(100svh - 96px) !important; align-items:flex-start !important; padding-top:clamp(3rem,8vw,5rem) !important; padding-bottom:clamp(4rem,9vw,6rem) !important; }
+  main.grid-bg > section#home > div.grid { grid-template-columns:1fr !important; gap:clamp(3.5rem,9vw,6rem) !important; align-items:start !important; }
+  main.grid-bg > section#home > div.grid > div:first-child { width:100%; min-width:0; }
+  main.grid-bg > section#home > div.grid > div:last-child { width:100%; justify-content:center !important; }
+  main.grid-bg > section#home h1 { font-size:clamp(3.15rem,10.5vw,6rem) !important; line-height:.88 !important; max-width:100%; overflow-wrap:normal; word-break:normal; }
+  main.grid-bg > section#home > div.grid > div:first-child > p:not(.mono) { max-width:44rem; }
+  main.grid-bg > section#home > div.grid > div:last-child .hero-image-ring { width:min(400px,72vw) !important; height:min(400px,72vw) !important; flex:0 0 auto; }
+  main.grid-bg > section#home > div.grid > div:last-child .hero-image { width:100% !important; height:100% !important; }
+}
+
+@media (max-width: 640px) {
+  .container { width:calc(100% - 24px); }
+  main.grid-bg > header > .container { gap:.6rem; }
+  main.grid-bg > header > .container > a:first-child { font-size:1.05rem; }
+  main.grid-bg > header > .container > div:last-child { gap:.35rem; }
+  main.grid-bg > header > .container > div:last-child a:first-child { display:none !important; }
+  main.grid-bg > header > .container > div:last-child a:last-child { padding:.55rem .9rem; font-size:.78rem; }
+  main.grid-bg > header nav.hidden { gap:1.05rem; }
+  main.grid-bg > header nav a { font-size:.72rem; }
+  main.grid-bg > section#home { min-height:auto !important; padding-top:2.7rem !important; padding-bottom:4.5rem !important; }
+  main.grid-bg > section#home > div.grid { gap:3.7rem !important; }
+  main.grid-bg > section#home > div.grid > div:first-child > p.mono { margin-bottom:1.15rem !important; font-size:.72rem !important; letter-spacing:.055em !important; }
+  main.grid-bg > section#home h1 { font-size:clamp(2.75rem,12.7vw,4.35rem) !important; letter-spacing:-.055em !important; line-height:.9 !important; }
+  main.grid-bg > section#home .mono.mt-7 { margin-top:1.35rem !important; font-size:1rem !important; }
+  main.grid-bg > section#home > div.grid > div:first-child > p:not(.mono) { margin-top:1.15rem !important; font-size:.98rem !important; line-height:1.7 !important; }
+  main.grid-bg > section#home > div.grid > div:first-child > div.grid { width:100%; max-width:none; gap:.7rem; margin-top:1.45rem !important; }
+  main.grid-bg > section#home > div.grid > div:first-child > div.grid a { min-height:3.25rem; padding:.75rem .8rem; font-size:.9rem; }
+  main.grid-bg > section#home > div.grid > div:first-child > div.flex { margin-top:1.5rem !important; font-size:.85rem; }
+  main.grid-bg > section#home > div.grid > div:first-child > div.grid:last-child { margin-top:2.25rem !important; gap:.8rem; padding-top:1.15rem; }
+  main.grid-bg > section#home > div.grid > div:first-child > div.grid:last-child > div { min-width:0; }
+  main.grid-bg > section#home > div.grid > div:first-child > div.grid:last-child > div:first-child { border-left:0 !important; padding-left:0 !important; }
+  main.grid-bg > section#home > div.grid > div:first-child > div.grid:last-child > div span:first-child { font-size:1.7rem; }
+  main.grid-bg > section#home > div.grid > div:first-child > div.grid:last-child > div span:last-child { font-size:.56rem; line-height:1.3; display:block; max-width:6rem; }
+  main.grid-bg > section#home > div.grid > div:last-child .hero-image-ring { width:min(285px,70vw) !important; height:min(285px,70vw) !important; padding:6px; }
+  main.grid-bg > section#home > div.grid > div:last-child .hero-image-ring::before { inset:-12px; }
+  main.grid-bg > section#home > div.grid > div:last-child .hero-image-ring::after { inset:-20px; }
+  .glow-orb { width:280px; height:280px; filter:blur(55px); }
+}
+
+@media (min-width: 1024px) { main.grid-bg > header nav { display:flex; } }
+@media (min-width: 1280px) { main.grid-bg > section#home { padding-top:5rem; padding-bottom:5rem; } }
