@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { Eye, EyeOff } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
+const ADMIN_EMAIL = 'owaies786@gmail.com'
+
 export default function AdminLogin() {
   const router = useRouter()
   const [email, setEmail] = useState('')
@@ -12,14 +14,23 @@ export default function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [resetLoading, setResetLoading] = useState(false)
+  const [resetMessage, setResetMessage] = useState('')
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError('')
+    setResetMessage('')
+
+    if (email.trim().toLowerCase() !== ADMIN_EMAIL) {
+      setError('This admin account is restricted to the configured administrator email.')
+      setLoading(false)
+      return
+    }
 
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error } = await supabase.auth.signInWithPassword({ email: ADMIN_EMAIL, password })
 
     if (error) {
       setError(error.message)
@@ -28,6 +39,25 @@ export default function AdminLogin() {
     }
 
     router.push('/admin')
+  }
+
+  async function resetPassword() {
+    setError('')
+    setResetMessage('')
+    setResetLoading(true)
+
+    const supabase = createClient()
+    const { error } = await supabase.auth.resetPasswordForEmail(ADMIN_EMAIL, {
+      redirectTo: `${window.location.origin}/auth/reset-password`,
+    })
+
+    if (error) {
+      setError(error.message)
+    } else {
+      setResetMessage(`A password reset email has been sent to ${ADMIN_EMAIL}.`)
+    }
+
+    setResetLoading(false)
   }
 
   return (
@@ -72,8 +102,17 @@ export default function AdminLogin() {
         </label>
 
         {error && <p className="mt-4 rounded-xl border border-red-300/20 bg-red-300/5 p-3 text-sm text-red-300">{error}</p>}
+        {resetMessage && <p className="mt-4 rounded-xl border border-cyan-300/20 bg-cyan-300/5 p-3 text-sm text-cyan-200">{resetMessage}</p>}
         <button disabled={loading} className="mt-5 w-full rounded-xl bg-white p-3 font-semibold text-black">
           {loading ? 'Signing in…' : 'Sign in'}
+        </button>
+        <button
+          type="button"
+          onClick={resetPassword}
+          disabled={resetLoading}
+          className="mt-3 w-full rounded-xl border border-white/10 p-3 text-slate-300 transition hover:border-cyan-300/40 hover:text-white disabled:opacity-60"
+        >
+          {resetLoading ? 'Sending reset email…' : 'Forgot password?'}
         </button>
       </form>
     </main>
