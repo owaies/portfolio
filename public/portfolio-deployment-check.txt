@@ -1,0 +1,1 @@
+Git-connected deployment trigger for the Mohammed Owaies portfolio. The application entry point remains app/page.tsx.
