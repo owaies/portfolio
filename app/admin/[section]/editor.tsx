@@ -50,7 +50,7 @@ export default function Editor({ table, columns, rows }: { table: string; column
     const path = `${table}/${crypto.randomUUID()}-${safeName || 'upload'}`
     const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: false, contentType: file.type || undefined })
     if (error) throw new Error(`${field} upload failed: ${error.message}`)
-    return path
+    return { path, publicUrl: supabase.storage.from(bucket).getPublicUrl(path).data.publicUrl }
   }
 
   const submit = async (formData: FormData) => {
@@ -60,8 +60,8 @@ export default function Editor({ table, columns, rows }: { table: string; column
       for (const field of [...imageFields, ...pdfFields]) {
         const file = files[field]
         if (file) {
-          const path = await uploadFile(field, file)
-          formData.set(field, path)
+          const uploaded = await uploadFile(field, file)
+          formData.set(field, imageFields.has(field) ? uploaded.publicUrl : uploaded.path)
         }
       }
       await saveRecord(formData)
