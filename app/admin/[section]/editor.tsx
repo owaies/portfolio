@@ -53,7 +53,18 @@ export default function Editor({ table, columns, rows }: { table: string; column
       </form>
     </div>}
     <div className="space-y-3">
-      {rows.map(row => <div key={row.id ?? row.key} className="glass rounded-2xl p-4"><div className="flex flex-wrap items-start justify-between gap-4"><div className="grid min-w-0 flex-1 gap-2 sm:grid-cols-2">{columns.filter(c => c !== 'id').map(c => <div key={c}><div className="mono text-[10px] uppercase tracking-wider text-slate-500">{c}</div><div className="truncate text-sm text-slate-200">{typeof row[c as keyof EditableRecord] === 'boolean' ? String(row[c as keyof EditableRecord]) : Array.isArray(row[c as keyof EditableRecord]) ? row[c as keyof EditableRecord]?.join(', ') : String(row[c as keyof EditableRecord] ?? '')}</div></div>)}</div><div className="flex shrink-0 gap-2"><button onClick={() => setEditing(row)} className="glass rounded-lg px-3 py-2 text-sm">Edit</button>{row.id && <button onClick={() => remove(row.id!)} className="rounded-lg border border-red-300/20 px-3 py-2 text-sm text-red-300">Delete</button>}</div></div></div>)}
+      {rows.map(row => {
+        const value = row
+        return <div key={value.id ?? value.key} className="glass rounded-2xl p-4"><div className="flex flex-wrap items-start justify-between gap-4"><div className="grid min-w-0 flex-1 gap-2 sm:grid-cols-2">{columns.filter(c => c !== 'id').map(c => {
+          const cellValue = value[c as keyof EditableRecord]
+          const renderedValue = typeof cellValue === 'boolean'
+            ? String(cellValue)
+            : Array.isArray(cellValue)
+              ? cellValue.join(', ')
+              : String(cellValue ?? '')
+          return <div key={c}><div className="mono text-[10px] uppercase tracking-wider text-slate-500">{c}</div><div className="truncate text-sm text-slate-200">{renderedValue}</div></div>
+        })}</div><div className="flex shrink-0 gap-2"><button onClick={() => setEditing(value)} className="glass rounded-lg px-3 py-2 text-sm">Edit</button>{value.id && <button onClick={() => remove(value.id!)} className="rounded-lg border border-red-300/20 px-3 py-2 text-sm text-red-300">Delete</button>}</div></div></div>
+      })}
       {rows.length === 0 && <div className="glass rounded-2xl p-10 text-center text-slate-500">No records yet. Create the first one above.</div>}
     </div>
   </div>
