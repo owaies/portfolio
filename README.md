@@ -1,29 +1,34 @@
 # Mohammed Owaies Portfolio
 
-Production-ready AI/ML engineer portfolio built with Next.js App Router, TypeScript, Tailwind CSS, Supabase Auth/Postgres/Storage, GitHub, and Vercel.
+AI/ML engineer portfolio built with Next.js App Router, TypeScript, Tailwind CSS, Supabase Auth/Postgres/Storage, GitHub, and Vercel.
 
 ## Stack
 - Next.js App Router + React + TypeScript
 - Tailwind CSS + Lucide React
 - Supabase SSR/Auth/Postgres/Storage
-- Vercel deployment
+- Vercel
 
 ## Local setup
-1. Create or activate a Supabase project.
-2. Run `supabase/migrations/20260830_portfolio.sql` in the Supabase SQL Editor.
-3. Create an admin Auth user and set that user's `profiles.role` to `admin`.
-4. Copy `.env.example` to `.env.local` and add the Supabase URL and publishable key.
-5. Install dependencies with `npm install`.
-6. Run `npm run dev`.
+1. Use the existing Supabase project: `tpqvmupdvxqloykqkpwj`.
+2. Apply `supabase/migrations/20260830_portfolio.sql` to the database. The live project also has a compatibility migration recorded as `portfolio_schema_20260830_compat`.
+3. Ensure the existing Supabase Auth user has a row in `public.profiles` with `role = admin`.
+4. Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+5. Run `npm install`.
+6. Run `npm run lint` and `npm run build`.
+7. Run `npm run dev`.
 
 ## Admin
-Open `/admin/login`. There is no public registration flow. Access is granted only to a Supabase Auth user whose public profile has `role = admin`.
+Open `/admin/login`. There is no public registration flow. An authenticated user must also have `public.profiles.role = 'admin'` for CMS mutations.
 
 ## Storage
-The migration creates: `portfolio-images`, `project-images`, `certificates`, `resumes`, and `gallery`. Public image buckets can be used for portfolio/project/gallery visuals; resume and certificate files are private.
+The existing portfolio schema uses these buckets: `portfolio-images`, `project-images`, `certificates`, `resumes`, and `gallery`. Resume and certificate buckets are private; portfolio/project/gallery image buckets are public.
+
+## Environment variables
+Only public Supabase connection values belong in the browser:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+
+Never commit `.env`, service-role keys, or other secrets.
 
 ## Vercel
-Import `owaies/portfolio` into Vercel and configure the same environment variables for Production/Preview. No paid Vercel service is required by the app.
-
-## Supabase security
-The app uses server/client SSR utilities and Row Level Security. The browser never receives a service-role or secret key. Public visitors can read only public/active content and submit contact messages; only admins can read contact messages or manage portfolio content.
+Deploy the same repository source to Vercel with the Next.js framework. Configure the two public Supabase environment variables for Production and Preview. The app is designed for the free/hobby-compatible architecture and does not require paid services.
