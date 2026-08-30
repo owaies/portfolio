@@ -18,11 +18,17 @@ export async function proxy(request: NextRequest) {
       },
     }
   )
+
   await supabase.auth.getClaims()
-  if (request.nextUrl.pathname.startsWith('/admin')) {
+
+  const pathname = request.nextUrl.pathname
+  const isProtectedAdminRoute = pathname.startsWith('/admin') && pathname !== '/admin/login'
+
+  if (isProtectedAdminRoute) {
     const { data } = await supabase.auth.getClaims()
     if (!data?.claims) return NextResponse.redirect(new URL('/admin/login', request.url))
   }
+
   return response
 }
 
