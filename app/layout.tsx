@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import './admin-overrides.css'
 import { PROFILE_IMAGE_DATA_URL } from '@/lib/profile-image'
 
 export const metadata: Metadata = {
