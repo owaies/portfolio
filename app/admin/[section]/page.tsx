@@ -5,7 +5,7 @@ import Editor from './editor'
 import AdminSidebar from '../admin-sidebar'
 
 const configs: Record<string,{table:string;title:string;columns:string[]}> = {
-  projects:{table:'projects',title:'Projects',columns:['title','slug','short_description','detailed_description','technologies','category','github_url','live_demo_url','featured','display_order','published']},
+  projects:{table:'projects',title:'Projects',columns:['title','slug','short_description','detailed_description','technologies','category','thumbnail','github_url','live_demo_url','featured','display_order','published']},
   skills:{table:'skills',title:'Skills',columns:['name','proficiency','category','accent_color','icon','display_order','active']},
   languages:{table:'languages',title:'Languages',columns:['name','proficiency_level','percentage','accent_color','display_order','active']},
   experience:{table:'experience',title:'Experience',columns:['company','role','period','description','technologies','location','currently_working','display_order','active']},
@@ -23,8 +23,11 @@ export default async function AdminSection({params}:{params:Promise<{section:str
   const supabase=await createClient()
   const {data:claims}=await supabase.auth.getClaims()
   if(!claims?.claims)redirect('/admin/login')
-  const order=cfg.table==='site_content'?'key':'display_order'
-  const {data,error}=await supabase.from(cfg.table).select('*').order(order,{ascending:true}).limit(100)
+  const order = cfg.table === 'site_content' ? 'key' : cfg.table === 'resumes' ? 'updated_at' : 'display_order'
+  const query = supabase.from(cfg.table).select('*')
+  const {data,error} = cfg.table === 'resumes'
+    ? await query.order(order,{ascending:false}).limit(100)
+    : await query.order(order,{ascending:true}).limit(100)
   const rows=data??[]
   return <main className="admin-shell">
     <AdminSidebar />
