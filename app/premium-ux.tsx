@@ -173,7 +173,6 @@ export default function PremiumUX({ children }: { children: React.ReactNode }) {
       <div className="premium-scroll-progress" aria-hidden="true"><span style={{ transform: `scaleX(${progress / 100})` }} /></div>
       <div className="premium-copy-actions" aria-label="Quick copy actions">{copyButton('Email', EMAIL)}{copyButton('GitHub URL', GITHUB)}</div>
       <button type="button" className={`premium-back-top ${showTop ? 'visible' : ''}`} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Back to top"><ArrowUp size={18} /></button>
-      <nav className="premium-bottom-nav" aria-label="Mobile section navigation">{['home','about','skills','projects','education','contact'].map(id => <a key={id} href={`#${id}`}>{id === 'home' ? 'Home' : id[0].toUpperCase() + id.slice(1)}</a>)}</nav>
       {toasts.length > 0 && <div className="premium-toasts" aria-live="polite">{toasts.map(item => <div key={item.id} className={`premium-toast ${item.kind}`}><span>{item.kind === 'success' ? '✓' : item.kind === 'error' ? '!' : 'i'}</span>{item.message}</div>)}</div>}
       {lightbox && <div className="premium-lightbox-backdrop" role="presentation" onMouseDown={event => { if (event.target === event.currentTarget) setLightbox(null) }}>
         <div className="premium-lightbox" role="dialog" aria-modal="true" aria-label={lightbox.alt || 'Project image'}>
