@@ -15,6 +15,11 @@ export interface Project {
   featured: boolean
   display_order: number
   published: boolean
+  tag: string
+  deployment_type: 'deployed' | 'local'
+  tag_color: 'green' | 'blue' | 'yellow' | null
+  icon: 'Eye' | 'Layers' | 'Monitor' | 'HelpCircle' | 'Scissors' | 'Code' | 'Cpu' | 'Boxes' | 'Database' | null
+  accent_color: string
   created_at: string
   updated_at: string
 }
