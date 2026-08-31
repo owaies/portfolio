@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Menu, X, MessageCircle, Mail } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const links = [
   ['about', 'About'],
@@ -14,12 +15,19 @@ const links = [
 ]
 
 export default function SiteNav() {
+  const pathname = usePathname()
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [open])
+
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
+
+  if (pathname.startsWith('/admin')) return null
 
   const close = () => setOpen(false)
 
