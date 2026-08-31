@@ -52,7 +52,6 @@
   .admin-modal { width:100%; max-height:calc(100svh - 20px); border-radius:16px; }
   .admin-modal-header { padding:16px; }
   .admin-form { gap:14px; }
-  .admin-field.sm\\:col-span-2 { grid-column:1 / -1; }
   .project-editor-modal { width:calc(100vw - 28px); max-height:calc(100svh - 28px); border-radius:24px; }
   .project-editor-header { padding:22px 20px 18px; }
   .project-editor-header h3 { font-size:25px; }
