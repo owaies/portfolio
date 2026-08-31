@@ -15,8 +15,13 @@ type Props = {
 
 export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props) {
   const [files, setFiles] = useState<FileMap>({})
-  const value = (key: string) => editing[key]
+  const value = (key: string): unknown => editing[key]
   const setFile = (key: string, file: File | null) => setFiles(prev => ({ ...prev, [key]: file }))
+
+  const booleanValue = (key: string, fallback: boolean) => {
+    const current = value(key)
+    return typeof current === 'boolean' ? current : fallback
+  }
 
   return (
     <div className="admin-modal-backdrop" role="presentation">
@@ -34,7 +39,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
           <label className="project-field"><span>Slug</span><input name="slug" defaultValue={String(value('slug') ?? '')} /></label>
           <label className="project-field"><span>Short Description</span><textarea name="short_description" defaultValue={String(value('short_description') ?? '')} rows={4} /></label>
           <label className="project-field"><span>Detailed Description</span><textarea name="detailed_description" defaultValue={String(value('detailed_description') ?? '')} rows={5} /></label>
-          <label className="project-field"><span>Technologies</span><input name="technologies" defaultValue={Array.isArray(value('technologies')) ? (value('technologies') as string[]).join(', ') : String(value('technologies') ?? '')} placeholder="Python, OpenCV, Supabase" /></label>
+          <label className="project-field"><span>Technologies</span><input name="technologies" defaultValue={Array.isArray(value('technologies')) ? value('technologies').map(String).join(', ') : String(value('technologies') ?? '')} placeholder="Python, OpenCV, Supabase" /></label>
           <label className="project-field"><span>Category</span><input name="category" defaultValue={String(value('category') ?? '')} /></label>
 
           <label className="project-field"><span>Thumbnail</span>
@@ -44,9 +49,9 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
 
           <label className="project-field"><span>Github Url</span><input name="github_url" type="url" defaultValue={String(value('github_url') ?? '')} /></label>
           <label className="project-field"><span>Live Demo Url</span><input name="live_demo_url" type="url" defaultValue={String(value('live_demo_url') ?? '')} /></label>
-          <label className="project-check"><input type="checkbox" name="featured" value="true" defaultChecked={value('featured') === true}/><span>featured</span></label>
+          <label className="project-check"><input type="checkbox" name="featured" value="true" defaultChecked={booleanValue('featured', false)}/><span>featured</span></label>
           <label className="project-field"><span>Display Order</span><input name="display_order" type="number" defaultValue={String(value('display_order') ?? 0)} /></label>
-          <label className="project-check"><input type="checkbox" name="published" value="true" defaultChecked={value('published') !== false}/><span>published</span></label>
+          <label className="project-check"><input type="checkbox" name="published" value="true" defaultChecked={booleanValue('published', true)}/><span>published</span></label>
 
           <div className="project-editor-actions"><button type="submit" disabled={busy} className="project-save"><Save size={19}/>{busy ? 'Saving…' : 'Save'}</button><button type="button" onClick={onClose} className="project-cancel">Cancel</button></div>
         </form>
