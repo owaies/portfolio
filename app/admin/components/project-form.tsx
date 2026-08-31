@@ -18,14 +18,13 @@ const DEPLOYMENT_TYPES: NonNullable<Project['deployment_type']>[] = ['deployed',
 const TAG_COLORS: NonNullable<Project['tag_color']>[] = ['green', 'blue', 'yellow']
 
 const isHexColor = (value: string) => /^#[0-9A-Fa-f]{6}$/.test(value)
-
 const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
 
 export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props) {
   const [title, setTitle] = useState(String(editing.title ?? ''))
   const [description, setDescription] = useState(String(editing.detailed_description ?? editing.short_description ?? ''))
   const [tag, setTag] = useState(String(editing.tag ?? 'Project'))
-  const [deploymentType, setDeploymentType] = useState<NonNullable<Project['deployment_type']>>(editing.deployment_type ?? 'local')
+  const [deploymentType, setDeploymentType] = useState<NonNullable<Project['deployment_type']> | ''>(editing.deployment_type ?? 'local')
   const [githubUrl, setGithubUrl] = useState(String(editing.github_url ?? ''))
   const [tagColor, setTagColor] = useState<Project['tag_color']>(editing.tag_color ?? null)
   const [icon, setIcon] = useState<Project['icon']>(editing.icon ?? null)
@@ -55,7 +54,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
         next.github_url = 'Enter a valid HTTP or HTTPS URL.'
       }
     }
-    if (!DEPLOYMENT_TYPES.includes(deploymentType)) next.deployment_type = 'Select deployed or local.'
+    if (!DEPLOYMENT_TYPES.includes(deploymentType as NonNullable<Project['deployment_type']>)) next.deployment_type = 'Select deployed or local.'
     if (tagColor !== null && !TAG_COLORS.includes(tagColor)) next.tag_color = 'Select green, blue, or yellow.'
     if (icon !== null && !ICONS.includes(icon)) next.icon = 'Select one of the supported icons.'
     if (!isHexColor(accentColor)) next.accent_color = 'Use a 6-digit hexadecimal color such as #00d4ff.'
@@ -96,13 +95,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
 
   return (
     <div className="admin-modal-backdrop project-modal-backdrop" role="presentation">
-      <div
-        className="project-editor-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="project-editor-title"
-        onClick={event => event.stopPropagation()}
-      >
+      <div className="project-editor-modal" role="dialog" aria-modal="true" aria-labelledby="project-editor-title" onClick={event => event.stopPropagation()}>
         <div className="project-editor-header">
           <h3 id="project-editor-title">{editing.id ? 'Edit Project' : 'Add New Projects'}</h3>
           <button type="button" onClick={onClose} className="admin-icon-button" aria-label="Close project editor" disabled={busy}>
@@ -132,9 +125,10 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
 
           <label className="project-field">
             <span>Deployment Type</span>
-            <select name="deployment_type" value={deploymentType} onChange={event => setDeploymentType(event.target.value as NonNullable<Project['deployment_type']>)}>
-              <option value="local">local</option>
+            <select name="deployment_type" value={deploymentType} onChange={event => setDeploymentType(event.target.value as NonNullable<Project['deployment_type']> | '')}>
+              <option value="">Select...</option>
               <option value="deployed">deployed</option>
+              <option value="local">local</option>
             </select>
             {fieldError('deployment_type') && <small className="project-field-error">{fieldError('deployment_type')}</small>}
           </label>
@@ -168,21 +162,8 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
           <label className="project-field">
             <span>Accent Color</span>
             <div className="project-color-row">
-              <input
-                className="project-color-picker"
-                type="color"
-                value={isHexColor(accentColor) ? accentColor : '#00d4ff'}
-                onChange={event => setAccentColor(event.target.value)}
-                aria-label="Choose accent color"
-              />
-              <input
-                className="project-color-text"
-                name="accent_color"
-                value={accentColor}
-                onChange={event => setAccentColor(event.target.value)}
-                placeholder="#00d4ff"
-                spellCheck={false}
-              />
+              <input className="project-color-picker" type="color" value={isHexColor(accentColor) ? accentColor : '#00d4ff'} onChange={event => setAccentColor(event.target.value)} aria-label="Choose accent color" />
+              <input className="project-color-text" name="accent_color" value={accentColor} onChange={event => setAccentColor(event.target.value)} placeholder="#00d4ff" spellCheck={false} />
             </div>
             {fieldError('accent_color') && <small className="project-field-error">{fieldError('accent_color')}</small>}
           </label>
@@ -202,10 +183,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
 
           <div className="project-editor-actions">
             <button type="button" onClick={onClose} className="project-cancel" disabled={busy}>Cancel</button>
-            <button type="submit" disabled={busy} className="project-save">
-              <Save size={19} />
-              {busy ? 'Saving…' : 'Save'}
-            </button>
+            <button type="submit" disabled={busy} className="project-save"><Save size={19} />{busy ? 'Saving…' : 'Save'}</button>
           </div>
         </form>
       </div>
