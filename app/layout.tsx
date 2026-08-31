@@ -1,29 +1,38 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import './admin-overrides.css'
-import { PROFILE_IMAGE_DATA_URL } from '@/lib/profile-image'
 import SiteNav from './site-nav'
+import PremiumUX from './premium-ux'
+
+const siteUrl = 'https://owaies-portfolio.vercel.app'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://owaies-portfolio.vercel.app'),
+  metadataBase: new URL(siteUrl),
   title: 'Mohammed Owaies | AI/ML Engineer',
   description: 'AI/ML Engineer portfolio of Mohammed Owaies, focused on machine learning, computer vision, algorithms, and real-world software systems.',
+  authors: [{ name: 'Mohammed Owaies' }],
+  creator: 'Mohammed Owaies',
+  keywords: ['Mohammed Owaies', 'AI/ML Engineer', 'Machine Learning', 'Computer Vision', 'Python', 'Portfolio'],
+  robots: { index: true, follow: true },
   icons: {
-    icon: PROFILE_IMAGE_DATA_URL,
-    shortcut: PROFILE_IMAGE_DATA_URL,
-    apple: PROFILE_IMAGE_DATA_URL,
+    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+    shortcut: ['/favicon.svg'],
+    apple: [{ url: '/apple-touch-icon.svg', type: 'image/svg+xml' }],
   },
   alternates: { canonical: '/' },
   openGraph: {
     title: 'Mohammed Owaies | AI/ML Engineer',
     description: 'Building intelligent, practical systems with AI/ML and software engineering.',
     type: 'website',
-    url: '/',
+    url: siteUrl,
+    siteName: 'Mohammed Owaies Portfolio',
+    images: [{ url: '/og-image.svg', width: 1200, height: 630, alt: 'Mohammed Owaies AI/ML Engineer portfolio' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Mohammed Owaies | AI/ML Engineer',
-    description: 'AI/ML Engineer portfolio.',
+    description: 'AI/ML Engineer portfolio focused on intelligent real-world systems.',
+    images: ['/og-image.svg'],
   },
 }
 
@@ -32,7 +41,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body>
         <SiteNav />
-        {children}
+        <PremiumUX>{children}</PremiumUX>
       </body>
     </html>
   )
