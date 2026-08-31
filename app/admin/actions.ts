@@ -123,6 +123,11 @@ export async function saveRecord(formData: FormData){
   if(id){
     const {error}=await supabase.from(table).update(payload).eq('id',id)
     if(error) throw new Error(error.message)
+  } else if(table==='site_content') {
+    // `key` is the primary key for site_content. Saving an existing key
+    // should update it instead of causing a duplicate-key 500 error.
+    const {error}=await supabase.from(table).upsert(payload,{onConflict:'key'})
+    if(error) throw new Error(error.message)
   } else {
     if(table==='projects'){
       payload.featured=false
