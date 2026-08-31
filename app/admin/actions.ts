@@ -23,41 +23,37 @@ const allowedFields: Record<string, string[]> = {
 }
 
 function slugify(value: string) {
-  return value
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
+  return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+}
+
+function validateUrl(value: unknown, label: string) {
+  if (!value) return
+  try {
+    const url = new URL(String(value))
+    if (!['http:', 'https:'].includes(url.protocol)) throw new Error()
+  } catch {
+    throw new Error(`${label} must be a valid HTTP or HTTPS URL.`)
+  }
 }
 
 function validateProjectPayload(payload: Record<string, unknown>) {
   if (typeof payload.title !== 'string' || !payload.title.trim()) throw new Error('Title is required.')
   if (typeof payload.detailed_description !== 'string' || !payload.detailed_description.trim()) throw new Error('Description is required.')
-
-  if (payload.github_url) {
-    try {
-      const url = new URL(String(payload.github_url))
-      if (!['http:', 'https:'].includes(url.protocol)) throw new Error()
-    } catch {
-      throw new Error('GitHub URL must be a valid HTTP or HTTPS URL.')
-    }
-  }
+  validateUrl(payload.github_url, 'GitHub URL')
 
   if (typeof payload.deployment_type !== 'string' || !projectDeploymentTypes.has(payload.deployment_type)) {
     throw new Error('Deployment Type must be deployed or local.')
   }
-  if (payload.tag_color && !projectTagColors.has(String(payload.tag_color))) {
-    throw new Error('Tag Color must be green, blue, or yellow.')
+  if (payload.deployment_type === 'deployed') {
+    if (typeof payload.live_demo_url !== 'string' || !payload.live_demo_url.trim()) throw new Error('Live / Deployed URL is required for deployed projects.')
+    validateUrl(payload.live_demo_url, 'Live / Deployed URL')
+  } else {
+    payload.live_demo_url = ''
   }
-  if (payload.icon && !projectIcons.has(String(payload.icon))) {
-    throw new Error('Icon is not supported.')
-  }
-  if (typeof payload.accent_color !== 'string' || !/^#[0-9A-Fa-f]{6}$/.test(payload.accent_color)) {
-    throw new Error('Accent Color must be a valid 6-digit hexadecimal color.')
-  }
-  if (typeof payload.display_order !== 'number' || !Number.isInteger(payload.display_order) || payload.display_order < 0) {
-    throw new Error('Display Order must be an integer greater than or equal to 0.')
-  }
+  if (payload.tag_color && !projectTagColors.has(String(payload.tag_color))) throw new Error('Tag Color must be green, blue, or yellow.')
+  if (payload.icon && !projectIcons.has(String(payload.icon))) throw new Error('Icon is not supported.')
+  if (typeof payload.accent_color !== 'string' || !/^#[0-9A-Fa-f]{6}$/.test(payload.accent_color)) throw new Error('Accent Color must be a valid 6-digit hexadecimal color.')
+  if (typeof payload.display_order !== 'number' || !Number.isInteger(payload.display_order) || payload.display_order < 0) throw new Error('Display Order must be an integer greater than or equal to 0.')
 }
 
 async function requireAdmin(){
@@ -110,6 +106,7 @@ export async function saveRecord(formData: FormData){
     payload.icon=String(payload.icon || '').trim() || null
     payload.accent_color=String(payload.accent_color || '#00d4ff').trim()
     payload.display_order=Number(payload.display_order ?? 0)
+    payload.live_demo_url=String(payload.live_demo_url ?? '').trim()
     validateProjectPayload(payload)
 
     const submittedSlug=String(payload.slug || '').trim()
