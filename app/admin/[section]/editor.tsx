@@ -64,25 +64,23 @@ export default function Editor({ table, columns, rows }: { table: string; column
       await saveRecord(formData)
       setMessage('Saved successfully. Refreshing…')
       window.location.reload()
-    } catch (e) { setMessage(e instanceof Error ? e.message : 'Unable to save.') }
-    finally { setBusy(false) }
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : 'Unable to save.')
+      throw e
+    } finally { setBusy(false) }
   }
 
-  const submitProject = async (formData: FormData, projectFiles: FileMap) => {
+  const submitProject = async (formData: FormData) => {
     setBusy(true); setMessage('')
     try {
-      const file = projectFiles.thumbnail
-      if (file) {
-        const uploaded = await uploadFile('thumbnail', file)
-        formData.set('thumbnail', uploaded.publicUrl)
-      } else if (editing?.thumbnail) {
-        formData.set('thumbnail', String(editing.thumbnail))
-      }
       await saveRecord(formData)
+      setEditing(null)
       setMessage('Project saved successfully. Refreshing…')
       window.location.reload()
-    } catch (e) { setMessage(e instanceof Error ? e.message : 'Unable to save project.') }
-    finally { setBusy(false) }
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : 'Unable to save project.')
+      throw e
+    } finally { setBusy(false) }
   }
 
   const remove = async (id: string) => {
