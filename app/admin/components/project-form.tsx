@@ -43,6 +43,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
       try { const url = new URL(githubUrl.trim()); if (!['http:', 'https:'].includes(url.protocol)) throw new Error() }
       catch { next.github_url = 'Enter a valid HTTP or HTTPS URL.' }
     }
+    if (!DEPLOYMENT_TYPES.includes(deploymentType as NonNullable<Project['deployment_type']>)) next.deployment_type = 'Select deployed or local.'
     if (deploymentType === 'deployed') {
       if (!liveDemoUrl.trim()) next.live_demo_url = 'Live / Deployed URL is required for deployed projects.'
       else {
@@ -50,7 +51,6 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
         catch { next.live_demo_url = 'Enter a valid HTTP or HTTPS URL.' }
       }
     }
-    if (!DEPLOYMENT_TYPES.includes(deploymentType as NonNullable<Project['deployment_type'])) next.deployment_type = 'Select deployed or local.'
     if (tagColor !== null && !TAG_COLORS.includes(tagColor)) next.tag_color = 'Select green, blue, or yellow.'
     if (icon !== null && !ICONS.includes(icon)) next.icon = 'Select one of the supported icons.'
     if (!isHexColor(accentColor)) next.accent_color = 'Use a 6-digit hexadecimal color such as #00d4ff.'
@@ -81,7 +81,6 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
         <h3 id="project-editor-title" className="text-[28px] font-bold text-white sm:text-[32px]">{editing.id ? 'Edit Project' : 'Add New Projects'}</h3>
         <button type="button" onClick={onClose} disabled={busy} className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-white/10 text-slate-400 transition hover:text-white" aria-label="Close project editor"><X size={27}/></button>
       </div>
-
       <form onSubmit={handleSubmit} noValidate className="min-h-0 overflow-y-auto overscroll-contain px-6 py-6 sm:px-8">
         <div className="space-y-7">
           <label className={labelClass}><span>Title</span><input className={fieldClass} name="title" value={title} onChange={e=>setTitle(e.target.value)} placeholder="Title" required autoFocus/>{fieldError('title')&&<small className="text-red-300">{fieldError('title')}</small>}</label>
