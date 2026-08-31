@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { X, Plus, Search, Upload, FileText, Image as ImageIcon, ExternalLink, Github, Trash2, Pencil } from 'lucide-react'
+import { X, Plus, Search, Upload, FileText, Image as ImageIcon, ExternalLink, Trash2, Pencil } from 'lucide-react'
 import { saveRecord, deleteRecord } from '../actions'
 import { createClient } from '@/lib/supabase/client'
 import ProjectForm from '../components/project-form'
@@ -114,7 +114,7 @@ export default function Editor({ table, columns, rows }: { table: string; column
           <p className="mt-2 max-w-3xl whitespace-pre-wrap text-sm leading-6 text-slate-400">{project.detailed_description || project.short_description || 'No description provided.'}</p>
           {technologies.length > 0 && <div className="mt-4 flex flex-wrap gap-2">{technologies.map(technology => <span key={technology} className="rounded-lg border border-white/10 bg-white/[.025] px-2.5 py-1 text-xs text-slate-300">{technology}</span>)}</div>}
           <div className="mt-5 flex flex-wrap gap-3 text-xs">
-            {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer" className="inline-flex min-w-0 max-w-full items-center gap-2 rounded-xl border border-white/10 bg-white/[.02] px-3 py-2 text-slate-300 hover:border-cyan-300/25 hover:text-white"><Github size={15}/><span className="truncate">{displayUrl(project.github_url)}</span><ExternalLink size={13}/></a>}
+            {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer" className="inline-flex min-w-0 max-w-full items-center gap-2 rounded-xl border border-white/10 bg-white/[.02] px-3 py-2 text-slate-300 hover:border-cyan-300/25 hover:text-white"><span className="truncate">GitHub · {displayUrl(project.github_url)}</span><ExternalLink size={13}/></a>}
             {deployed && project.live_demo_url && <a href={project.live_demo_url} target="_blank" rel="noreferrer" className="inline-flex min-w-0 max-w-full items-center gap-2 rounded-xl border border-cyan-300/15 bg-cyan-300/5 px-3 py-2 text-cyan-200 hover:border-cyan-300/30"><ExternalLink size={15}/><span className="truncate">{displayUrl(project.live_demo_url)}</span></a>}
           </div>
         </div>
