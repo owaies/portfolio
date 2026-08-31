@@ -25,6 +25,7 @@ export default function SiteNav() {
 
   return (
     <div className="lg:hidden">
+      <style>{`@media (max-width: 1023px) { main.grid-bg > header { display: none !important; } }`}</style>
       <header className="sticky top-0 z-50 border-b border-white/[.07] bg-black/65 backdrop-blur-2xl">
         <div className="container flex min-h-[70px] items-center justify-between gap-4">
           <Link href="#home" onClick={close} className="text-lg font-extrabold tracking-widest">
