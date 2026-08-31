@@ -8,7 +8,7 @@ import ProjectForm from '../components/project-form'
 import type { Project, Skill, Language, Experience, Education, Certificate, Resume } from '@/types/portfolio'
 
 type SiteContentRecord = { key: string; value: string }
-type EditableRecord = Partial<Project & Skill & Language & Experience & Education & Certificate & Resume & SiteContentRecord> & { id?: string }
+type EditableRecord = Partial<Project> & Partial<Skill> & Partial<Language> & Partial<Experience> & Partial<Education> & Partial<Certificate> & Partial<Resume> & Partial<SiteContentRecord> & { id?: string }
 type FileMap = Record<string, File | null>
 
 const booleanFields = new Set(['featured', 'published', 'active', 'currently_working'])
