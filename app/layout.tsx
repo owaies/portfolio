@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import './admin-overrides.css'
 import './premium-ux.css'
+import './premium-ux-motion.css'
 import SiteNav from './site-nav'
 import PremiumUX from './premium-ux'
 
