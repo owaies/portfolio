@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import './admin-overrides.css'
 import { PROFILE_IMAGE_DATA_URL } from '@/lib/profile-image'
+import SiteNav from './site-nav'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://owaies-portfolio.vercel.app'),
@@ -29,7 +30,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SiteNav />
+        {children}
+      </body>
     </html>
   )
 }
