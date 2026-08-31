@@ -1,6 +1,15 @@
-/* Keep the public navigation single-sourced through SiteNav. */
-main.grid-bg > header { display:none !important; }
+/* Public navigation is implemented only by SiteNav. */
 
 @media (max-width:1023px) {
-  main.grid-bg > header { display:none !important; }
+  /* Keep the mobile SiteNav attached to the viewport while the document scrolls. */
+  .site-nav-mobile {
+    position:sticky !important;
+    top:0 !important;
+    z-index:60 !important;
+  }
+
+  .site-nav-mobile-header {
+    position:relative !important;
+    top:auto !important;
+  }
 }
