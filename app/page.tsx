@@ -1,3 +1,4 @@
+import React from "react"
 import Image from "next/image"
 import { ArrowDown, ArrowUpRight, Award, BriefcaseBusiness, Code2, Download, ExternalLink, GraduationCap, Mail, MapPin, MessageCircle } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
