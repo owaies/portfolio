@@ -31,6 +31,18 @@ export const viewport: Viewport = {
   themeColor: '#0a0807',
 }
 
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Mohammed Owaies',
+  jobTitle: 'AI/ML Engineer',
+  url: siteUrl,
+  sameAs: [
+    'https://github.com/owaies',
+    'https://www.linkedin.com/in/mohammed-owaies-507b4a398',
+  ],
+}
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body><SiteNav /><PremiumUX>{children}</PremiumUX></body></html>
+  return <html lang="en"><body><SiteNav /><PremiumUX>{children}</PremiumUX><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} /></body></html>
 }
