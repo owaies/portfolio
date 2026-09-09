@@ -1,51 +1,76 @@
-# Mohammed Owaies Portfolio
+# Mohammed Owaies · AI/ML Engineer Portfolio
 
-AI/ML engineer portfolio built with Next.js App Router, TypeScript, Tailwind CSS, Supabase Auth/Postgres/Storage, GitHub, and Vercel.
+A cinematic, production-oriented portfolio built with Next.js, React, TypeScript, Tailwind CSS, Framer Motion, Supabase and Vercel.
+
+## Highlights
+- Cinematic single-page narrative: Hero → About → Skills → Projects → Experience → Education → Certifications → Languages → Resume → Contact.
+- Supabase-backed content for portfolio records, publishing, ordering and CMS administration.
+- Supabase Auth + server-enforced `profiles.role = 'admin'` authorization and RLS.
+- Supabase Storage support for portfolio media, certificates, resumes and gallery assets.
+- Framer Motion reveal/stagger system, lightweight canvas particles, cursor glow, orbital profile treatment and reduced-motion support.
+- Responsive mobile navigation, semantic sections, keyboard-friendly controls and strong metadata/structured data.
+- Graceful empty states when optional database content is unavailable.
 
 ## Stack
-- Next.js App Router + React + TypeScript
-- Tailwind CSS + Lucide React
-- Supabase SSR/Auth/Postgres/Storage
-- Vercel
+Next.js · React · TypeScript · Tailwind CSS · Framer Motion · Lucide React · Supabase PostgreSQL · Supabase Auth · Supabase Storage · Vercel
 
 ## Architecture
-- `app/` contains routes, pages, API handlers, shared UI, and global styling.
-- `app/projects/[slug]` renders individual public project pages.
-- `app/admin` contains the authenticated content-management interface.
-- `app/api` contains server-side API handlers for contact and resume access.
-- `lib/` contains shared infrastructure such as the Supabase server client.
-- `types/` contains shared portfolio data types.
-- `supabase/` contains database migrations used to reproduce the portfolio schema.
+`GitHub → Vercel → Next.js → Supabase (PostgreSQL/Auth/Storage)`
 
-## Local setup
-1. Use the existing Supabase project: `tpqvmupdvxqloykqkpwj`.
-2. Apply `supabase/migrations/20260830_portfolio.sql` to the database. The live project also has a compatibility migration recorded as `portfolio_schema_20260830_compat`.
-3. Ensure the existing Supabase Auth user has a row in `public.profiles` with `role = admin`.
-4. Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
-5. Run `npm install`.
-6. Run `npm run typecheck`, `npm run lint`, and `npm run build`.
-7. Run `npm run dev`.
+The public homepage reads published/active records from Supabase. The `/admin` area uses Supabase Auth and existing reusable CRUD/upload components. Service-role credentials are never intended for browser code.
 
-## Admin
-Open `/admin/login`. There is no public registration flow. An authenticated user must also have `public.profiles.role = 'admin'` for CMS mutations.
+## Local development
+1. Create a Supabase project.
+2. Run the SQL migrations in `supabase/migrations/` using the Supabase SQL editor or Supabase CLI.
+3. Create an admin user in Supabase Auth and give the corresponding `profiles` row the `admin` role.
+4. Copy `.env.example` to `.env.local` and fill in the values:
 
-## Storage
-The existing portfolio schema uses these buckets: `portfolio-images`, `project-images`, `certificates`, `resumes`, and `gallery`. Resume and certificate buckets are private; portfolio/project/gallery image buckets are public.
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
 
-## Environment variables
-Only public Supabase connection values belong in the browser:
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+5. Install and run:
 
-Never commit `.env`, service-role keys, or other secrets.
+```bash
+npm install
+npm run dev
+```
 
-## Vercel
-Deploy the same repository source to Vercel with the Next.js framework. Configure the two public Supabase environment variables for Production and Preview. The app is designed for the free/hobby-compatible architecture and does not require paid services.
+Open `http://localhost:3000` and `/admin`.
 
-## Quality checks
+## Supabase
+The initial migration creates/uses: `profiles`, `site_content`, `projects`, `skills`, `experience`, `education`, `certificates`, `languages`, `resumes`, `gallery` and `contact_messages`, with indexes, updated timestamps, RLS and admin policies. Storage buckets are configured for portfolio media.
 
-The repository's GitHub Actions quality workflow validates TypeScript, linting, and the production build for pushes and pull requests targeting `main`. Local validation should use the same commands before submitting a change.
+Keep the service-role key server-only. Public reads are limited to published/active content through RLS. Writes require an authenticated admin.
+
+## Admin CMS
+`/admin` provides the existing dashboard and CRUD flows for portfolio content, including project editing, skill levels, education, experience, certificates, languages, gallery, resume and site content. Upload validation and destructive-action confirmation should be used for important records.
+
+## Vercel deployment
+1. Push the repository to GitHub.
+2. Import `owaies/portfolio` into Vercel.
+3. Add the same Supabase environment variables in Vercel Project Settings.
+4. Deploy with the existing Next.js build command.
+
+Recommended checks before deployment:
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
+```
 
 ## Security
+- `.env`, `.env.local` and secret files must remain ignored.
+- Never expose `SUPABASE_SERVICE_ROLE_KEY` to client components.
+- Authorization is enforced by Supabase RLS rather than an email-only browser check.
+- Validate uploads and URLs at the admin boundary.
 
-See [SECURITY.md](./SECURITY.md) for vulnerability reporting and security expectations.
+## Screenshots
+Add production screenshots here after the Vercel deployment is verified.
+
+## License
+Personal portfolio project by Mohammed Owaies.
