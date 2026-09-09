@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import './admin-overrides.css'
 import './premium-ux.css'
@@ -22,6 +22,13 @@ export const metadata: Metadata = {
   alternates: { canonical: '/' },
   openGraph: { title: 'Mohammed Owaies | AI/ML Engineer', description: 'Building intelligent, practical systems with AI/ML and software engineering.', type: 'website', url: siteUrl, siteName: 'Mohammed Owaies Portfolio', images: [{ url: '/og-image.svg', width: 1200, height: 630, alt: 'Mohammed Owaies AI/ML Engineer portfolio' }] },
   twitter: { card: 'summary_large_image', title: 'Mohammed Owaies | AI/ML Engineer', description: 'AI/ML Engineer portfolio focused on intelligent real-world systems.', images: ['/og-image.svg'] },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  colorScheme: 'dark',
+  themeColor: '#031015',
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
