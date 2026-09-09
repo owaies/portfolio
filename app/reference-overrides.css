@@ -1,0 +1,34 @@
+/* Reference-video geometry and mobile composition */
+.target-site{background:#020305}
+.target-nav{height:54px;background:rgba(4,5,9,.88);border-bottom:1px solid rgba(255,255,255,.055)}
+.target-nav-inner{width:min(1180px,calc(100% - 70px))}
+.target-hero-inner,.target-section{width:min(1180px,calc(100% - 70px))}
+.target-hero-inner{padding-top:74px;padding-bottom:54px}
+.target-portrait-wrap{width:440px;height:440px;margin-bottom:72px}
+.target-portrait{width:410px;height:410px;box-shadow:0 0 28px rgba(0,222,255,.34),0 0 100px rgba(0,222,255,.09),inset 0 0 30px rgba(0,222,255,.12)}
+.target-ring-a{inset:-16px}.target-ring-b{inset:-34px}
+.target-open{right:-24px;bottom:22px;font-size:11px;padding:11px 16px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:rgba(9,12,18,.75);backdrop-filter:blur(10px)}
+.target-open span{width:8px;height:8px}
+.target-hero-copy{max-width:100%}.target-hero-copy h1{font-size:clamp(4.2rem,8vw,6.7rem)}.target-eyebrow{font-size:10px}.target-role{font-size:13px}.target-hero-description{font-size:13px;max-width:620px}.target-actions a{font-size:10px;min-height:31px}.target-stats{max-width:430px}.target-stats b{font-size:17px}
+.target-section{padding-top:112px}.target-section-heading{margin-bottom:40px}.target-section-heading h2{font-size:clamp(2.1rem,4vw,3.2rem)}
+.target-about-card-section{padding-top:0}.target-about-card{padding:24px 22px;border-radius:18px}.target-about-main>p{font-size:10px}.target-facts b{font-size:8px}
+.target-skill-groups{grid-template-columns:1fr 1fr;gap:14px}.target-skill-panel{padding:22px}.target-project-grid{gap:14px}.target-project-card{min-height:300px}.target-certificate-grid{grid-template-columns:repeat(2,1fr)}.target-language-grid{grid-template-columns:repeat(2,1fr)}
+.target-contact-grid{grid-template-columns:1fr 1fr;gap:24px}.target-contact-list{display:grid;gap:14px}.target-contact-card{min-height:92px;padding:18px}.target-contact-card b{font-size:11px}
+@media(max-width:700px){
+  .target-nav{height:58px}.target-nav-inner{width:calc(100% - 70px)}
+  .target-nav-links,.target-nav-actions a{display:none!important}.target-nav-actions{margin-left:auto}.target-menu-button{display:grid!important}
+  .target-mobile-menu{display:grid!important}
+  .target-hero{min-height:auto}.target-hero-inner{width:calc(100% - 70px);padding-top:105px;padding-bottom:72px;align-items:center}
+  .target-portrait-wrap{width:440px;height:440px;margin-bottom:72px;max-width:calc(100vw - 70px)}
+  .target-portrait{width:min(410px,calc(100vw - 100px));height:min(410px,calc(100vw - 100px))}
+  .target-open{right:-6px;bottom:12px;font-size:10px;padding:9px 13px}
+  .target-hero-copy{max-width:100%}.target-hero-copy h1{font-size:clamp(3.2rem,12vw,5rem);line-height:.9}.target-hero-description{font-size:13px;line-height:1.8}.target-actions{gap:7px}.target-actions a{font-size:9px;min-height:30px}.target-stats{gap:15px}
+  .target-section{width:calc(100% - 70px);padding-top:108px}.target-section-heading{margin-bottom:42px;text-align:center}.target-section-heading h2{font-size:clamp(2.05rem,9vw,3rem)}.target-section-subtitle{font-size:12px;line-height:1.65}
+  .target-about-card{grid-template-columns:34px 1fr;gap:11px;padding:18px 16px}.target-cgpa{display:none}.target-about-main>p{font-size:10px}.target-facts{gap:12px}.target-facts b{font-size:8px}
+  .target-skill-groups{grid-template-columns:1fr;gap:28px}.target-skill-panel{padding:24px 20px}.target-skill-panel h3{font-size:16px}.target-skill>div:first-child{font-size:12px}.target-skill>div:first-child b{font-size:10px}.target-progress{height:4px}
+  .target-tech-stack{padding-top:44px}.target-tech-stack>span{font-size:9px}.target-tech-stack b{font-size:8px}
+  .target-project-grid{grid-template-columns:1fr 1fr;gap:14px}.target-project-card{min-height:310px;padding:18px 16px}.target-project-card h3{font-size:14px}.target-project-card>p{font-size:8px}.target-project-tags span{font-size:6px}
+  .target-timeline{padding-left:82px}.target-timeline:before{left:53px}.target-education-icon{left:-67px}.target-education-card{padding:18px 14px}.target-education-card h3{font-size:12px}
+  .target-certificate-grid,.target-language-grid{grid-template-columns:1fr}.target-contact-grid{grid-template-columns:1fr}.target-contact-card{min-height:108px}.target-contact-card b{font-size:13px}
+}
+.target-menu-button{display:none;width:34px;height:34px;place-items:center;border:0;background:transparent;color:#eef5ff;cursor:pointer}.target-menu-button svg{width:25px;height:25px}.target-mobile-menu{display:none;position:absolute;top:58px;left:0;right:0;padding:14px 35px 18px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(4,5,9,.97);backdrop-filter:blur(18px);grid-template-columns:repeat(2,1fr);gap:6px;z-index:61}.target-mobile-menu a{padding:13px 12px;border:1px solid rgba(255,255,255,.07);border-radius:10px;color:#aeb6c5;font:500 10px 'JetBrains Mono';text-align:center}
