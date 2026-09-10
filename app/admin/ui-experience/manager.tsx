@@ -32,8 +32,7 @@ function ProfileImageManager({ initialImages }: { initialImages: Record<UIExperi
       if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`)
       const publicUrl = supabase.storage.from('portfolio-images').getPublicUrl(path).data.publicUrl
       const formData = new FormData(); formData.set('table', 'site_content'); formData.set('key', `profile_image_${id}`); formData.set('value', publicUrl)
-      const result = await saveRecord(formData)
-      if (!result?.ok) throw new Error(result?.error || 'Could not save the profile picture.')
+      await saveRecord(formData)
       setImages(prev => ({ ...prev, [id]: publicUrl }))
       setMessage(`${UI_EXPERIENCES[id].name} profile picture saved.`)
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Unable to save profile picture.') }
@@ -44,8 +43,7 @@ function ProfileImageManager({ initialImages }: { initialImages: Record<UIExperi
     setMessage(''); setUploading(id)
     try {
       const formData = new FormData(); formData.set('table', 'site_content'); formData.set('key', `profile_image_${id}`); formData.set('value', '')
-      const result = await saveRecord(formData)
-      if (!result?.ok) throw new Error(result?.error || 'Could not remove the profile picture.')
+      await saveRecord(formData)
       setImages(prev => ({ ...prev, [id]: '' })); setMessage(`${UI_EXPERIENCES[id].name} now uses the default profile picture.`)
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Unable to remove profile picture.') }
     finally { setUploading(null) }
@@ -59,7 +57,7 @@ function ProfileImageManager({ initialImages }: { initialImages: Record<UIExperi
     {message && <div className="ui-profile-message" role="status">{message}</div>}
     <div className="ui-profile-grid">
       {(Object.keys(UI_EXPERIENCES) as UIExperienceId[]).map(id => { const item = UI_EXPERIENCES[id], image = images[id], busy = uploading === id; return <article key={id} className={`ui-profile-card ui-profile-${id}`} style={{ display: 'block' }}>
-        <div className="ui-profile-preview" style={{ minHeight: '180px' }}>{image ? <img src={`${image}${image.includes('?') ? '&' : '?'}v=${Date.now()}`} alt={`${item.name} profile preview`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /> : <div className="ui-profile-empty"><ImageIcon size={26}/><span>Using default profile picture</span></div>}<div className="ui-profile-overlay"><span>{item.icon} {item.name}</span><small>{image ? 'CUSTOM PROFILE PICTURE' : 'DEFAULT PROFILE PICTURE'}</small></div></div>
+        <div className="ui-profile-preview" style={{ minHeight: '180px' }}>{image ? <img src={`${image}${image.includes('?') ? '&' : '?'}v=${encodeURIComponent(image.slice(-24))}`} alt={`${item.name} profile preview`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /> : <div className="ui-profile-empty"><ImageIcon size={26}/><span>Using default profile picture</span></div>}<div className="ui-profile-overlay"><span>{item.icon} {item.name}</span><small>{image ? 'CUSTOM PROFILE PICTURE' : 'DEFAULT PROFILE PICTURE'}</small></div></div>
         <div className="ui-profile-body"><div><h3>{item.name}</h3><p>{item.keywords.join(' · ')}</p></div><div className="ui-profile-controls">
           <label className="ui-profile-upload"><input type="file" accept="image/jpeg,image/png,image/webp,image/avif" disabled={busy} onChange={event => { const file = event.target.files?.[0]; if (file) void upload(id, file); event.currentTarget.value = '' }} /><Upload size={15}/><span>{busy ? 'Uploading…' : image ? 'Change profile picture' : 'Upload profile picture'}</span></label>
           {image && <button type="button" className="admin-secondary ui-profile-remove" disabled={busy} onClick={() => void remove(id)}><Trash2 size={14}/> Remove</button>}
