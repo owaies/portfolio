@@ -2,6 +2,7 @@
 
 import { useLayoutEffect } from 'react'
 import { isUIExperienceId, type UIExperienceId } from '@/lib/ui-experiences'
+import { createClient } from '@/lib/supabase/client'
 
 const CHROME = {
   'digital-architecture': { theme: '#f7faff', scheme: 'light' },
@@ -16,10 +17,6 @@ export default function UIExperienceRuntime({ active }: { active: UIExperienceId
     const isAdminRoute = window.location.pathname.startsWith('/admin')
     const params = new URLSearchParams(window.location.search)
     const preview = params.get('ui-preview')
-
-    // UI experiences belong to the public portfolio only. Never let the
-    // public theme leak into the admin control room, including during route
-    // transitions where the root layout stays mounted.
     const experience = !isAdminRoute && isUIExperienceId(preview) ? preview : !isAdminRoute ? active : null
 
     if (!experience) {
@@ -47,6 +44,29 @@ export default function UIExperienceRuntime({ active }: { active: UIExperienceId
     schemeMeta.setAttribute('name', 'color-scheme')
     schemeMeta.setAttribute('content', chrome.scheme)
     if (!schemeMeta.parentElement) document.head.appendChild(schemeMeta)
+
+    // The public page already renders the existing profile image on the server.
+    // Replace it only when an experience-specific image exists, so there is
+    // always a safe fallback and previews use the same per-experience asset.
+    let cancelled = false
+    const imageKey = `profile_image_${experience}`
+    const applyProfileImage = async () => {
+      try {
+        const supabase = createClient()
+        const { data } = await supabase.from('site_content').select('value').eq('key', imageKey).maybeSingle()
+        const url = data?.value?.trim()
+        if (!url || cancelled) return
+        const image = document.querySelector<HTMLImageElement>('.target-portrait img')
+        if (!image) return
+        if (image.currentSrc === url || image.src === url) return
+        image.src = url
+      } catch {
+        // Keep the server-rendered profile image if the optional override cannot load.
+      }
+    }
+    void applyProfileImage()
+
+    return () => { cancelled = true }
   }, [active])
 
   return null
