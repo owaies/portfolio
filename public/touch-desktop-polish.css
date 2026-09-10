@@ -1,0 +1,192 @@
+/* Android Chrome "Desktop site" polish.
+   This targets touch phones that expose a desktop-width CSS viewport.
+   Normal mobile (<=900px) is intentionally untouched. */
+@media (hover: none) and (pointer: coarse) and (min-width: 901px) and (max-width: 1200px) {
+  /* Navigation: readable at the phone's physical scale while retaining desktop navigation. */
+  .target-nav {
+    height: 58px !important;
+    border-radius: 0 0 18px 18px !important;
+  }
+
+  .target-nav-inner {
+    width: min(1120px, calc(100% - 34px)) !important;
+    gap: 18px !important;
+  }
+
+  .target-brand {
+    font-size: 15px !important;
+    min-width: 58px;
+  }
+
+  .target-nav-links {
+    gap: 4px !important;
+  }
+
+  .target-nav-links a {
+    padding: 10px 8px !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+    white-space: nowrap;
+  }
+
+  .target-nav-actions a.target-contact {
+    min-height: 34px !important;
+    padding: 0 13px !important;
+    font-size: 9px !important;
+  }
+
+  /* Journey: the three microscopic cards become a clean readable stack. */
+  .target-journey,
+  .target-timeline {
+    width: 100% !important;
+  }
+
+  .target-timeline {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 18px !important;
+    position: relative;
+  }
+
+  .target-education-card {
+    min-height: 190px !important;
+    padding: 22px !important;
+    border-radius: 20px !important;
+  }
+
+  .target-education-card h3 {
+    font-size: 16px !important;
+    line-height: 1.3 !important;
+  }
+
+  .target-education-card p,
+  .target-education-card small,
+  .target-education-card span,
+  .target-education-card b,
+  .target-education-card i {
+    font-size: 10px !important;
+    line-height: 1.55 !important;
+  }
+
+  .target-education-icon {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  /* Resume: remove the huge empty canvas and make the preview useful. */
+  .target-resume-card {
+    display: grid !important;
+    grid-template-columns: 210px minmax(0, 1fr) !important;
+    grid-template-areas:
+      "preview title"
+      "preview text"
+      "preview actions" !important;
+    align-items: center !important;
+    column-gap: 30px !important;
+    min-height: 300px !important;
+    padding: 28px !important;
+    text-align: left !important;
+  }
+
+  .target-resume-preview {
+    grid-area: preview !important;
+    width: 210px !important;
+    height: 270px !important;
+    margin: 0 !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    box-shadow: 0 16px 40px rgba(30, 65, 100, .16) !important;
+  }
+
+  .target-resume-card h3 {
+    grid-area: title !important;
+    margin: 0 0 8px !important;
+    font-size: 22px !important;
+  }
+
+  .target-resume-card > p {
+    grid-area: text !important;
+    margin: 0 !important;
+    max-width: 520px !important;
+    font-size: 11px !important;
+    line-height: 1.65 !important;
+  }
+
+  .target-resume-actions {
+    grid-area: actions !important;
+    justify-content: flex-start !important;
+    margin-top: 8px !important;
+    gap: 10px !important;
+  }
+
+  .target-resume-actions a {
+    min-height: 36px !important;
+    padding: 0 14px !important;
+    font-size: 9px !important;
+  }
+
+  /* Footer: readable brand, metadata and properly separated navigation. */
+  .target-footer {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    grid-template-areas:
+      "brand links"
+      "copyright links" !important;
+    gap: 16px 28px !important;
+    align-items: center !important;
+    padding: 30px 34px !important;
+  }
+
+  .target-footer > div:first-child {
+    grid-area: brand !important;
+    font-size: 17px !important;
+  }
+
+  .target-footer > div:first-child small {
+    margin-left: 9px !important;
+    font-size: 8px !important;
+  }
+
+  .target-footer > p {
+    grid-area: copyright !important;
+    margin: 0 !important;
+    font-size: 9px !important;
+    line-height: 1.5 !important;
+  }
+
+  .target-footer-links {
+    grid-area: links !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(70px, 1fr)) !important;
+    gap: 7px 14px !important;
+    min-width: 170px;
+  }
+
+  .target-footer-links a {
+    display: block !important;
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+    padding: 5px 0 !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (min-width: 901px) and (max-width: 1020px) {
+  .target-timeline {
+    grid-template-columns: 1fr !important;
+  }
+
+  .target-education-card {
+    min-height: 0 !important;
+  }
+
+  .target-resume-card {
+    grid-template-columns: 175px minmax(0, 1fr) !important;
+    column-gap: 22px !important;
+  }
+
+  .target-resume-preview {
+    width: 175px !important;
+    height: 230px !important;
+  }
+}
