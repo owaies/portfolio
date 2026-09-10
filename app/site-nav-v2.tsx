@@ -20,8 +20,10 @@ export default function SiteNavV2() {
 
   useEffect(() => {
     const update = () => {
-      const coarse = window.matchMedia("(pointer: coarse)").matches
-      setCompact(window.innerWidth <= 900 || coarse)
+      // Use the CSS viewport width as the source of truth. Pointer type is not
+      // a reliable indicator of layout mode because Chrome's "Desktop site"
+      // can still report a coarse touch pointer on a phone.
+      setCompact(window.innerWidth <= 900)
     }
     update()
     window.addEventListener("resize", update)
