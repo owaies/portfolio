@@ -9,13 +9,13 @@ export async function GET(request: Request) {
   }
 
   const supabase = await createClient()
-  const { data: publicData } = supabase.storage.from('certificates').getPublicUrl(path)
-  if (!publicData?.publicUrl) {
+  const { data, error } = await supabase.storage.from('certificates').createSignedUrl(path, 300)
+  if (error || !data?.signedUrl) {
     return NextResponse.json({ error: 'Certificate not found.' }, { status: 404 })
   }
 
   if (url.searchParams.get('download') === '1') {
-    const response = await fetch(publicData.publicUrl, { cache: 'no-store' })
+    const response = await fetch(data.signedUrl, { cache: 'no-store' })
     if (!response.ok) {
       return NextResponse.json({ error: 'Unable to download certificate.' }, { status: 502 })
     }
@@ -25,10 +25,10 @@ export async function GET(request: Request) {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="${filename}"`,
-        'Cache-Control': 'no-store',
+        'Cache-Control': 'private, no-store',
       },
     })
   }
 
-  return NextResponse.redirect(publicData.publicUrl)
+  return NextResponse.redirect(data.signedUrl)
 }
