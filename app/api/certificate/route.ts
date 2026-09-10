@@ -36,13 +36,38 @@ function normalizeCertificatePath(value: string) {
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
-  const path = normalizeCertificatePath(url.searchParams.get('path') || '')
+  const requestedPath = normalizeCertificatePath(url.searchParams.get('path') || '')
 
-  if (!path) {
+  if (!requestedPath) {
     return NextResponse.json({ error: 'Invalid certificate file.' }, { status: 400 })
   }
 
   const supabase = await createClient()
+  let path = requestedPath
+
+  // A certificate can be re-uploaded from the admin panel, which changes its
+  // UUID-prefixed storage path. Browsers can still hold an older link in cache.
+  // Resolve that stale path by its stable filename before building the public URL.
+  const filename = requestedPath.split('/').pop() || requestedPath
+  const { data: matchingCertificates } = await supabase
+    .from('certificates')
+    .select('certificate_pdf, active')
+    .eq('active', true)
+
+  const exactMatch = matchingCertificates?.find((row) =>
+    normalizeCertificatePath(row.certificate_pdf || '') === requestedPath
+  )
+
+  if (!exactMatch) {
+    const filenameMatch = matchingCertificates?.find((row) => {
+      const candidate = normalizeCertificatePath(row.certificate_pdf || '')
+      return candidate.split('/').pop() === filename
+    })
+    if (filenameMatch?.certificate_pdf) {
+      path = normalizeCertificatePath(filenameMatch.certificate_pdf)
+    }
+  }
+
   const { data: publicData } = supabase.storage.from('certificates').getPublicUrl(path)
   if (!publicData?.publicUrl) {
     return NextResponse.json({ error: 'Unable to open certificate.' }, { status: 500 })
@@ -60,11 +85,11 @@ export async function GET(request: Request) {
   }
 
   const body = await response.arrayBuffer()
-  const filename = path.split('/').pop()?.replace(/[^a-zA-Z0-9._-]/g, '-') || 'certificate.pdf'
+  const outputFilename = path.split('/').pop()?.replace(/[^a-zA-Z0-9._-]/g, '-') || 'certificate.pdf'
   return new NextResponse(body, {
     headers: {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="${filename}"`,
+      'Content-Disposition': `attachment; filename="${outputFilename}"`,
       'Cache-Control': 'no-store',
     },
   })
