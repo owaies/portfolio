@@ -1,6 +1,7 @@
 'use client'
 
 import { useLayoutEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { isUIExperienceId, type UIExperienceId } from '@/lib/ui-experiences'
 import { createClient } from '@/lib/supabase/client'
 
@@ -13,8 +14,10 @@ const CHROME = {
 const ADMIN_CHROME = { theme: '#030407', scheme: 'dark' } as const
 
 export default function UIExperienceRuntime({ active }: { active: UIExperienceId }) {
+  const pathname = usePathname()
+
   useLayoutEffect(() => {
-    const isAdminRoute = window.location.pathname.startsWith('/admin')
+    const isAdminRoute = pathname.startsWith('/admin')
     const params = new URLSearchParams(window.location.search)
     const preview = params.get('ui-preview')
     const experience = !isAdminRoute && isUIExperienceId(preview) ? preview : !isAdminRoute ? active : null
@@ -45,9 +48,6 @@ export default function UIExperienceRuntime({ active }: { active: UIExperienceId
     schemeMeta.setAttribute('content', chrome.scheme)
     if (!schemeMeta.parentElement) document.head.appendChild(schemeMeta)
 
-    // The public page already renders the existing profile image on the server.
-    // Replace it only when an experience-specific image exists, so there is
-    // always a safe fallback and previews use the same per-experience asset.
     let cancelled = false
     const imageKey = `profile_image_${experience}`
     const applyProfileImage = async () => {
@@ -67,7 +67,7 @@ export default function UIExperienceRuntime({ active }: { active: UIExperienceId
     void applyProfileImage()
 
     return () => { cancelled = true }
-  }, [active])
+  }, [active, pathname])
 
   return null
 }
