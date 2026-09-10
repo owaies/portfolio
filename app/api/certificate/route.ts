@@ -6,7 +6,6 @@ function normalizeCertificatePath(value: string) {
     const raw = decodeURIComponent(value).trim()
     if (!raw) return ''
 
-    // Accept the stored object path directly, with or without the bucket prefix.
     if (!raw.includes('://')) {
       const normalized = raw.replace(/^\/+/, '')
       const objectPath = normalized.startsWith('certificates/')
@@ -35,38 +34,6 @@ function normalizeCertificatePath(value: string) {
   }
 }
 
-async function getCertificateResponse(path: string, download: boolean) {
-  const supabase = await createClient()
-  const { data, error } = await supabase.storage.from('certificates').createSignedUrl(path, 300)
-
-  if (error || !data?.signedUrl) {
-    return NextResponse.json(
-      { error: 'Certificate file is unavailable. Please replace the PDF from Admin → Certificates.' },
-      { status: 404 },
-    )
-  }
-
-  // Proxy the signed object instead of redirecting to Supabase. This guarantees
-  // that mobile browsers receive an actual application/pdf response and lets
-  // the custom viewer render the certificate reliably inside its iframe.
-  const response = await fetch(data.signedUrl, { cache: 'no-store' })
-  if (!response.ok) {
-    return NextResponse.json({ error: 'Unable to load certificate PDF.' }, { status: 502 })
-  }
-
-  const body = await response.arrayBuffer()
-  const filename = path.split('/').pop()?.replace(/[^a-zA-Z0-9._-]/g, '-') || 'certificate.pdf'
-
-  return new NextResponse(body, {
-    headers: {
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `${download ? 'attachment' : 'inline'}; filename="${filename}"`,
-      'Cache-Control': 'private, no-store, max-age=0',
-      'X-Content-Type-Options': 'nosniff',
-    },
-  })
-}
-
 export async function GET(request: Request) {
   const url = new URL(request.url)
   const path = normalizeCertificatePath(url.searchParams.get('path') || '')
@@ -75,5 +42,30 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Invalid certificate file.' }, { status: 400 })
   }
 
-  return getCertificateResponse(path, url.searchParams.get('download') === '1')
+  const supabase = await createClient()
+  const { data: publicData } = supabase.storage.from('certificates').getPublicUrl(path)
+  if (!publicData?.publicUrl) {
+    return NextResponse.json({ error: 'Unable to open certificate.' }, { status: 500 })
+  }
+
+  // Certificates are portfolio content, so serve them through Supabase's public
+  // object endpoint just like the working resume viewer. This avoids browser/
+  // mobile iframe issues caused by proxying signed PDFs through a server route.
+  const download = url.searchParams.get('download') === '1'
+  if (!download) return NextResponse.redirect(publicData.publicUrl)
+
+  const response = await fetch(publicData.publicUrl, { cache: 'no-store' })
+  if (!response.ok) {
+    return NextResponse.json({ error: 'Unable to download certificate PDF.' }, { status: 502 })
+  }
+
+  const body = await response.arrayBuffer()
+  const filename = path.split('/').pop()?.replace(/[^a-zA-Z0-9._-]/g, '-') || 'certificate.pdf'
+  return new NextResponse(body, {
+    headers: {
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="${filename}"`,
+      'Cache-Control': 'no-store',
+    },
+  })
 }
