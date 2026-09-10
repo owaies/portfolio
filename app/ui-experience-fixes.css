@@ -3,17 +3,12 @@
 html { scroll-behavior: smooth; }
 
 body[data-ui-experience="digital-architecture"],
-body[data-ui-experience="organic-intelligence"] {
-  color: var(--ux-text);
-}
+body[data-ui-experience="organic-intelligence"] { color: var(--ux-text); }
 
 body[data-ui-experience="digital-architecture"] .target-section,
 body[data-ui-experience="organic-intelligence"] .target-section,
-body[data-ui-experience="neural-interface"] .target-section {
-  scroll-margin-top: 76px;
-}
+body[data-ui-experience="neural-interface"] .target-section { scroll-margin-top: 76px; }
 
-/* Light experiences: every content-bearing element must remain readable on glass/ivory surfaces. */
 body[data-ui-experience="digital-architecture"] .target-about-main > p,
 body[data-ui-experience="digital-architecture"] .target-facts small,
 body[data-ui-experience="digital-architecture"] .target-facts b,
@@ -38,9 +33,7 @@ body[data-ui-experience="digital-architecture"] .target-language-card span,
 body[data-ui-experience="digital-architecture"] .target-resume-card > p,
 body[data-ui-experience="digital-architecture"] .target-contact-card span,
 body[data-ui-experience="digital-architecture"] .target-footer,
-body[data-ui-experience="digital-architecture"] .target-footer small {
-  color: #53647a !important;
-}
+body[data-ui-experience="digital-architecture"] .target-footer small { color: #53647a !important; }
 
 body[data-ui-experience="digital-architecture"] .target-about-top strong,
 body[data-ui-experience="digital-architecture"] .target-cgpa b,
@@ -51,9 +44,7 @@ body[data-ui-experience="digital-architecture"] .target-education-card h3,
 body[data-ui-experience="digital-architecture"] .target-certificate-card h3,
 body[data-ui-experience="digital-architecture"] .target-resume-card h3,
 body[data-ui-experience="digital-architecture"] .target-contact-card b,
-body[data-ui-experience="digital-architecture"] .target-language-card b {
-  color: #172236 !important;
-}
+body[data-ui-experience="digital-architecture"] .target-language-card b { color: #172236 !important; }
 
 body[data-ui-experience="organic-intelligence"] .target-about-main > p,
 body[data-ui-experience="organic-intelligence"] .target-facts small,
@@ -79,9 +70,7 @@ body[data-ui-experience="organic-intelligence"] .target-language-card span,
 body[data-ui-experience="organic-intelligence"] .target-resume-card > p,
 body[data-ui-experience="organic-intelligence"] .target-contact-card span,
 body[data-ui-experience="organic-intelligence"] .target-footer,
-body[data-ui-experience="organic-intelligence"] .target-footer small {
-  color: #53695c !important;
-}
+body[data-ui-experience="organic-intelligence"] .target-footer small { color: #53695c !important; }
 
 body[data-ui-experience="organic-intelligence"] .target-about-top strong,
 body[data-ui-experience="organic-intelligence"] .target-cgpa b,
@@ -92,49 +81,23 @@ body[data-ui-experience="organic-intelligence"] .target-education-card h3,
 body[data-ui-experience="organic-intelligence"] .target-certificate-card h3,
 body[data-ui-experience="organic-intelligence"] .target-resume-card h3,
 body[data-ui-experience="organic-intelligence"] .target-contact-card b,
-body[data-ui-experience="organic-intelligence"] .target-language-card b {
-  color: #26382f !important;
-}
+body[data-ui-experience="organic-intelligence"] .target-language-card b { color: #26382f !important; }
 
-/* Light-mode navigation. The old cinematic nav defaults are intentionally dark. */
 body[data-ui-experience="digital-architecture"] .target-nav,
-body[data-ui-experience="organic-intelligence"] .target-nav {
-  background: rgba(250, 250, 247, .94) !important;
-  border-bottom-color: rgba(35, 70, 105, .12) !important;
-  box-shadow: 0 8px 28px rgba(40, 65, 90, .08) !important;
-}
-
+body[data-ui-experience="organic-intelligence"] .target-nav { background: rgba(250,250,247,.94) !important; border-bottom-color: rgba(35,70,105,.12) !important; box-shadow: 0 8px 28px rgba(40,65,90,.08) !important; }
 body[data-ui-experience="digital-architecture"] .target-brand,
 body[data-ui-experience="digital-architecture"] .target-nav-links a,
 body[data-ui-experience="digital-architecture"] .target-menu-button,
 body[data-ui-experience="organic-intelligence"] .target-brand,
 body[data-ui-experience="organic-intelligence"] .target-nav-links a,
-body[data-ui-experience="organic-intelligence"] .target-menu-button {
-  color: #253448 !important;
-}
-
-body[data-ui-experience="digital-architecture"] .target-nav-links a:hover,
-body[data-ui-experience="organic-intelligence"] .target-nav-links a:hover {
-  color: #1677ff !important;
-}
-
+body[data-ui-experience="organic-intelligence"] .target-menu-button { color: #253448 !important; }
+body[data-ui-experience="digital-architecture"] .target-nav-links a:hover { color: #1677ff !important; }
 body[data-ui-experience="organic-intelligence"] .target-nav-links a:hover { color: #168b57 !important; }
-
 body[data-ui-experience="digital-architecture"] .target-mobile-menu,
-body[data-ui-experience="organic-intelligence"] .target-mobile-menu {
-  background: rgba(248, 249, 246, .98) !important;
-  border-bottom-color: rgba(35, 70, 105, .12) !important;
-  box-shadow: 0 18px 40px rgba(40, 65, 90, .1);
-}
-
+body[data-ui-experience="organic-intelligence"] .target-mobile-menu { background: rgba(248,249,246,.995) !important; border-bottom-color: rgba(35,70,105,.12) !important; box-shadow: 0 18px 40px rgba(40,65,90,.1); }
 body[data-ui-experience="digital-architecture"] .target-mobile-menu a,
-body[data-ui-experience="organic-intelligence"] .target-mobile-menu a {
-  color: #3d5068 !important;
-  border-color: rgba(35, 70, 105, .12) !important;
-  background: rgba(255,255,255,.7);
-}
+body[data-ui-experience="organic-intelligence"] .target-mobile-menu a { color: #26374e !important; border-color: rgba(35,70,105,.12) !important; background: rgba(255,255,255,.9); }
 
-/* Keep the neural experience intentionally dark and high-contrast. */
 body[data-ui-experience="neural-interface"] .target-about-main > p,
 body[data-ui-experience="neural-interface"] .target-facts small,
 body[data-ui-experience="neural-interface"] .target-facts b,
@@ -146,37 +109,82 @@ body[data-ui-experience="neural-interface"] .target-education-card strong,
 body[data-ui-experience="neural-interface"] .target-certificate-card p,
 body[data-ui-experience="neural-interface"] .target-language-card span,
 body[data-ui-experience="neural-interface"] .target-resume-card > p,
-body[data-ui-experience="neural-interface"] .target-contact-card span {
-  color: #9bb0c2 !important;
+body[data-ui-experience="neural-interface"] .target-contact-card span { color: #a9bdcc !important; }
+
+/* Navigation is compact on narrow screens and also on touch devices using browser desktop mode. */
+.target-nav { z-index: 1000 !important; }
+.target-nav-inner { min-width: 0; }
+.target-brand { flex: 0 0 auto; }
+.target-nav-actions { margin-left: auto; }
+.target-menu-button { display: none; border: 0; background: transparent; color: #eaf7ff; padding: 7px; cursor: pointer; }
+.target-menu-button svg { width: 30px; height: 30px; }
+.target-mobile-menu { display: none; }
+
+@media (max-width: 900px), (hover: none) and (pointer: coarse) {
+  .target-nav { height: 54px !important; position: sticky !important; top: 0 !important; }
+  .target-nav-inner { width: calc(100% - 28px) !important; height: 54px !important; gap: 0 !important; }
+  .target-nav-links, .target-nav-actions > a { display: none !important; }
+  .target-menu-button { display: inline-grid !important; place-items: center; }
+  .target-mobile-menu {
+    display: grid !important;
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 54px !important;
+    width: 100vw !important;
+    min-height: 294px;
+    padding: 24px 28px 30px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px !important;
+    background: rgba(5,10,22,.995) !important;
+    border-top: 1px solid rgba(53,230,255,.08) !important;
+    border-bottom: 1px solid rgba(53,230,255,.14) !important;
+    box-shadow: 0 24px 80px rgba(0,0,0,.5) !important;
+    backdrop-filter: blur(22px);
+    z-index: 1100 !important;
+    overflow: auto;
+  }
+  .target-mobile-menu a {
+    min-height: 70px !important;
+    display: grid !important;
+    place-items: center !important;
+    padding: 12px !important;
+    border: 1px solid rgba(53,230,255,.12) !important;
+    border-radius: 16px !important;
+    color: #dbeaf5 !important;
+    background: rgba(7,16,31,.98) !important;
+    font: 500 14px 'JetBrains Mono', monospace !important;
+    text-decoration: none !important;
+  }
+  .target-mobile-menu a:hover, .target-mobile-menu a:focus-visible { color: #35e6ff !important; border-color: rgba(53,230,255,.35) !important; }
+  body.nav-menu-open { overflow: hidden; }
+
+  .target-section { scroll-margin-top: 70px !important; }
+  .target-contact-card { min-width: 0 !important; width: 100% !important; }
+  .target-contact-card b { min-width: 0 !important; max-width: 100% !important; white-space: normal !important; overflow: visible !important; overflow-wrap: anywhere !important; word-break: break-word !important; line-height: 1.45 !important; }
+  .target-contact-list, .target-contact-grid, .target-contact-grid form { min-width: 0 !important; max-width: 100% !important; }
+  .target-contact-grid form input, .target-contact-grid form textarea { width: 100% !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important; }
+  .target-hero-description, .target-about-copy p, .target-section-subtitle { overflow-wrap: anywhere; }
+
+  /* The quick-copy dock is redundant with the footer on phones and used to cover cards/forms. */
+  .premium-copy-actions { display: none !important; }
+  .premium-back-top { right: 14px !important; bottom: 14px !important; z-index: 900 !important; }
 }
 
-/* Fixed quick actions should not collide with browser safe areas or become a giant overlay on phones. */
-@media (max-width: 700px) {
-  .premium-copy-actions {
-    right: 14px !important;
-    bottom: calc(14px + env(safe-area-inset-bottom)) !important;
-    gap: 6px !important;
-    z-index: 45 !important;
-  }
-  .premium-copy-button {
-    min-height: 38px !important;
-    padding: 0 11px !important;
-    font-size: 10px !important;
-  }
-  .premium-back-top {
-    right: 14px !important;
-    bottom: calc(66px + env(safe-area-inset-bottom)) !important;
-    z-index: 44 !important;
-  }
-  .target-section-heading { position: relative; z-index: 2; }
+@media (max-width: 480px), (hover: none) and (pointer: coarse) {
+  .target-mobile-menu { padding-inline: 18px !important; }
+  .target-mobile-menu a { min-height: 62px !important; font-size: 13px !important; }
+  .target-contact-card { grid-template-columns: 34px minmax(0,1fr) !important; gap: 10px !important; }
+  .target-contact-card > svg { display: none; }
 }
 
-/* Prevent decorative layers from catching taps or making text look washed out. */
+@media (min-width: 901px) and (hover: hover) and (pointer: fine) {
+  .target-menu-button, .target-mobile-menu { display: none !important; }
+}
+
 .target-orb,
 .target-grid,
 .target-portrait-ring,
 .target-portrait-wrap::after { pointer-events: none !important; }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
