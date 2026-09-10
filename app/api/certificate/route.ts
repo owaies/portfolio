@@ -11,10 +11,7 @@ function normalizeCertificatePath(value: string) {
 
     if (!raw.includes('://')) {
       const normalized = raw.replace(/^\/+/, '')
-      const objectPath = normalized.startsWith('certificates/')
-        ? normalized.slice('certificates/'.length)
-        : normalized
-      return objectPath && !objectPath.includes('..') ? objectPath : ''
+      return normalized && !normalized.includes('..') ? normalized : ''
     }
 
     const parsed = new URL(raw)
@@ -45,6 +42,35 @@ function certificateFilename(path: string) {
   )
 }
 
+function candidatePaths(path: string) {
+  const candidates = [path]
+  if (path.startsWith('certificates/')) {
+    candidates.push(path.slice('certificates/'.length))
+  }
+  return [...new Set(candidates.filter(Boolean))]
+}
+
+async function fetchCertificatePdf(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  paths: string[],
+) {
+  for (const path of paths) {
+    const { data: publicData } = supabase.storage.from('certificates').getPublicUrl(path)
+    if (!publicData?.publicUrl) continue
+
+    const response = await fetch(publicData.publicUrl, {
+      cache: 'no-store',
+      headers: { Accept: 'application/pdf' },
+    })
+
+    if (response.ok) {
+      return { path, response }
+    }
+  }
+
+  return null
+}
+
 export async function GET(request: Request) {
   const url = new URL(request.url)
   const id = url.searchParams.get('id')?.trim() || ''
@@ -53,8 +79,6 @@ export async function GET(request: Request) {
 
   let path = requestedPath
 
-  // Prefer the certificate ID. This always resolves to the latest database
-  // record and prevents stale browser pages from pointing at deleted uploads.
   if (id) {
     const { data } = await supabase
       .from('certificates')
@@ -73,7 +97,6 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Invalid certificate file.' }, { status: 400 })
     }
 
-    // Backward compatibility for old links that contain a stored path.
     const requestedFilename = certificateFilename(requestedPath)
     const { data: matchingCertificates } = await supabase
       .from('certificates')
@@ -81,7 +104,7 @@ export async function GET(request: Request) {
       .eq('active', true)
 
     const exactMatch = matchingCertificates?.find((row) =>
-      normalizeCertificatePath(row.certificate_pdf || '') === requestedPath,
+      candidatePaths(normalizeCertificatePath(row.certificate_pdf || '')).includes(requestedPath),
     )
 
     if (exactMatch?.certificate_pdf) {
@@ -102,28 +125,20 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Certificate not found.' }, { status: 404 })
   }
 
-  const { data: publicData } = supabase.storage.from('certificates').getPublicUrl(path)
-  if (!publicData?.publicUrl) {
-    return NextResponse.json({ error: 'Unable to open certificate.' }, { status: 500 })
+  const result = await fetchCertificatePdf(supabase, candidatePaths(path))
+  if (!result) {
+    return NextResponse.json(
+      { error: 'Certificate PDF is unavailable.' },
+      { status: 404 },
+    )
   }
 
-  // Proxy the PDF through the portfolio's own origin. This avoids mobile
-  // browser redirects, stale Supabase URLs, and iframe/CORS viewer issues.
-  const pdfResponse = await fetch(publicData.publicUrl, {
-    cache: 'no-store',
-    headers: { Accept: 'application/pdf' },
-  })
-
-  if (!pdfResponse.ok) {
-    return NextResponse.json({ error: 'Certificate PDF is unavailable.' }, { status: 404 })
-  }
-
-  const outputFilename = path.split('/').pop()?.replace(/[^a-zA-Z0-9._-]/g, '-') || 'certificate.pdf'
+  const outputFilename = result.path.split('/').pop()?.replace(/[^a-zA-Z0-9._-]/g, '-') || 'certificate.pdf'
   const download = url.searchParams.get('download') === '1'
-  const contentType = pdfResponse.headers.get('content-type') || 'application/pdf'
-  const contentLength = pdfResponse.headers.get('content-length')
+  const contentType = result.response.headers.get('content-type') || 'application/pdf'
+  const contentLength = result.response.headers.get('content-length')
 
-  return new Response(pdfResponse.body, {
+  return new Response(result.response.body, {
     status: 200,
     headers: {
       'Content-Type': contentType,
