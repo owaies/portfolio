@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { usePathname } from "next/navigation"
 import { MessageCircle, ArrowUpRight, Menu, X } from "lucide-react"
 
 const links = [
@@ -13,7 +14,10 @@ const links = [
 ]
 
 export default function SiteNavV2() {
+  const pathname = usePathname()
   const [open, setOpen] = useState(false)
+
+  if (pathname.startsWith("/admin")) return null
 
   const navigateTo = (target: string) => {
     const section = document.getElementById(target)
