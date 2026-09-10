@@ -38,8 +38,11 @@ export default function ExperienceLoadingScreen() {
     let appReady = false
     let videoFinished = reducedMotion
     let failed = false
+    let fastTransitionStarted = false
     let fallbackTimer: number | undefined
     let hideTimer: number | undefined
+    let fastTransitionTimer: number | undefined
+    let normalPlaybackTimer: number | undefined
 
     const hide = () => {
       if (disposed) return
@@ -51,10 +54,52 @@ export default function ExperienceLoadingScreen() {
       if (appReady && videoFinished) hide()
     }
 
+    const preserveCinematicEnding = () => {
+      if (disposed || failed || reducedMotion || !Number.isFinite(video.duration)) return
+
+      // Keep the final ~1.15s at normal speed so the designed end frame is still seen.
+      const endingWindow = 1.15
+      const remaining = video.duration - video.currentTime
+      if (remaining <= endingWindow) {
+        video.playbackRate = 1
+        if (normalPlaybackTimer) window.clearTimeout(normalPlaybackTimer)
+        return
+      }
+
+      video.playbackRate = 2.5
+      if (normalPlaybackTimer) window.clearTimeout(normalPlaybackTimer)
+      normalPlaybackTimer = window.setTimeout(preserveCinematicEnding, 120)
+    }
+
+    const accelerateForFastLoad = () => {
+      if (disposed || failed || reducedMotion || fastTransitionStarted || !appReady) return
+      if (!video.duration || !Number.isFinite(video.duration)) return
+
+      // Never make the loader feel rushed. After a short cinematic minimum,
+      // accelerate only the middle of the clip and return to 1x for its ending.
+      const minimumCinematicTime = 1.8
+      const endingWindow = 1.15
+      if (video.currentTime < minimumCinematicTime) {
+        fastTransitionTimer = window.setTimeout(accelerateForFastLoad, Math.max(80, (minimumCinematicTime - video.currentTime) * 1000))
+        return
+      }
+
+      const remaining = video.duration - video.currentTime
+      if (remaining <= endingWindow) {
+        video.playbackRate = 1
+        fastTransitionStarted = true
+        return
+      }
+
+      fastTransitionStarted = true
+      preserveCinematicEnding()
+    }
+
     const markAppReady = () => {
       if (disposed) return
       appReady = true
       maybeHide()
+      accelerateForFastLoad()
     }
 
     const onEnded = () => {
@@ -107,6 +152,8 @@ export default function ExperienceLoadingScreen() {
       window.clearTimeout(hardTimeout)
       if (fallbackTimer) window.clearTimeout(fallbackTimer)
       if (hideTimer) window.clearTimeout(hideTimer)
+      if (fastTransitionTimer) window.clearTimeout(fastTransitionTimer)
+      if (normalPlaybackTimer) window.clearTimeout(normalPlaybackTimer)
       window.removeEventListener('load', markAppReady)
     }
   }, [experience])
