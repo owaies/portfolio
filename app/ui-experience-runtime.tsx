@@ -28,7 +28,6 @@ export default function UIExperienceRuntime({ active }: { active: UIExperienceId
       themeMeta.setAttribute('name', 'theme-color')
       themeMeta.setAttribute('content', ADMIN_CHROME.theme)
       if (!themeMeta.parentElement) document.head.appendChild(themeMeta)
-
       const schemeMeta = document.querySelector('meta[name="color-scheme"]') ?? document.createElement('meta')
       schemeMeta.setAttribute('name', 'color-scheme')
       schemeMeta.setAttribute('content', ADMIN_CHROME.scheme)
@@ -42,31 +41,55 @@ export default function UIExperienceRuntime({ active }: { active: UIExperienceId
     themeMeta.setAttribute('name', 'theme-color')
     themeMeta.setAttribute('content', chrome.theme)
     if (!themeMeta.parentElement) document.head.appendChild(themeMeta)
-
     const schemeMeta = document.querySelector('meta[name="color-scheme"]') ?? document.createElement('meta')
     schemeMeta.setAttribute('name', 'color-scheme')
     schemeMeta.setAttribute('content', chrome.scheme)
     if (!schemeMeta.parentElement) document.head.appendChild(schemeMeta)
 
     let cancelled = false
+    let observer: MutationObserver | null = null
     const imageKey = `profile_image_${experience}`
-    const applyProfileImage = async () => {
+
+    const applyProfileImage = (url: string) => {
+      if (cancelled || !url) return false
+      const image = document.querySelector<HTMLImageElement>('.target-portrait img')
+      if (!image) return false
+      if (image.getAttribute('src') === url || image.currentSrc === url || image.src === url) return true
+      image.src = url
+      image.setAttribute('data-experience-profile-image', experience)
+      return true
+    }
+
+    const loadOverride = async () => {
       try {
         const supabase = createClient()
         const { data } = await supabase.from('site_content').select('value').eq('key', imageKey).maybeSingle()
         const url = data?.value?.trim()
         if (!url || cancelled) return
-        const image = document.querySelector<HTMLImageElement>('.target-portrait img')
-        if (!image) return
-        if (image.currentSrc === url || image.src === url) return
-        image.src = url
+
+        // Next Image can mount its <img> a tick after the page component. Keep
+        // watching briefly so preview always receives the same image as the
+        // profile-picture manager, rather than falling back to the default.
+        if (applyProfileImage(url)) return
+        observer = new MutationObserver(() => {
+          if (applyProfileImage(url)) {
+            observer?.disconnect()
+            observer = null
+          }
+        })
+        observer.observe(document.body, { childList: true, subtree: true })
+        const retry = () => {
+          if (cancelled || applyProfileImage(url)) return
+          window.requestAnimationFrame(retry)
+        }
+        window.requestAnimationFrame(retry)
       } catch {
         // Keep the server-rendered profile image if the optional override cannot load.
       }
     }
-    void applyProfileImage()
 
-    return () => { cancelled = true }
+    void loadOverride()
+    return () => { cancelled = true; observer?.disconnect() }
   }, [active, pathname])
 
   return null
