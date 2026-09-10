@@ -20,7 +20,9 @@ function isMobileOrPortrait() {
 }
 
 export default function ExperienceLoadingScreen() {
-  const [visible, setVisible] = useState(() => typeof window === 'undefined' || !window.location.pathname.startsWith('/admin'))
+  const [visible, setVisible] = useState(
+    () => typeof window === 'undefined' || !window.location.pathname.startsWith('/admin')
+  )
   const [fading, setFading] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const experience = useMemo(() => getExperienceFromDocument(), [])
@@ -42,15 +44,27 @@ export default function ExperienceLoadingScreen() {
     let videoFinished = reducedMotion
     let failed = false
     let fastTransitionStarted = false
+    let playbackStarted = false
     let fallbackTimer: number | undefined
     let hideTimer: number | undefined
     let fastTransitionTimer: number | undefined
     let normalPlaybackTimer: number | undefined
+    let playbackWatchdogTimer: number | undefined
+
+    const clearPlaybackWatchdog = () => {
+      if (playbackWatchdogTimer) {
+        window.clearTimeout(playbackWatchdogTimer)
+        playbackWatchdogTimer = undefined
+      }
+    }
 
     const hide = () => {
       if (disposed) return
+      clearPlaybackWatchdog()
       setFading(true)
-      hideTimer = window.setTimeout(() => { if (!disposed) setVisible(false) }, reducedMotion ? 180 : 650)
+      hideTimer = window.setTimeout(() => {
+        if (!disposed) setVisible(false)
+      }, reducedMotion ? 180 : 650)
     }
 
     const maybeHide = () => {
@@ -74,18 +88,25 @@ export default function ExperienceLoadingScreen() {
     const accelerateForFastLoad = () => {
       if (disposed || failed || reducedMotion || fastTransitionStarted || !appReady) return
       if (!video.duration || !Number.isFinite(video.duration)) return
+
       const minimumCinematicTime = 1.8
       const endingWindow = 1.15
+
       if (video.currentTime < minimumCinematicTime) {
-        fastTransitionTimer = window.setTimeout(accelerateForFastLoad, Math.max(80, (minimumCinematicTime - video.currentTime) * 1000))
+        fastTransitionTimer = window.setTimeout(
+          accelerateForFastLoad,
+          Math.max(80, (minimumCinematicTime - video.currentTime) * 1000)
+        )
         return
       }
+
       const remaining = video.duration - video.currentTime
       if (remaining <= endingWindow) {
         video.playbackRate = 1
         fastTransitionStarted = true
         return
       }
+
       fastTransitionStarted = true
       preserveCinematicEnding()
     }
@@ -94,6 +115,29 @@ export default function ExperienceLoadingScreen() {
       if (disposed) return
       appReady = true
       maybeHide()
+      accelerateForFastLoad()
+
+      // If the browser never manages to start the video, do not leave the
+      // visitor staring at its poster forever. Keep the cinematic path when
+      // playback works, but fail open on mobile/network edge cases.
+      if (!playbackStarted && !videoFinished && !playbackWatchdogTimer) {
+        playbackWatchdogTimer = window.setTimeout(() => {
+          if (!disposed && !playbackStarted && !videoFinished) hide()
+        }, 4200)
+      }
+    }
+
+    const onMetadata = () => {
+      accelerateForFastLoad()
+    }
+
+    const onCanPlay = () => {
+      accelerateForFastLoad()
+    }
+
+    const onPlaying = () => {
+      playbackStarted = true
+      clearPlaybackWatchdog()
       accelerateForFastLoad()
     }
 
@@ -106,9 +150,10 @@ export default function ExperienceLoadingScreen() {
       if (failed || disposed) return
       failed = true
       videoFinished = true
+      clearPlaybackWatchdog()
       fallbackTimer = window.setTimeout(() => {
         if (!disposed) hide()
-      }, 700)
+      }, 250)
     }
 
     video.muted = true
@@ -117,6 +162,9 @@ export default function ExperienceLoadingScreen() {
     video.preload = 'auto'
     video.src = source
     video.load()
+    video.addEventListener('loadedmetadata', onMetadata)
+    video.addEventListener('canplay', onCanPlay)
+    video.addEventListener('playing', onPlaying)
     video.addEventListener('ended', onEnded)
     video.addEventListener('error', onError)
 
@@ -129,22 +177,27 @@ export default function ExperienceLoadingScreen() {
     window.addEventListener('load', markAppReady, { once: true })
     if (document.readyState === 'complete') markAppReady()
 
+    // Absolute safety net. The loader must never become the page.
     const hardTimeout = window.setTimeout(() => {
       if (!disposed && !failed) {
         appReady = true
         videoFinished = true
         hide()
       }
-    }, 12000)
+    }, 9000)
 
     return () => {
       disposed = true
       video.pause()
       video.removeAttribute('src')
       video.load()
+      video.removeEventListener('loadedmetadata', onMetadata)
+      video.removeEventListener('canplay', onCanPlay)
+      video.removeEventListener('playing', onPlaying)
       video.removeEventListener('ended', onEnded)
       video.removeEventListener('error', onError)
       window.clearTimeout(hardTimeout)
+      clearPlaybackWatchdog()
       if (fallbackTimer) window.clearTimeout(fallbackTimer)
       if (hideTimer) window.clearTimeout(hideTimer)
       if (fastTransitionTimer) window.clearTimeout(fastTransitionTimer)
@@ -156,10 +209,25 @@ export default function ExperienceLoadingScreen() {
   if (!visible || (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin'))) return null
 
   return (
-    <div id="experience-loading-screen" className={`experience-loading-screen${fading ? ' is-fading' : ''}`} aria-label="Loading portfolio" aria-busy="true">
+    <div
+      id="experience-loading-screen"
+      className={`experience-loading-screen${fading ? ' is-fading' : ''}`}
+      aria-label="Loading portfolio"
+      aria-busy="true"
+    >
       <div className="experience-loading-poster" data-loading-poster data-experience={experience} aria-hidden="true" />
-      <video className="experience-loading-video" autoPlay muted playsInline preload="none" aria-hidden="true" ref={videoRef} />
-      <div className="experience-loading-fallback" role="status"><span className="sr-only">Loading portfolio</span></div>
+      <video
+        className="experience-loading-video"
+        autoPlay
+        muted
+        playsInline
+        preload="none"
+        aria-hidden="true"
+        ref={videoRef}
+      />
+      <div className="experience-loading-fallback" role="status">
+        <span className="sr-only">Loading portfolio</span>
+      </div>
     </div>
   )
 }
