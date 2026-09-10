@@ -1,0 +1,144 @@
+/* Digital Architecture: a fully scoped light futuristic presentation layer. */
+body[data-ui-experience="digital-architecture"]{color-scheme:light;--da-bg:#f8fbff;--da-paper:#fff;--da-ink:#10213b;--da-muted:#65748b;--da-line:rgba(43,91,145,.14);--da-blue:#1769ff;--da-cyan:#22b9ff;--da-violet:#7659e8;--da-shadow:0 22px 70px rgba(38,76,120,.10);background:radial-gradient(circle at 12% 0%,rgba(74,169,255,.16),transparent 27%),radial-gradient(circle at 91% 8%,rgba(117,89,232,.10),transparent 25%),linear-gradient(180deg,#f8fbff 0%,#f6f9fc 52%,#fff 100%);font-family:Inter,system-ui,sans-serif}
+body[data-ui-experience="digital-architecture"]::before{opacity:.32;background-image:linear-gradient(rgba(28,76,126,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(28,76,126,.045) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(#000,rgba(0,0,0,.45) 70%,transparent)}
+body[data-ui-experience="digital-architecture"] .target-site{background:transparent;color:var(--da-ink)}
+body[data-ui-experience="digital-architecture"] .target-site::before{background-image:linear-gradient(rgba(35,86,140,.032) 1px,transparent 1px),linear-gradient(90deg,rgba(35,86,140,.032) 1px,transparent 1px);background-size:54px 54px}
+body[data-ui-experience="digital-architecture"] .target-site::after{opacity:.012}
+body[data-ui-experience="digital-architecture"] .target-nav{background:rgba(255,255,255,.76);border:1px solid rgba(64,105,155,.14);box-shadow:0 12px 40px rgba(47,79,119,.08);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+body[data-ui-experience="digital-architecture"] .target-nav a{color:#1c2d45;transition:color .2s ease,transform .2s ease}
+body[data-ui-experience="digital-architecture"] .target-nav a:hover{color:var(--da-blue);transform:translateY(-1px)}
+body[data-ui-experience="digital-architecture"] .target-nav .active,body[data-ui-experience="digital-architecture"] .target-nav a[aria-current="page"]{color:var(--da-blue)}
+body[data-ui-experience="digital-architecture"] .target-nav-actions a{background:linear-gradient(135deg,#287eff,#5e68e9);border:0;color:#fff;box-shadow:0 10px 28px rgba(43,108,255,.22)}
+body[data-ui-experience="digital-architecture"] .target-nav-actions a:hover{color:#fff;transform:translateY(-2px)}
+body[data-ui-experience="digital-architecture"] .target-menu-button{color:#15253d;background:rgba(255,255,255,.72);border:1px solid var(--da-line);border-radius:11px}
+body[data-ui-experience="digital-architecture"] .target-mobile-menu{background:rgba(248,251,255,.96);border-color:var(--da-line);box-shadow:0 22px 45px rgba(36,69,106,.12)}
+body[data-ui-experience="digital-architecture"] .target-mobile-menu a{color:#243750;border-color:var(--da-line);background:rgba(255,255,255,.72)}
+
+/* Hero: editorial copy on the left, an architectural AI/profiling chamber on the right. */
+body[data-ui-experience="digital-architecture"] .target-hero{min-height:690px;background:radial-gradient(ellipse at 78% 32%,rgba(67,164,255,.14),transparent 28%),linear-gradient(180deg,rgba(255,255,255,.28),transparent 75%)}
+body[data-ui-experience="digital-architecture"] .target-grid{opacity:.46;background-image:linear-gradient(rgba(32,81,132,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(32,81,132,.05) 1px,transparent 1px);background-size:48px 48px}
+body[data-ui-experience="digital-architecture"] .target-hero-inner{width:min(1180px,calc(100% - 72px));min-height:690px;display:grid;grid-template-columns:minmax(0,1fr) minmax(430px,540px);grid-template-rows:1fr auto;grid-template-areas:"copy scene" "copy quote";gap:20px 28px;align-items:center;padding:78px 0 58px}
+body[data-ui-experience="digital-architecture"] .target-hero-copy{grid-area:copy;max-width:570px;align-self:center;z-index:4}
+body[data-ui-experience="digital-architecture"] .target-eyebrow{color:#365c87;font:600 10px 'JetBrains Mono';letter-spacing:.22em}
+body[data-ui-experience="digital-architecture"] .target-hero-copy h1{font-size:clamp(4rem,7.4vw,6.4rem);line-height:.88;letter-spacing:-.065em;color:#13223a;text-shadow:none}
+body[data-ui-experience="digital-architecture"] .target-hero-copy h1 span{background:linear-gradient(95deg,#1a63d9 5%,#277eff 48%,#7659e8 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+body[data-ui-experience="digital-architecture"] .target-role{color:#60728a;font-size:13px;line-height:1.7}
+body[data-ui-experience="digital-architecture"] .target-role span{color:#1769ff}
+body[data-ui-experience="digital-architecture"] .target-hero-description{color:#53647b;font-size:13px;line-height:1.85;max-width:535px}
+body[data-ui-experience="digital-architecture"] .target-actions a{min-height:42px;padding:0 17px;background:rgba(255,255,255,.76);border:1px solid rgba(50,94,145,.14);color:#20324b;box-shadow:0 8px 24px rgba(40,74,113,.07);backdrop-filter:blur(12px);font-size:10px;font-weight:600}
+body[data-ui-experience="digital-architecture"] .target-actions a:hover{color:var(--da-blue);border-color:rgba(23,105,255,.30);box-shadow:0 14px 32px rgba(23,105,255,.12);transform:translateY(-2px)}
+body[data-ui-experience="digital-architecture"] .target-actions .target-hire{background:linear-gradient(135deg,#142a48,#1e3f6b);border-color:#142a48;color:#fff;box-shadow:0 12px 28px rgba(19,48,84,.22)}
+body[data-ui-experience="digital-architecture"] .target-actions .target-hire:hover{color:#fff;border-color:#1769ff}
+body[data-ui-experience="digital-architecture"] .target-actions .target-green{color:#26754d}
+body[data-ui-experience="digital-architecture"] .target-stats{max-width:480px;gap:0;margin-top:28px;padding-top:18px;border-top:1px solid rgba(45,91,142,.14);background:transparent;box-shadow:none}
+body[data-ui-experience="digital-architecture"] .target-stats>div{position:relative;padding-right:26px}
+body[data-ui-experience="digital-architecture"] .target-stats>div:not(:last-child)::after{content:"";position:absolute;right:12px;top:4px;width:1px;height:34px;background:rgba(45,91,142,.14)}
+body[data-ui-experience="digital-architecture"] .target-stats b{color:#1769ff;font-size:19px}
+body[data-ui-experience="digital-architecture"] .target-stats span{color:#708097;font-size:7px;letter-spacing:.13em}
+body[data-ui-experience="digital-architecture"] .target-scroll{color:#6e7f94;letter-spacing:.22em}.target-scroll svg{color:#1769ff}
+
+/* AI chamber uses the existing profile picture, never a generated person. */
+body[data-ui-experience="digital-architecture"] .target-portrait-wrap{grid-area:scene;width:100%;height:475px;margin:0;display:grid;place-items:center;isolation:isolate}
+body[data-ui-experience="digital-architecture"] .target-portrait-wrap::before{content:"";position:absolute;width:min(470px,92%);height:380px;border:1px solid rgba(55,126,213,.18);border-radius:30px;background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(226,240,253,.42));box-shadow:inset 0 1px rgba(255,255,255,.95),0 35px 80px rgba(39,88,142,.10);backdrop-filter:blur(16px);transform:perspective(1000px) rotateY(-5deg);z-index:-3}
+body[data-ui-experience="digital-architecture"] .target-portrait-wrap::after{content:"AI CORE  /  01";position:absolute;top:12px;right:4%;padding:8px 11px;border:1px solid rgba(35,107,184,.14);border-radius:999px;background:rgba(255,255,255,.68);color:#507293;font:600 7px 'JetBrains Mono';letter-spacing:.14em;box-shadow:0 8px 20px rgba(44,86,128,.06);z-index:5}
+body[data-ui-experience="digital-architecture"] .target-portrait{width:310px;height:310px;border:7px solid rgba(255,255,255,.72);box-shadow:0 0 0 1px rgba(40,117,210,.22),0 18px 45px rgba(30,88,155,.18),0 0 80px rgba(39,152,255,.16);z-index:2}
+body[data-ui-experience="digital-architecture"] .target-portrait::after{content:"";position:absolute;inset:0;background:linear-gradient(145deg,rgba(255,255,255,.10),transparent 42%,rgba(37,126,230,.07));pointer-events:none}
+body[data-ui-experience="digital-architecture"] .target-portrait-ring{border-color:rgba(38,126,220,.18);box-shadow:0 0 24px rgba(52,149,255,.08)}
+body[data-ui-experience="digital-architecture"] .target-ring-a{inset:58px;border-radius:50%;border-style:dashed;animation:daOrbit 22s linear infinite}
+body[data-ui-experience="digital-architecture"] .target-ring-b{inset:30px;border-radius:50%;border-color:rgba(118,89,232,.20);transform:rotate(26deg) scaleX(1.28);animation:daOrbitReverse 28s linear infinite}
+body[data-ui-experience="digital-architecture"] .target-open{right:4%;bottom:34px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.88);border:1px solid rgba(42,113,177,.16);color:#26734d;font-size:9px;box-shadow:0 10px 26px rgba(42,79,119,.10);backdrop-filter:blur(12px);z-index:6}
+body[data-ui-experience="digital-architecture"] .target-open span{width:7px;height:7px}
+body[data-ui-experience="digital-architecture"] .target-hero-quote{grid-area:quote;justify-self:end;align-self:start;max-width:320px;padding:12px 16px;border-left:2px solid #49a7ff;color:#61748b;background:rgba(255,255,255,.62);border-radius:0 13px 13px 0;font-size:9px;line-height:1.6;box-shadow:0 10px 28px rgba(40,75,112,.06);backdrop-filter:blur(10px)}
+body[data-ui-experience="digital-architecture"] .target-hero-quote small{display:block;margin-top:4px;color:#8292a6}
+@keyframes daOrbit{to{transform:rotate(360deg)}}
+@keyframes daOrbitReverse{to{transform:rotate(-360deg) scaleX(1.28)}}
+
+/* Section system */
+body[data-ui-experience="digital-architecture"] .target-section{width:min(1180px,calc(100% - 72px));padding:108px 0 0}
+body[data-ui-experience="digital-architecture"] .target-section-heading{margin-bottom:38px;position:relative}
+body[data-ui-experience="digital-architecture"] .target-section-heading::after{content:"";display:block;width:58px;height:2px;margin-top:15px;background:linear-gradient(90deg,#1769ff,#5bc9ff);border-radius:99px}
+body[data-ui-experience="digital-architecture"] .target-section-heading h2{font-size:clamp(2.2rem,4.2vw,3.55rem);color:#13233b;letter-spacing:-.05em}
+body[data-ui-experience="digital-architecture"] .target-section-heading h2 span{background:linear-gradient(90deg,#1769ff,#7659e8);-webkit-background-clip:text;background-clip:text;color:transparent}
+body[data-ui-experience="digital-architecture"] .target-section-subtitle{color:#687991;font-size:11px;line-height:1.75}
+body[data-ui-experience="digital-architecture"] .target-eyebrow{color:#4e6f92}
+
+/* The compact identity panel becomes a glass research profile. */
+body[data-ui-experience="digital-architecture"] .target-about-card{padding:26px;border:1px solid rgba(46,93,143,.13);border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.88),rgba(238,246,254,.68));box-shadow:var(--da-shadow);backdrop-filter:blur(18px)}
+body[data-ui-experience="digital-architecture"] .target-about-icon{background:linear-gradient(145deg,rgba(23,105,255,.10),rgba(34,185,255,.08));border-color:rgba(23,105,255,.14);color:#1769ff}
+body[data-ui-experience="digital-architecture"] .target-about-top strong,.target-cgpa b{color:#172940}
+body[data-ui-experience="digital-architecture"] .target-about-top span,.target-about-main>p,.target-facts small{color:#6b7d94}
+body[data-ui-experience="digital-architecture"] .target-about-main>p{font-size:10px;line-height:1.85}
+body[data-ui-experience="digital-architecture"] .target-facts>div{padding:11px 12px;border:1px solid rgba(53,104,157,.10);border-radius:13px;background:rgba(255,255,255,.52)}
+body[data-ui-experience="digital-architecture"] .target-facts b{color:#263a53}
+body[data-ui-experience="digital-architecture"] .target-cgpa{background:rgba(255,255,255,.72);border-color:rgba(23,105,255,.13);box-shadow:0 10px 28px rgba(37,84,132,.08)}
+body[data-ui-experience="digital-architecture"] .target-cgpa b{color:#1769ff}
+body[data-ui-experience="digital-architecture"] .target-about-copy{max-width:850px}.target-about-copy p{color:#596c84;font-size:11px;line-height:1.95}
+body[data-ui-experience="digital-architecture"] .target-traits span{padding:8px 11px;border:1px solid rgba(31,102,170,.12);background:rgba(255,255,255,.68);color:#3e5f80;border-radius:999px;box-shadow:0 6px 18px rgba(42,81,119,.05)}
+
+/* Skills become bright engineering modules. */
+body[data-ui-experience="digital-architecture"] .target-skill-groups{grid-template-columns:1fr 1fr;gap:18px}
+body[data-ui-experience="digital-architecture"] .target-skill-panel{padding:25px;border:1px solid rgba(43,92,145,.13);border-radius:20px;background:rgba(255,255,255,.72);box-shadow:var(--da-shadow);backdrop-filter:blur(15px)}
+body[data-ui-experience="digital-architecture"] .target-skill-panel h3{font-size:13px;color:#19304b}.target-skill-panel h3 i{background:#22b9ff;box-shadow:0 0 12px rgba(34,185,255,.45)}
+body[data-ui-experience="digital-architecture"] .target-skill>div:first-child{font-size:10px;color:#4e627b}.target-skill>div:first-child b{color:#1769ff;font-size:8px}
+body[data-ui-experience="digital-architecture"] .target-progress{height:5px;background:rgba(37,92,150,.08)}.target-progress i{background:linear-gradient(90deg,#22b9ff,#1769ff)!important;box-shadow:0 0 9px rgba(34,185,255,.18)}
+body[data-ui-experience="digital-architecture"] .target-skill-panel.purple .target-progress i{background:linear-gradient(90deg,#927dff,#7659e8)!important;box-shadow:0 0 9px rgba(118,89,232,.16)}
+body[data-ui-experience="digital-architecture"] .target-tech-stack{padding-top:42px}.target-tech-stack>span{color:#71839a}.target-tech-stack>div{gap:8px}.target-tech-stack b{padding:8px 12px;border:1px solid rgba(38,94,151,.10);background:rgba(255,255,255,.68);color:#47627e;font-size:8px;box-shadow:0 5px 16px rgba(42,78,117,.04)}
+
+/* Bento project architecture. */
+body[data-ui-experience="digital-architecture"] .target-project-grid{grid-template-columns:repeat(12,1fr);gap:18px}
+body[data-ui-experience="digital-architecture"] .target-project-card{grid-column:span 4;min-height:390px;padding:0 20px 20px;border:1px solid rgba(43,91,145,.13);border-top:2px solid var(--da-blue);border-radius:20px;background:rgba(255,255,255,.82);box-shadow:var(--da-shadow);overflow:hidden;transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease}
+body[data-ui-experience="digital-architecture"] .target-project-card:nth-child(1),body[data-ui-experience="digital-architecture"] .target-project-card:nth-child(4){grid-column:span 6}
+body[data-ui-experience="digital-architecture"] .target-project-card:nth-child(2){--project-accent:#22b9ff}.target-project-card:nth-child(3){--project-accent:#7659e8}
+body[data-ui-experience="digital-architecture"] .target-project-card:nth-child(4){--project-accent:#3f86ff}
+body[data-ui-experience="digital-architecture"] .target-project-card:hover{transform:translateY(-6px);border-color:rgba(23,105,255,.25);box-shadow:0 28px 78px rgba(39,86,133,.14)}
+body[data-ui-experience="digital-architecture"] .target-project-image{height:190px;margin:0 -20px 18px;background:linear-gradient(135deg,#edf6ff,#fff);border-bottom:1px solid rgba(45,93,144,.10);overflow:hidden}
+body[data-ui-experience="digital-architecture"] .target-project-image img{transition:transform .5s ease;object-fit:cover}.target-project-card:hover .target-project-image img{transform:scale(1.045)}
+body[data-ui-experience="digital-architecture"] .target-project-head{margin-top:0}.target-project-icon{background:rgba(23,105,255,.07);border-color:rgba(23,105,255,.12);color:#1769ff}
+body[data-ui-experience="digital-architecture"] .target-project-head small{color:#26734d;background:rgba(39,155,91,.06);border-color:rgba(39,155,91,.12)}
+body[data-ui-experience="digital-architecture"] .target-project-head em{color:#63758c;background:#f4f8fc;border-color:rgba(45,91,142,.10)}
+body[data-ui-experience="digital-architecture"] .target-project-card h3{color:#152842;font-size:17px}.target-project-card>p{color:#64768d;font-size:9px;line-height:1.8}
+body[data-ui-experience="digital-architecture"] .target-project-tags span{padding:6px 8px;background:#f2f7fc;color:#41617f;border:1px solid rgba(41,96,150,.09);font-size:7px}
+body[data-ui-experience="digital-architecture"] .target-project-links a{color:#1769ff;background:#fff;border-color:rgba(23,105,255,.16);font-size:8px}.target-project-links a:hover{color:#fff!important;background:#1769ff;border-color:#1769ff}
+
+/* Journey and credentials. */
+body[data-ui-experience="digital-architecture"] .target-timeline:before{background:linear-gradient(#22b9ff,#1769ff,rgba(118,89,232,.18),transparent)}
+body[data-ui-experience="digital-architecture"] .target-education-card,body[data-ui-experience="digital-architecture"] .target-experience-card{border-color:rgba(43,91,145,.13);background:rgba(255,255,255,.76);box-shadow:0 16px 48px rgba(41,78,117,.07);backdrop-filter:blur(13px)}
+body[data-ui-experience="digital-architecture"] .target-education-icon{color:#1769ff;background:rgba(23,105,255,.06);border-color:rgba(23,105,255,.14)}
+body[data-ui-experience="digital-architecture"] .target-education-card h3,.target-experience-card h3{color:#1a2e47}.target-education-meta span,.target-experience-meta span{color:#58708b}.target-education-card p,.target-experience-card p{color:#65778d}
+body[data-ui-experience="digital-architecture"] .target-certificate-grid{grid-template-columns:repeat(4,1fr);gap:16px}
+body[data-ui-experience="digital-architecture"] .target-certificate-card{min-height:260px;border:1px solid rgba(43,91,145,.13);border-radius:18px;background:rgba(255,255,255,.82);box-shadow:0 18px 52px rgba(39,76,115,.08);overflow:hidden;transition:.28s ease}
+body[data-ui-experience="digital-architecture"] .target-certificate-card:hover{transform:translateY(-5px);border-color:rgba(23,105,255,.24);box-shadow:0 25px 68px rgba(39,87,135,.13)}
+body[data-ui-experience="digital-architecture"] .target-certificate-card h3{color:#172c45}.target-certificate-card p{color:#6a7c91}.target-certificate-card>div:last-child a{color:#1769ff;background:#f5f9fd;border-color:rgba(23,105,255,.13)}
+
+/* Resume, languages, contact and footer. */
+body[data-ui-experience="digital-architecture"] .target-resume-card,body[data-ui-experience="digital-architecture"] .target-language-card,body[data-ui-experience="digital-architecture"] .target-contact-card{border-color:rgba(43,91,145,.13);background:rgba(255,255,255,.80);box-shadow:0 18px 55px rgba(39,76,115,.08);backdrop-filter:blur(14px)}
+body[data-ui-experience="digital-architecture"] .target-resume-preview{background:linear-gradient(145deg,#edf6ff,#fff);border-color:rgba(43,91,145,.10)}
+body[data-ui-experience="digital-architecture"] .target-resume-card h3,.target-language-card b,.target-contact-card b{color:#172c45}.target-resume-card p,.target-language-card p,.target-contact-card span{color:#697b91}
+body[data-ui-experience="digital-architecture"] .target-resume-actions a{color:#1769ff;background:#fff;border-color:rgba(23,105,255,.14)}
+body[data-ui-experience="digital-architecture"] .target-contact-grid{grid-template-columns:1fr 1fr;gap:28px}.target-contact-card:hover{transform:translateY(-4px);border-color:rgba(23,105,255,.25);box-shadow:0 24px 65px rgba(39,87,135,.12)}
+body[data-ui-experience="digital-architecture"] .target-contact-icon{background:rgba(23,105,255,.07);border-color:rgba(23,105,255,.12);color:#1769ff}
+body[data-ui-experience="digital-architecture"] .target-footer{margin-top:110px;padding:28px 36px;color:#667991;background:rgba(246,250,254,.82);border-top:1px solid rgba(43,91,145,.12);box-shadow:0 -12px 40px rgba(40,76,115,.04)}
+body[data-ui-experience="digital-architecture"] .target-footer>div:first-child{color:#172c45}.target-footer>div:first-child span{color:#1769ff}.target-footer-links a{color:#50677f}.target-footer-links a:hover{color:#1769ff}
+
+/* Mobile is intentionally re-composed, not merely scaled down. */
+@media(max-width:900px){
+ body[data-ui-experience="digital-architecture"] .target-hero-inner{width:calc(100% - 40px);grid-template-columns:1fr;grid-template-rows:auto auto auto;grid-template-areas:"scene" "copy" "quote";min-height:auto;padding:94px 0 64px;gap:34px}
+ body[data-ui-experience="digital-architecture"] .target-portrait-wrap{height:390px}.target-portrait{width:260px;height:260px}.target-portrait-wrap::before{height:310px;width:min(430px,100%)}.target-ring-a{inset:55px}.target-ring-b{inset:35px}.target-open{right:8%;bottom:25px}
+ body[data-ui-experience="digital-architecture"] .target-hero-copy{max-width:650px;margin:0 auto;text-align:left}.target-hero-copy h1{font-size:clamp(3.5rem,12vw,5.6rem)}.target-hero-description{max-width:600px}.target-stats{max-width:100%}
+ body[data-ui-experience="digital-architecture"] .target-hero-quote{justify-self:stretch;max-width:none}
+ body[data-ui-experience="digital-architecture"] .target-section{width:calc(100% - 40px)}
+ body[data-ui-experience="digital-architecture"] .target-certificate-grid{grid-template-columns:repeat(2,1fr)}
+ body[data-ui-experience="digital-architecture"] .target-project-card,body[data-ui-experience="digital-architecture"] .target-project-card:nth-child(1),body[data-ui-experience="digital-architecture"] .target-project-card:nth-child(4){grid-column:span 6}
+}
+@media(max-width:700px){
+ body[data-ui-experience="digital-architecture"] .target-nav{height:60px}.target-nav-inner{width:calc(100% - 28px)}
+ body[data-ui-experience="digital-architecture"] .target-hero{min-height:auto}.target-hero-inner{padding-top:86px}
+ body[data-ui-experience="digital-architecture"] .target-portrait-wrap{height:325px}.target-portrait{width:220px;height:220px}.target-portrait-wrap::before{height:255px;border-radius:24px}.target-ring-a{inset:48px}.target-ring-b{inset:30px}.target-open{right:2%;bottom:17px;font-size:8px;padding:8px 11px}
+ body[data-ui-experience="digital-architecture"] .target-portrait-wrap::after{top:0;right:0;font-size:6px}
+ body[data-ui-experience="digital-architecture"] .target-hero-copy h1{font-size:clamp(3rem,15vw,4.6rem);line-height:.9}.target-eyebrow{font-size:8px}.target-role{font-size:10px}.target-hero-description{font-size:11px;line-height:1.8}.target-actions a{min-height:38px;padding:0 13px;font-size:9px}.target-stats b{font-size:16px}.target-stats span{font-size:6px}
+ body[data-ui-experience="digital-architecture"] .target-section{padding-top:82px}.target-section-heading{margin-bottom:30px}.target-section-heading h2{font-size:clamp(2rem,10vw,2.8rem)}.target-section-subtitle{font-size:10px}
+ body[data-ui-experience="digital-architecture"] .target-skill-groups{grid-template-columns:1fr}.target-skill-panel{padding:21px}
+ body[data-ui-experience="digital-architecture"] .target-project-grid{grid-template-columns:1fr;gap:15px}.target-project-card,.target-project-card:nth-child(1),.target-project-card:nth-child(2),.target-project-card:nth-child(3),.target-project-card:nth-child(4){grid-column:1;min-height:355px}.target-project-image{height:180px}
+ body[data-ui-experience="digital-architecture"] .target-certificate-grid{grid-template-columns:1fr}.target-contact-grid{grid-template-columns:1fr}.target-footer{margin-top:78px;padding:25px 20px;display:grid;gap:18px;text-align:center}
+}
+@media(prefers-reduced-motion:reduce){body[data-ui-experience="digital-architecture"] .target-ring-a,body[data-ui-experience="digital-architecture"] .target-ring-b{animation:none!important}body[data-ui-experience="digital-architecture"] .target-project-card,body[data-ui-experience="digital-architecture"] .target-project-image img{transition:none!important}}
