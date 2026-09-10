@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Check, Eye, Sparkles, X, Monitor, Smartphone, Upload, Image as ImageIcon } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { Check, Eye, Sparkles, X, Monitor, Smartphone, Upload, Image as ImageIcon, Camera, Trash2 } from 'lucide-react'
 import { publishUIExperience, saveRecord } from '../actions'
 import { LOADING_EXPERIENCES } from '@/lib/loading-experiences'
 import { UI_EXPERIENCES, type UIExperienceId } from '@/lib/ui-experiences'
@@ -16,7 +16,6 @@ function AssetStatus({ id }: { id: UIExperienceId }) {
     })).then(results => { if (alive) setStatus(results.every(Boolean) ? 'ready' : 'missing') })
     return () => { alive = false }
   }, [id])
-
   const label = status === 'checking' ? 'Checking…' : status === 'ready' ? 'Connected' : 'Awaiting asset'
   return <div className={`ui-loading-assets ui-loading-assets-${status}`}><div><Monitor size={12}/><span>Desktop Loading</span></div><div><Smartphone size={12}/><span>Mobile Loading</span></div><strong>{status === 'ready' ? '✓' : status === 'missing' ? '!' : '…'} {label}</strong></div>
 }
@@ -25,6 +24,7 @@ function ProfileImageManager({ initialImages }: { initialImages: Record<UIExperi
   const [images, setImages] = useState(initialImages)
   const [uploading, setUploading] = useState<UIExperienceId | null>(null)
   const [message, setMessage] = useState('')
+  const inputs = useRef<Partial<Record<UIExperienceId, HTMLInputElement | null>>>({})
 
   const upload = async (id: UIExperienceId, file: File) => {
     setMessage('')
@@ -35,14 +35,15 @@ function ProfileImageManager({ initialImages }: { initialImages: Record<UIExperi
       const supabase = createClient()
       const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-').replace(/-+/g, '-')
       const path = `profile/${id}/${crypto.randomUUID()}-${safeName || 'profile-image'}`
-      const { error: uploadError } = await supabase.storage.from('portfolio-images').upload(path, file, { upsert: false, contentType: file.type })
+      const { error: uploadError } = await supabase.storage.from('portfolio-images').upload(path, file, { upsert: false, contentType: file.type, cacheControl: '3600' })
       if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`)
       const publicUrl = supabase.storage.from('portfolio-images').getPublicUrl(path).data.publicUrl
       const formData = new FormData()
       formData.set('table', 'site_content')
       formData.set('key', `profile_image_${id}`)
       formData.set('value', publicUrl)
-      await saveRecord(formData)
+      const result = await saveRecord(formData)
+      if (!result?.ok) throw new Error(result?.error || 'Could not save the profile image.')
       setImages(prev => ({ ...prev, [id]: publicUrl }))
       setMessage(`${UI_EXPERIENCES[id].name} profile image saved.`)
     } catch (error) {
@@ -50,10 +51,27 @@ function ProfileImageManager({ initialImages }: { initialImages: Record<UIExperi
     } finally { setUploading(null) }
   }
 
+  const remove = async (id: UIExperienceId) => {
+    setMessage('')
+    setUploading(id)
+    try {
+      const formData = new FormData()
+      formData.set('table', 'site_content')
+      formData.set('key', `profile_image_${id}`)
+      formData.set('value', '')
+      const result = await saveRecord(formData)
+      if (!result?.ok) throw new Error(result?.error || 'Could not remove the profile image override.')
+      setImages(prev => ({ ...prev, [id]: '' }))
+      setMessage(`${UI_EXPERIENCES[id].name} now uses the default profile image.`)
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Unable to remove profile image.')
+    } finally { setUploading(null) }
+  }
+
   return <section className="ui-profile-manager" aria-labelledby="ui-profile-title">
     <div className="ui-profile-manager-heading">
-      <div><p className="mono ui-experience-kicker">PROFILE IMAGERY</p><h2 id="ui-profile-title">One profile. Three visual identities.</h2><p>Set a different profile image for each UI experience. Changing one image never changes the other two.</p></div>
-      <div className="ui-profile-manager-note">Images are stored in the existing portfolio media storage.</div>
+      <div><p className="mono ui-experience-kicker">PROFILE PICTURE</p><h2 id="ui-profile-title">Your portrait, tailored to each experience.</h2><p>Change the actual profile picture shown on your public portfolio. Each UI experience has its own independent image.</p></div>
+      <div className="ui-profile-manager-note"><Camera size={16}/> <span>Separate image per experience</span></div>
     </div>
     {message && <div className="ui-profile-message" role="status">{message}</div>}
     <div className="ui-profile-grid">
@@ -63,15 +81,18 @@ function ProfileImageManager({ initialImages }: { initialImages: Record<UIExperi
         const busy = uploading === id
         return <article key={id} className={`ui-profile-card ui-profile-${id}`}>
           <div className="ui-profile-preview">
-            {image ? <img src={image} alt={`${item.name} profile preview`} /> : <div className="ui-profile-empty"><ImageIcon size={26}/><span>No custom image</span></div>}
-            <div className="ui-profile-overlay"><span>{item.icon} {item.name}</span><small>{image ? 'CUSTOM PROFILE' : 'USING DEFAULT PROFILE'}</small></div>
+            {image ? <img src={`${image}${image.includes('?') ? '&' : '?'}v=${encodeURIComponent(image.slice(-24))}`} alt={`${item.name} profile preview`} /> : <div className="ui-profile-empty"><ImageIcon size={26}/><span>Using default profile picture</span></div>}
+            <div className="ui-profile-overlay"><span>{item.icon} {item.name}</span><small>{image ? 'CUSTOM PROFILE PICTURE' : 'DEFAULT PROFILE PICTURE'}</small></div>
           </div>
           <div className="ui-profile-body">
             <div><h3>{item.name}</h3><p>{item.keywords.join(' · ')}</p></div>
-            <label className="ui-profile-upload">
-              <input type="file" accept="image/*" disabled={busy} onChange={event => { const file = event.target.files?.[0]; if (file) upload(id, file); event.currentTarget.value = '' }}/>
-              <Upload size={15}/><span>{busy ? 'Uploading…' : image ? 'Change profile image' : 'Choose profile image'}</span>
-            </label>
+            <div className="ui-profile-controls">
+              <label className="ui-profile-upload">
+                <input ref={element => { inputs.current[id] = element }} type="file" accept="image/jpeg,image/png,image/webp,image/avif" disabled={busy} onChange={event => { const file = event.target.files?.[0]; if (file) upload(id, file); event.currentTarget.value = '' }}/>
+                <Upload size={15}/><span>{busy ? 'Uploading…' : image ? 'Change profile picture' : 'Upload profile picture'}</span>
+              </label>
+              {image && <button type="button" className="admin-secondary ui-profile-remove" disabled={busy} onClick={() => remove(id)}><Trash2 size={14}/> Remove</button>}
+            </div>
           </div>
         </article>
       })}
