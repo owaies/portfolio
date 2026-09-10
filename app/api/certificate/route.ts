@@ -46,8 +46,7 @@ export async function GET(request: Request) {
   let path = requestedPath
 
   // A certificate can be re-uploaded from the admin panel, which changes its
-  // UUID-prefixed storage path. Browsers can still hold an older link in cache.
-  // Resolve that stale path by its stable filename before building the public URL.
+  // UUID-prefixed storage path. Resolve an older cached path by its filename.
   const filename = requestedPath.split('/').pop() || requestedPath
   const { data: matchingCertificates } = await supabase
     .from('certificates')
@@ -73,24 +72,16 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Unable to open certificate.' }, { status: 500 })
   }
 
-  // Certificates are portfolio content, so serve them through Supabase's public
-  // object endpoint just like the working resume viewer. This avoids browser/
-  // mobile iframe issues caused by proxying signed PDFs through a server route.
+  // Let Supabase deliver the PDF directly. This is the same delivery model as
+  // the working resume viewer and avoids server-side PDF fetch failures on mobile.
+  const outputFilename = path.split('/').pop()?.replace(/[^a-zA-Z0-9._-]/g, '-') || 'certificate.pdf'
   const download = url.searchParams.get('download') === '1'
-  if (!download) return NextResponse.redirect(publicData.publicUrl)
 
-  const response = await fetch(publicData.publicUrl, { cache: 'no-store' })
-  if (!response.ok) {
-    return NextResponse.json({ error: 'Unable to download certificate PDF.' }, { status: 502 })
+  if (!download) {
+    return NextResponse.redirect(publicData.publicUrl)
   }
 
-  const body = await response.arrayBuffer()
-  const outputFilename = path.split('/').pop()?.replace(/[^a-zA-Z0-9._-]/g, '-') || 'certificate.pdf'
-  return new NextResponse(body, {
-    headers: {
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="${outputFilename}"`,
-      'Cache-Control': 'no-store',
-    },
-  })
+  const downloadUrl = new URL(publicData.publicUrl)
+  downloadUrl.searchParams.set('download', outputFilename)
+  return NextResponse.redirect(downloadUrl)
 }
