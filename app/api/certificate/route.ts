@@ -34,6 +34,14 @@ function normalizeCertificatePath(value: string) {
   }
 }
 
+function certificateFilename(path: string) {
+  const filename = path.split('/').pop() || path
+  return filename.replace(
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}-/i,
+    '',
+  )
+}
+
 export async function GET(request: Request) {
   const url = new URL(request.url)
   const requestedPath = normalizeCertificatePath(url.searchParams.get('path') || '')
@@ -45,12 +53,13 @@ export async function GET(request: Request) {
   const supabase = await createClient()
   let path = requestedPath
 
-  // A certificate can be re-uploaded from the admin panel, which changes its
-  // UUID-prefixed storage path. Resolve an older cached path by its filename.
-  const filename = requestedPath.split('/').pop() || requestedPath
+  // Admin uploads prefix certificate filenames with a UUID. Re-uploading the
+  // same certificate therefore creates a new object path. Resolve stale links
+  // by the stable filename after removing that generated UUID prefix.
+  const requestedFilename = certificateFilename(requestedPath)
   const { data: matchingCertificates } = await supabase
     .from('certificates')
-    .select('certificate_pdf, active')
+    .select('certificate_pdf')
     .eq('active', true)
 
   const exactMatch = matchingCertificates?.find((row) =>
@@ -60,8 +69,9 @@ export async function GET(request: Request) {
   if (!exactMatch) {
     const filenameMatch = matchingCertificates?.find((row) => {
       const candidate = normalizeCertificatePath(row.certificate_pdf || '')
-      return candidate.split('/').pop() === filename
+      return certificateFilename(candidate) === requestedFilename
     })
+
     if (filenameMatch?.certificate_pdf) {
       path = normalizeCertificatePath(filenameMatch.certificate_pdf)
     }
@@ -72,8 +82,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Unable to open certificate.' }, { status: 500 })
   }
 
-  // Let Supabase deliver the PDF directly. This is the same delivery model as
-  // the working resume viewer and avoids server-side PDF fetch failures on mobile.
+  // Let Supabase deliver the PDF directly, matching the working resume flow.
   const outputFilename = path.split('/').pop()?.replace(/[^a-zA-Z0-9._-]/g, '-') || 'certificate.pdf'
   const download = url.searchParams.get('download') === '1'
 
