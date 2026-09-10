@@ -1,0 +1,31 @@
+/* Desktop-site on touch phones must use the desktop CSS viewport, not pointer type. */
+
+@media (min-width: 901px) {
+  .target-menu-button,
+  .target-mobile-menu { display: none !important; }
+
+  .target-nav-links,
+  .target-nav-actions > a { display: inline-flex !important; }
+
+  .target-nav { position: sticky !important; top: 0 !important; z-index: 1000 !important; }
+
+  /* Chrome Desktop-site can report an unusually tall svh. Do not center the
+     hero inside that virtual height, otherwise the content floats halfway
+     down the page and leaves a giant empty region above it. */
+  .target-hero {
+    min-height: auto !important;
+  }
+
+  .target-hero-inner {
+    min-height: 0 !important;
+    padding-top: 72px !important;
+    padding-bottom: 72px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .target-menu-button { display: inline-grid !important; }
+  .target-nav-links,
+  .target-nav-actions > a { display: none !important; }
+  .target-mobile-menu { display: grid !important; }
+}
