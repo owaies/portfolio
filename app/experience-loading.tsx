@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { DEFAULT_UI_EXPERIENCE, isUIExperienceId, type UIExperienceId } from '@/lib/ui-experiences'
 import { LOADING_EXPERIENCES } from '@/lib/loading-experiences'
 
@@ -20,12 +21,19 @@ function isMobileOrPortrait() {
 }
 
 export default function ExperienceLoadingScreen() {
-  const [visible, setVisible] = useState(
-    () => typeof window === 'undefined' || !window.location.pathname.startsWith('/admin')
-  )
+  const pathname = usePathname()
+  const isAdminRoute = pathname.startsWith('/admin')
+  const [visible, setVisible] = useState(() => !isAdminRoute)
   const [fading, setFading] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const experience = useMemo(() => getExperienceFromDocument(), [])
+
+  // RootLayout persists during client-side navigation. usePathname makes the
+  // loader react to /admin navigation instead of leaving the old public-page
+  // loader mounted over the admin UI.
+  useEffect(() => {
+    if (isAdminRoute) setVisible(false)
+  }, [isAdminRoute])
 
   useEffect(() => {
     let disposed = false
@@ -206,7 +214,7 @@ export default function ExperienceLoadingScreen() {
     }
   }, [experience])
 
-  if (!visible || (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin'))) return null
+  if (isAdminRoute || !visible) return null
 
   return (
     <div
