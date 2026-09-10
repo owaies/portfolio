@@ -42,6 +42,14 @@ function certificateFilename(path: string) {
   )
 }
 
+function redirectToPdf(url: string) {
+  return NextResponse.redirect(url, {
+    headers: {
+      'Cache-Control': 'no-store, max-age=0',
+    },
+  })
+}
+
 export async function GET(request: Request) {
   const url = new URL(request.url)
   const requestedPath = normalizeCertificatePath(url.searchParams.get('path') || '')
@@ -87,10 +95,10 @@ export async function GET(request: Request) {
   const download = url.searchParams.get('download') === '1'
 
   if (!download) {
-    return NextResponse.redirect(publicData.publicUrl)
+    return redirectToPdf(publicData.publicUrl)
   }
 
   const downloadUrl = new URL(publicData.publicUrl)
   downloadUrl.searchParams.set('download', outputFilename)
-  return NextResponse.redirect(downloadUrl)
+  return redirectToPdf(downloadUrl.toString())
 }
