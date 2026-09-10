@@ -10,7 +10,7 @@ const configs: Record<string,{table:string;title:string;columns:string[]}> = {
   languages:{table:'languages',title:'Languages',columns:['name','proficiency_level','percentage','accent_color','display_order','active']},
   experience:{table:'experience',title:'Experience',columns:['company','role','period','description','technologies','location','currently_working','display_order','active']},
   education:{table:'education',title:'Education',columns:['period','degree','institution','details','status','accent_color','icon','display_order','active']},
-  certificates:{table:'certificates',title:'Certificates',columns:['title','issuing_organization','issue_date','credential_id','credential_url','thumbnail','certificate_pdf','display_order','active']},
+  certificates:{table:'certificates',title:'Certificates',columns:['title','issuing_organization','issue_date','thumbnail','certificate_pdf','display_order','active']},
   resume:{table:'resumes',title:'Resume',columns:['label','preview_image','resume_pdf','active']},
   gallery:{table:'gallery',title:'Gallery',columns:['image_url','caption','display_order','featured','published']},
   content:{table:'site_content',title:'Content / CMS',columns:['key','value']},
