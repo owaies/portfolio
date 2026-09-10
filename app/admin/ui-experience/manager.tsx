@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Check, Eye, Sparkles, X, Monitor, Smartphone } from 'lucide-react'
-import { publishUIExperience } from '../actions'
+import { Check, Eye, Sparkles, X, Monitor, Smartphone, Upload, Image as ImageIcon } from 'lucide-react'
+import { publishUIExperience, saveRecord } from '../actions'
 import { LOADING_EXPERIENCES } from '@/lib/loading-experiences'
 import { UI_EXPERIENCES, type UIExperienceId } from '@/lib/ui-experiences'
+import { createClient } from '@/lib/supabase/client'
 
 function AssetStatus({ id }: { id: UIExperienceId }) {
   const [status, setStatus] = useState<'checking' | 'ready' | 'missing'>('checking')
@@ -20,7 +21,65 @@ function AssetStatus({ id }: { id: UIExperienceId }) {
   return <div className={`ui-loading-assets ui-loading-assets-${status}`}><div><Monitor size={12}/><span>Desktop Loading</span></div><div><Smartphone size={12}/><span>Mobile Loading</span></div><strong>{status === 'ready' ? '✓' : status === 'missing' ? '!' : '…'} {label}</strong></div>
 }
 
-export default function UIExperienceManager({ active }: { active: UIExperienceId }) {
+function ProfileImageManager({ initialImages }: { initialImages: Record<UIExperienceId, string> }) {
+  const [images, setImages] = useState(initialImages)
+  const [uploading, setUploading] = useState<UIExperienceId | null>(null)
+  const [message, setMessage] = useState('')
+
+  const upload = async (id: UIExperienceId, file: File) => {
+    setMessage('')
+    if (!file.type.startsWith('image/')) { setMessage('Please choose an image file.'); return }
+    if (file.size > 8 * 1024 * 1024) { setMessage('Profile images must be 8 MB or smaller.'); return }
+    setUploading(id)
+    try {
+      const supabase = createClient()
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-').replace(/-+/g, '-')
+      const path = `profile/${id}/${crypto.randomUUID()}-${safeName || 'profile-image'}`
+      const { error: uploadError } = await supabase.storage.from('portfolio-images').upload(path, file, { upsert: false, contentType: file.type })
+      if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`)
+      const publicUrl = supabase.storage.from('portfolio-images').getPublicUrl(path).data.publicUrl
+      const formData = new FormData()
+      formData.set('table', 'site_content')
+      formData.set('key', `profile_image_${id}`)
+      formData.set('value', publicUrl)
+      await saveRecord(formData)
+      setImages(prev => ({ ...prev, [id]: publicUrl }))
+      setMessage(`${UI_EXPERIENCES[id].name} profile image saved.`)
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Unable to save profile image.')
+    } finally { setUploading(null) }
+  }
+
+  return <section className="ui-profile-manager" aria-labelledby="ui-profile-title">
+    <div className="ui-profile-manager-heading">
+      <div><p className="mono ui-experience-kicker">PROFILE IMAGERY</p><h2 id="ui-profile-title">One profile. Three visual identities.</h2><p>Set a different profile image for each UI experience. Changing one image never changes the other two.</p></div>
+      <div className="ui-profile-manager-note">Images are stored in the existing portfolio media storage.</div>
+    </div>
+    {message && <div className="ui-profile-message" role="status">{message}</div>}
+    <div className="ui-profile-grid">
+      {(Object.keys(UI_EXPERIENCES) as UIExperienceId[]).map(id => {
+        const item = UI_EXPERIENCES[id]
+        const image = images[id]
+        const busy = uploading === id
+        return <article key={id} className={`ui-profile-card ui-profile-${id}`}>
+          <div className="ui-profile-preview">
+            {image ? <img src={image} alt={`${item.name} profile preview`} /> : <div className="ui-profile-empty"><ImageIcon size={26}/><span>No custom image</span></div>}
+            <div className="ui-profile-overlay"><span>{item.icon} {item.name}</span><small>{image ? 'CUSTOM PROFILE' : 'USING DEFAULT PROFILE'}</small></div>
+          </div>
+          <div className="ui-profile-body">
+            <div><h3>{item.name}</h3><p>{item.keywords.join(' · ')}</p></div>
+            <label className="ui-profile-upload">
+              <input type="file" accept="image/*" disabled={busy} onChange={event => { const file = event.target.files?.[0]; if (file) upload(id, file); event.currentTarget.value = '' }}/>
+              <Upload size={15}/><span>{busy ? 'Uploading…' : image ? 'Change profile image' : 'Choose profile image'}</span>
+            </label>
+          </div>
+        </article>
+      })}
+    </div>
+  </section>
+}
+
+export default function UIExperienceManager({ active, profileImages }: { active: UIExperienceId; profileImages: Record<UIExperienceId, string> }) {
   const [preview, setPreview] = useState<UIExperienceId | null>(null)
   const [selected, setSelected] = useState<UIExperienceId>(active)
   const [confirm, setConfirm] = useState(false)
@@ -30,6 +89,7 @@ export default function UIExperienceManager({ active }: { active: UIExperienceId
   return <>
     <div className="ui-experience-intro"><div><p className="mono ui-experience-kicker">UI EXPERIENCE</p><h2>Choose how your portfolio looks and feels.</h2><p>Three presentation systems. One content system. Your projects, skills, education, certificates and contact data stay intact while the entire visual world changes.</p></div><div className="ui-experience-current"><span>Current Active Experience</span><strong>{UI_EXPERIENCES[active].icon} {UI_EXPERIENCES[active].name}</strong><small>Public visitors see this experience.</small></div></div>
     {error&&<div className="ui-experience-error">{error}</div>}
+    <ProfileImageManager initialImages={profileImages} />
     <div className="ui-experience-grid">{(Object.keys(UI_EXPERIENCES) as UIExperienceId[]).map(id=>{const item=UI_EXPERIENCES[id],isActive=active===id,isSelected=selected===id;return <article key={id} className={`ui-experience-card ui-experience-${id} ${isActive?'is-active':''} ${isSelected?'is-selected':''}`}><div className="ui-experience-art"><div className="ui-art-grid"/><div className="ui-art-orb"/><div className="ui-art-label">{item.tagline}</div><div className="ui-art-symbol">{item.icon}</div></div><div className="ui-experience-card-body"><div className="ui-experience-title"><div><span className="ui-experience-icon">{item.icon}</span><div><h3>{item.name}</h3><p>{item.keywords.join(' · ')}</p></div></div>{isActive&&<span className="ui-active-badge"><Check size={12}/> ACTIVE</span>}</div><p className="ui-experience-description">{item.description}</p><AssetStatus id={id}/><div className="ui-experience-actions"><button type="button" className="admin-secondary" onClick={()=>setPreview(id)}><Eye size={13}/> Preview</button><button type="button" className={isSelected?'ui-selected-button':'admin-primary'} onClick={()=>setSelected(id)} disabled={isActive||isSelected}>{isSelected&&!isActive?<Check size={13}/>:<Sparkles size={13}/>} {isActive?'Active':isSelected?'Selected':'Select'}</button></div></div></article>})}</div>
     {selected!==active&&<div className="ui-experience-publish-bar"><div><span>Ready to publish</span><strong>{UI_EXPERIENCES[selected].icon} {UI_EXPERIENCES[selected].name}</strong></div><button type="button" className="admin-primary" onClick={()=>setConfirm(true)} disabled={publishing}>Publish Experience</button></div>}
     {confirm&&<div className="ui-confirm-backdrop" role="dialog" aria-modal="true" aria-labelledby="ui-confirm-title"><div className="ui-confirm-modal"><button type="button" className="admin-icon-button ui-confirm-close" aria-label="Cancel publication" onClick={()=>setConfirm(false)}><X size={17}/></button><span className="ui-confirm-mark">✦</span><p className="mono ui-experience-kicker">CHANGE UI EXPERIENCE?</p><h3 id="ui-confirm-title">Publish this visual experience?</h3><p>This will change the visual experience of the public portfolio.</p><div className="ui-confirm-compare"><div><small>Current</small><strong>{UI_EXPERIENCES[active].icon} {UI_EXPERIENCES[active].name}</strong></div><span>→</span><div><small>New</small><strong>{UI_EXPERIENCES[selected].icon} {UI_EXPERIENCES[selected].name}</strong></div></div><div className="ui-confirm-actions"><button type="button" className="admin-secondary" onClick={()=>setConfirm(false)}>Cancel</button><button type="button" className="admin-primary" onClick={publish} disabled={publishing}>{publishing?'Publishing…':'Publish'}</button></div></div></div>}
