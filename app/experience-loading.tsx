@@ -20,14 +20,17 @@ function isMobileOrPortrait() {
 }
 
 export default function ExperienceLoadingScreen() {
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(() => typeof window === 'undefined' || !window.location.pathname.startsWith('/admin'))
   const [fading, setFading] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const experience = useMemo(() => getExperienceFromDocument(), [])
 
   useEffect(() => {
     let disposed = false
-    if (window.location.pathname.startsWith('/admin')) return
+    if (window.location.pathname.startsWith('/admin')) {
+      setVisible(false)
+      return
+    }
 
     const video = videoRef.current
     if (!video) return
@@ -56,8 +59,6 @@ export default function ExperienceLoadingScreen() {
 
     const preserveCinematicEnding = () => {
       if (disposed || failed || reducedMotion || !Number.isFinite(video.duration)) return
-
-      // Keep the final ~1.15s at normal speed so the designed end frame is still seen.
       const endingWindow = 1.15
       const remaining = video.duration - video.currentTime
       if (remaining <= endingWindow) {
@@ -65,7 +66,6 @@ export default function ExperienceLoadingScreen() {
         if (normalPlaybackTimer) window.clearTimeout(normalPlaybackTimer)
         return
       }
-
       video.playbackRate = 2.5
       if (normalPlaybackTimer) window.clearTimeout(normalPlaybackTimer)
       normalPlaybackTimer = window.setTimeout(preserveCinematicEnding, 120)
@@ -74,23 +74,18 @@ export default function ExperienceLoadingScreen() {
     const accelerateForFastLoad = () => {
       if (disposed || failed || reducedMotion || fastTransitionStarted || !appReady) return
       if (!video.duration || !Number.isFinite(video.duration)) return
-
-      // Never make the loader feel rushed. After a short cinematic minimum,
-      // accelerate only the middle of the clip and return to 1x for its ending.
       const minimumCinematicTime = 1.8
       const endingWindow = 1.15
       if (video.currentTime < minimumCinematicTime) {
         fastTransitionTimer = window.setTimeout(accelerateForFastLoad, Math.max(80, (minimumCinematicTime - video.currentTime) * 1000))
         return
       }
-
       const remaining = video.duration - video.currentTime
       if (remaining <= endingWindow) {
         video.playbackRate = 1
         fastTransitionStarted = true
         return
       }
-
       fastTransitionStarted = true
       preserveCinematicEnding()
     }
