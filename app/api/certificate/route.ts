@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 function normalizeCertificatePath(value: string) {
   try {
     const raw = decodeURIComponent(value).trim()
@@ -42,47 +45,61 @@ function certificateFilename(path: string) {
   )
 }
 
-function redirectToPdf(url: string) {
-  return NextResponse.redirect(url, {
-    headers: {
-      'Cache-Control': 'no-store, max-age=0',
-    },
-  })
-}
-
 export async function GET(request: Request) {
   const url = new URL(request.url)
+  const id = url.searchParams.get('id')?.trim() || ''
   const requestedPath = normalizeCertificatePath(url.searchParams.get('path') || '')
-
-  if (!requestedPath) {
-    return NextResponse.json({ error: 'Invalid certificate file.' }, { status: 400 })
-  }
-
   const supabase = await createClient()
+
   let path = requestedPath
 
-  // Admin uploads prefix certificate filenames with a UUID. Re-uploading the
-  // same certificate therefore creates a new object path. Resolve stale links
-  // by the stable filename after removing that generated UUID prefix.
-  const requestedFilename = certificateFilename(requestedPath)
-  const { data: matchingCertificates } = await supabase
-    .from('certificates')
-    .select('certificate_pdf')
-    .eq('active', true)
+  // Prefer the certificate ID. This always resolves to the latest database
+  // record and prevents stale browser pages from pointing at deleted uploads.
+  if (id) {
+    const { data } = await supabase
+      .from('certificates')
+      .select('certificate_pdf,title')
+      .eq('id', id)
+      .eq('active', true)
+      .maybeSingle()
 
-  const exactMatch = matchingCertificates?.find((row) =>
-    normalizeCertificatePath(row.certificate_pdf || '') === requestedPath
-  )
-
-  if (!exactMatch) {
-    const filenameMatch = matchingCertificates?.find((row) => {
-      const candidate = normalizeCertificatePath(row.certificate_pdf || '')
-      return certificateFilename(candidate) === requestedFilename
-    })
-
-    if (filenameMatch?.certificate_pdf) {
-      path = normalizeCertificatePath(filenameMatch.certificate_pdf)
+    if (data?.certificate_pdf) {
+      path = normalizeCertificatePath(data.certificate_pdf)
     }
+  }
+
+  if (!path) {
+    if (!requestedPath) {
+      return NextResponse.json({ error: 'Invalid certificate file.' }, { status: 400 })
+    }
+
+    // Backward compatibility for old links that contain a stored path.
+    const requestedFilename = certificateFilename(requestedPath)
+    const { data: matchingCertificates } = await supabase
+      .from('certificates')
+      .select('certificate_pdf')
+      .eq('active', true)
+
+    const exactMatch = matchingCertificates?.find((row) =>
+      normalizeCertificatePath(row.certificate_pdf || '') === requestedPath,
+    )
+
+    if (exactMatch?.certificate_pdf) {
+      path = normalizeCertificatePath(exactMatch.certificate_pdf)
+    } else {
+      const filenameMatch = matchingCertificates?.find((row) => {
+        const candidate = normalizeCertificatePath(row.certificate_pdf || '')
+        return certificateFilename(candidate) === requestedFilename
+      })
+
+      if (filenameMatch?.certificate_pdf) {
+        path = normalizeCertificatePath(filenameMatch.certificate_pdf)
+      }
+    }
+  }
+
+  if (!path) {
+    return NextResponse.json({ error: 'Certificate not found.' }, { status: 404 })
   }
 
   const { data: publicData } = supabase.storage.from('certificates').getPublicUrl(path)
@@ -90,15 +107,30 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Unable to open certificate.' }, { status: 500 })
   }
 
-  // Let Supabase deliver the PDF directly, matching the working resume flow.
-  const outputFilename = path.split('/').pop()?.replace(/[^a-zA-Z0-9._-]/g, '-') || 'certificate.pdf'
-  const download = url.searchParams.get('download') === '1'
+  // Proxy the PDF through the portfolio's own origin. This avoids mobile
+  // browser redirects, stale Supabase URLs, and iframe/CORS viewer issues.
+  const pdfResponse = await fetch(publicData.publicUrl, {
+    cache: 'no-store',
+    headers: { Accept: 'application/pdf' },
+  })
 
-  if (!download) {
-    return redirectToPdf(publicData.publicUrl)
+  if (!pdfResponse.ok) {
+    return NextResponse.json({ error: 'Certificate PDF is unavailable.' }, { status: 404 })
   }
 
-  const downloadUrl = new URL(publicData.publicUrl)
-  downloadUrl.searchParams.set('download', outputFilename)
-  return redirectToPdf(downloadUrl.toString())
+  const outputFilename = path.split('/').pop()?.replace(/[^a-zA-Z0-9._-]/g, '-') || 'certificate.pdf'
+  const download = url.searchParams.get('download') === '1'
+  const contentType = pdfResponse.headers.get('content-type') || 'application/pdf'
+  const contentLength = pdfResponse.headers.get('content-length')
+
+  return new Response(pdfResponse.body, {
+    status: 200,
+    headers: {
+      'Content-Type': contentType,
+      ...(contentLength ? { 'Content-Length': contentLength } : {}),
+      'Content-Disposition': `${download ? 'attachment' : 'inline'}; filename="${outputFilename}"`,
+      'Cache-Control': 'no-store, max-age=0',
+      'X-Content-Type-Options': 'nosniff',
+    },
+  })
 }
