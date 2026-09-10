@@ -1,0 +1,26 @@
+/* Desktop-site mode on Android can keep a coarse pointer while exposing a desktop-width viewport.
+   Layout mode therefore follows viewport width only. */
+@media (min-width: 901px) {
+  .target-nav .target-nav-links { display: flex !important; }
+  .target-nav .target-nav-actions > a { display: inline-flex !important; }
+  .target-nav .target-menu-button { display: none !important; }
+  .target-nav .target-mobile-menu { display: none !important; }
+
+  /* Prevent Android Chrome Desktop-site from creating a very tall hero because
+     its visual viewport height is larger than the intended desktop canvas. */
+  .target-hero,
+  .target-hero-inner {
+    min-height: min(900px, calc(100svh - 58px)) !important;
+  }
+
+  .target-hero-inner {
+    padding-top: 56px !important;
+    padding-bottom: 48px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .target-nav .target-nav-links,
+  .target-nav .target-nav-actions > a { display: none !important; }
+  .target-nav .target-menu-button { display: inline-grid !important; }
+}
