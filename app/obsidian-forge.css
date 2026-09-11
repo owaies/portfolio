@@ -1,51 +1,471 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap');
 
 body[data-ui-experience="obsidian-forge"] {
-  --forge-bg:#050607;--forge-surface:rgba(13,14,16,.72);--forge-line:rgba(238,235,228,.22);--forge-line-soft:rgba(238,235,228,.11);--forge-text:#f3f0e9;--forge-muted:#aaa69e;--forge-dim:#77736d;--forge-white:#faf8f2;
-  background:var(--forge-bg)!important;color:var(--forge-text)!important;font-family:Inter,system-ui,sans-serif!important;
+  --forge-bg: #050607;
+  --forge-surface: rgba(13,14,16,.72);
+  --forge-surface-strong: rgba(8,9,11,.9);
+  --forge-line: rgba(238,235,228,.22);
+  --forge-line-soft: rgba(238,235,228,.11);
+  --forge-text: #f3f0e9;
+  --forge-muted: #aaa69e;
+  --forge-dim: #77736d;
+  --forge-white: #faf8f2;
+  background: var(--forge-bg) !important;
+  color: var(--forge-text) !important;
+  font-family: Inter, system-ui, sans-serif !important;
 }
-body[data-ui-experience="obsidian-forge"] .target-site{position:relative;overflow:clip;background:radial-gradient(ellipse at 72% 12%,rgba(255,255,255,.055),transparent 24%),linear-gradient(180deg,#050607 0%,#090a0c 42%,#050607 100%)!important}
-body[data-ui-experience="obsidian-forge"] .target-site::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.22;background-image:linear-gradient(115deg,transparent 0 18%,rgba(255,255,255,.08) 18.15%,transparent 18.4% 68%,rgba(255,255,255,.045) 68.15%,transparent 68.4%),radial-gradient(circle at 76% 9%,rgba(255,255,255,.15) 0 1px,transparent 2px),radial-gradient(circle at 19% 30%,rgba(255,255,255,.11) 0 1px,transparent 2px);background-size:100% 100%,290px 230px,410px 320px}
-body[data-ui-experience="obsidian-forge"] .target-nav{position:absolute!important;top:0!important;left:0!important;width:100%!important;z-index:80!important;min-height:74px!important;background:linear-gradient(180deg,rgba(3,4,5,.7),rgba(3,4,5,.08))!important;border-bottom:0!important;backdrop-filter:blur(8px)!important}
-body[data-ui-experience="obsidian-forge"] .target-nav-inner{width:min(1180px,calc(100% - 88px))!important;min-height:74px!important;margin:0 auto!important}
-body[data-ui-experience="obsidian-forge"] .target-brand{font-family:Oswald,"Arial Narrow",sans-serif!important;font-size:19px!important;font-weight:600!important;letter-spacing:.12em!important}.target-brand span{color:var(--forge-muted)!important}
-body[data-ui-experience="obsidian-forge"] .target-nav-links{gap:34px!important}
-body[data-ui-experience="obsidian-forge"] .target-nav-links a,body[data-ui-experience="obsidian-forge"] .target-contact,body[data-ui-experience="obsidian-forge"] .target-menu-button{color:rgba(245,242,235,.82)!important;text-transform:uppercase!important;letter-spacing:.15em!important;font-size:9px!important;font-weight:500!important}
-body[data-ui-experience="obsidian-forge"] .target-nav-links a{transition:color .35s ease,opacity .35s ease!important}body[data-ui-experience="obsidian-forge"] .target-nav-links a:hover{color:#fff!important}
-body[data-ui-experience="obsidian-forge"] .target-contact{border:1px solid rgba(245,242,235,.45)!important;border-radius:999px!important;padding:10px 18px!important;background:rgba(0,0,0,.18)!important}
-body[data-ui-experience="obsidian-forge"] .target-menu-button{border:1px solid rgba(245,242,235,.3)!important;background:rgba(0,0,0,.2)!important}
-body[data-ui-experience="obsidian-forge"] .target-hero{position:relative!important;isolation:isolate!important;min-height:100svh!important;height:max(760px,100svh)!important;background:linear-gradient(90deg,rgba(3,4,5,.9) 0%,rgba(3,4,5,.64) 28%,rgba(3,4,5,.08) 62%,rgba(3,4,5,.48) 100%),linear-gradient(180deg,rgba(3,4,5,.12),transparent 45%,rgba(3,4,5,.78)),url("/obsidian-forge-environment.svg") center/cover no-repeat!important}
-body[data-ui-experience="obsidian-forge"] .target-hero::before{content:"";position:absolute;inset:auto 0 0;height:34%;z-index:1;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(3,4,5,.94)),radial-gradient(ellipse at 52% 92%,rgba(255,255,255,.11),transparent 28%)}
-body[data-ui-experience="obsidian-forge"] .target-hero::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(circle at 77% 13%,rgba(255,255,255,.16) 0 1px,transparent 2px),radial-gradient(circle at 69% 16%,rgba(255,255,255,.08),transparent 15%),linear-gradient(90deg,transparent 0 76%,rgba(255,255,255,.04) 76.1%,transparent 76.3%);mix-blend-mode:screen}
-body[data-ui-experience="obsidian-forge"] .target-grid{opacity:.09!important;background-size:88px 88px!important;mask-image:linear-gradient(to bottom,black,transparent 62%)!important}
-body[data-ui-experience="obsidian-forge"] .target-hero-inner{position:relative!important;z-index:5!important;width:min(1180px,calc(100% - 88px))!important;min-height:100%!important;margin:0 auto!important;padding-top:clamp(150px,16vh,190px)!important}
-body[data-ui-experience="obsidian-forge"] .target-hero-copy{position:relative!important;z-index:9!important;width:min(590px,51vw)!important;max-width:none!important}
-body[data-ui-experience="obsidian-forge"] .target-eyebrow{margin-bottom:16px!important;color:rgba(242,239,232,.72)!important;font-size:9px!important;font-weight:500!important;letter-spacing:.36em!important;text-transform:uppercase!important}
-body[data-ui-experience="obsidian-forge"] .target-hero h1{position:relative!important;width:6.9ch!important;max-width:none!important;margin:0!important;font-family:Impact,Oswald,"Arial Narrow",sans-serif!important;font-size:clamp(4.9rem,9.2vw,9.7rem)!important;font-weight:700!important;line-height:.82!important;letter-spacing:-.055em!important;color:transparent!important;text-transform:uppercase!important}
-body[data-ui-experience="obsidian-forge"] .target-hero h1::before{content:"BUILD\A INTELLIGENT\A SOLUTIONS.";white-space:pre;display:block;color:var(--forge-white);text-shadow:0 3px 30px rgba(0,0,0,.5)}
-body[data-ui-experience="obsidian-forge"] .target-hero h1>*{visibility:hidden!important}
-body[data-ui-experience="obsidian-forge"] .target-hero .target-hero-copy>.target-hero-description{position:relative!important;margin-top:27px!important;width:min(360px,100%)!important;color:rgba(239,236,229,.72)!important;font-size:13px!important;line-height:1.55!important}
-body[data-ui-experience="obsidian-forge"] .target-actions{position:relative!important;z-index:10!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:16px!important;margin-top:23px!important}
-body[data-ui-experience="obsidian-forge"] .target-actions a{min-height:42px!important;padding:0 19px!important;border:1px solid rgba(242,239,232,.52)!important;border-radius:2px!important;background:rgba(6,7,8,.2)!important;color:var(--forge-white)!important;text-transform:uppercase!important;letter-spacing:.13em!important;font-size:9px!important;backdrop-filter:blur(8px)!important;transition:transform .45s cubic-bezier(.2,.7,.2,1),background .35s ease,border-color .35s ease!important}
-body[data-ui-experience="obsidian-forge"] .target-actions a:hover{transform:translateY(-3px)!important;background:rgba(255,255,255,.08)!important;border-color:rgba(255,255,255,.85)!important}
-body[data-ui-experience="obsidian-forge"] .target-portrait-wrap{position:absolute!important;z-index:8!important;right:3.5%!important;bottom:-2%!important;width:min(43vw,590px)!important;height:min(76vh,700px)!important;margin:0!important;pointer-events:none!important}
-body[data-ui-experience="obsidian-forge"] .target-portrait-wrap::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(4,5,6,.4),transparent 20%,transparent 76%,rgba(4,5,6,.18));pointer-events:none}
-body[data-ui-experience="obsidian-forge"] .target-portrait{position:absolute!important;inset:0!important;overflow:hidden!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;clip-path:polygon(16% 0,88% 0,100% 100%,0 100%)!important}
-body[data-ui-experience="obsidian-forge"] .target-portrait::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(180deg,rgba(4,5,6,.04) 58%,rgba(4,5,6,.76) 98%),linear-gradient(90deg,rgba(4,5,6,.32),transparent 22%,transparent 75%,rgba(4,5,6,.15))}
-body[data-ui-experience="obsidian-forge"] .target-portrait img{object-position:center top!important;filter:grayscale(.22) contrast(1.12) brightness(.9)!important;transform:scale(1.04)!important;mix-blend-mode:normal!important}
-body[data-ui-experience="obsidian-forge"] .target-portrait-ring{display:none!important}
-body[data-ui-experience="obsidian-forge"] .target-open{position:absolute!important;z-index:7!important;right:5%!important;bottom:18%!important;padding:8px 12px!important;border:1px solid rgba(242,239,232,.28)!important;border-radius:2px!important;background:rgba(5,6,7,.52)!important;color:rgba(245,242,235,.82)!important;backdrop-filter:blur(12px)!important;font-size:8px!important;letter-spacing:.14em!important;text-transform:uppercase!important}.target-open span{background:#f4f0e8!important}
-body[data-ui-experience="obsidian-forge"] .target-hero-quote{position:absolute!important;z-index:10!important;right:0!important;top:28%!important;bottom:auto!important;width:100px!important;padding-left:13px!important;border-left:1px solid rgba(242,239,232,.3)!important;color:rgba(245,242,235,.66)!important;font-size:9px!important;line-height:2!important;letter-spacing:.14em!important;text-transform:uppercase!important}.target-hero-quote small{display:none!important}
-body[data-ui-experience="obsidian-forge"] .target-scroll{position:absolute!important;z-index:12!important;left:0!important;bottom:28px!important;color:rgba(245,242,235,.55)!important;font-size:8px!important;letter-spacing:.27em!important}
-body[data-ui-experience="obsidian-forge"] .target-stats{position:absolute!important;left:0!important;bottom:35px!important;z-index:11!important;width:auto!important;max-width:none!important;display:flex!important;gap:0!important;margin:0!important;border-top:1px solid rgba(242,239,232,.2)!important;padding-top:11px!important}.target-stats>div{min-width:110px!important;padding:0 20px!important;border-right:1px solid rgba(242,239,232,.2)!important}.target-stats>div:first-child{padding-left:0!important}.target-stats>div:last-child{border-right:0!important}.target-stats b{color:var(--forge-white)!important;font-family:Oswald,sans-serif!important;font-size:20px!important;line-height:1!important}.target-stats span{color:rgba(245,242,235,.52)!important;font-size:7px!important;letter-spacing:.18em!important}
-body[data-ui-experience="obsidian-forge"] #about{padding-top:0!important;padding-bottom:22px!important}.target-about-card{max-width:1180px!important;margin:0 auto!important;padding:15px 0!important;border-width:0 0 1px!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}.target-about-icon,.target-cgpa{display:none!important}.target-about-main{width:100%!important}.target-about-top strong{color:var(--forge-white)!important;font-family:Oswald,sans-serif!important;font-size:11px!important;letter-spacing:.14em!important;text-transform:uppercase!important}.target-about-top span{color:var(--forge-dim)!important;font-size:9px!important;letter-spacing:.14em!important;text-transform:uppercase!important}.target-about-main>p,.target-facts{display:none!important}
-body[data-ui-experience="obsidian-forge"] .target-section{position:relative!important;width:min(1180px,calc(100% - 88px))!important;max-width:1180px!important;margin:0 auto!important;padding:clamp(105px,11vw,165px) 0!important}.target-section-heading{max-width:100%!important;margin-bottom:48px!important}.target-section-heading .target-eyebrow{margin-bottom:14px!important}.target-section-heading h2{margin:0!important;max-width:9ch!important;font-family:Impact,Oswald,"Arial Narrow",sans-serif!important;font-size:clamp(4.4rem,8.5vw,8.7rem)!important;font-weight:700!important;line-height:.84!important;letter-spacing:-.055em!important;text-transform:uppercase!important;color:var(--forge-white)!important}.target-section-subtitle{width:min(350px,100%)!important;margin-top:20px!important;color:rgba(238,235,228,.66)!important;font-size:13px!important;line-height:1.65!important}
-body[data-ui-experience="obsidian-forge"] #projects{padding-top:100px!important}body[data-ui-experience="obsidian-forge"] #projects .target-section-heading{display:grid!important;grid-template-columns:1fr 1fr auto!important;align-items:end!important;gap:40px!important}body[data-ui-experience="obsidian-forge"] #projects .target-section-heading h2{grid-column:1!important;grid-row:2!important}body[data-ui-experience="obsidian-forge"] #projects .target-section-heading .target-section-subtitle{grid-column:2!important;grid-row:2!important;align-self:end!important;margin-bottom:4px!important}.target-view-all{grid-column:3!important;grid-row:2!important;white-space:nowrap!important;align-self:end!important;color:rgba(245,242,235,.78)!important;font-size:8px!important;letter-spacing:.16em!important;text-transform:uppercase!important}
-body[data-ui-experience="obsidian-forge"] .target-project-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important}.target-project-card,.target-project-card:nth-child(1),.target-project-card:nth-child(4){grid-column:auto!important;min-height:0!important;height:520px!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;border:1px solid rgba(239,236,229,.28)!important;border-radius:4px!important;background:linear-gradient(180deg,rgba(30,31,34,.56),rgba(7,8,10,.94))!important;box-shadow:0 24px 70px rgba(0,0,0,.32)!important}.target-project-card::before{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;border:1px solid rgba(255,255,255,.025)}.target-project-image{position:relative!important;height:56%!important;flex:0 0 56%!important;background:#111216!important;overflow:hidden!important}.target-project-image::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 50%,rgba(4,5,6,.58))}.target-project-image img{filter:grayscale(.35) contrast(1.08) brightness(.84)!important;transition:transform .75s cubic-bezier(.2,.7,.2,1),filter .6s ease!important}.target-project-card:hover .target-project-image img{transform:scale(1.065)!important;filter:grayscale(.05) contrast(1.12) brightness(.96)!important}.target-project-head{position:relative!important;z-index:5!important;display:flex!important;justify-content:space-between!important;padding:15px 16px 0!important}.target-project-icon{display:none!important}.target-project-head small{color:rgba(245,242,235,.68)!important;font-family:Oswald,sans-serif!important;font-size:8px!important;letter-spacing:.14em!important}.target-project-head em{color:rgba(245,242,235,.5)!important;font-size:7px!important;font-style:normal!important;letter-spacing:.12em!important;text-transform:uppercase!important}.target-project-card h3{position:relative!important;z-index:5!important;margin:9px 16px 0!important;padding:0!important;color:var(--forge-white)!important;font-family:Oswald,sans-serif!important;font-size:clamp(1.35rem,1.9vw,2rem)!important;font-weight:600!important;line-height:.95!important;letter-spacing:-.02em!important}.target-project-card p{position:relative!important;z-index:5!important;margin:7px 16px 0!important;padding:0!important;color:rgba(238,235,228,.58)!important;font-size:10px!important;line-height:1.5!important}.target-project-tags{position:relative!important;z-index:5!important;display:flex!important;flex-wrap:wrap!important;gap:5px!important;margin:8px 16px 0!important}.target-project-tags span{padding:4px 6px!important;border:1px solid rgba(239,236,229,.14)!important;border-radius:0!important;background:rgba(255,255,255,.025)!important;color:rgba(245,242,235,.52)!important;font-size:6px!important;letter-spacing:.1em!important;text-transform:uppercase!important}.target-project-links{position:relative!important;z-index:5!important;margin-top:auto!important;padding:10px 16px 16px!important;display:flex!important;justify-content:space-between!important;gap:6px!important}.target-project-links a{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:34px!important;height:34px!important;padding:0!important;border:1px solid rgba(245,242,235,.38)!important;border-radius:50%!important;background:rgba(0,0,0,.2)!important;color:var(--forge-white)!important;font-size:0!important;transition:transform .4s ease,background .3s ease!important}.target-project-links a:hover{transform:translateY(-2px) rotate(-8deg)!important;background:rgba(255,255,255,.09)!important}
-body[data-ui-experience="obsidian-forge"] #about-copy{min-height:650px!important;display:grid!important;align-items:center!important;padding-top:125px!important;padding-bottom:125px!important;background:radial-gradient(circle at 72% 55%,rgba(255,255,255,.07),transparent 20%),linear-gradient(180deg,transparent,rgba(255,255,255,.012),transparent)}body[data-ui-experience="obsidian-forge"] #about-copy .target-section-heading{position:relative!important;z-index:5!important;max-width:530px!important;margin:0!important}body[data-ui-experience="obsidian-forge"] #about-copy .target-section-heading h2{max-width:6ch!important}body[data-ui-experience="obsidian-forge"] #about-copy .target-about-copy{position:relative!important;z-index:5!important;width:min(360px,100%)!important;margin-left:47%!important;margin-top:-140px!important}body[data-ui-experience="obsidian-forge"] #about-copy .target-about-copy p{color:rgba(238,235,228,.68)!important;font-size:12px!important;line-height:1.65!important}
-body[data-ui-experience="obsidian-forge"] #about-copy .target-traits{position:absolute!important;left:430px!important;top:-65px!important;width:310px!important;height:310px!important;margin:0!important;display:block!important;transform-style:preserve-3d!important;transform:perspective(900px) rotateX(58deg) rotateZ(-22deg) rotateY(-18deg)!important;border:1px solid rgba(245,242,235,.22)!important;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.012))!important;box-shadow:80px 90px 90px rgba(0,0,0,.55),inset 0 0 60px rgba(255,255,255,.025)!important;animation:forgeCube 13s ease-in-out infinite alternate!important}body[data-ui-experience="obsidian-forge"] #about-copy .target-traits::before,body[data-ui-experience="obsidian-forge"] #about-copy .target-traits::after{content:"IDEAS     DESIGN     TECHNOLOGY     PEOPLE     IMPACT"!important;position:absolute!important;display:flex!important;align-items:center!important;justify-content:center!important;inset:0!important;color:rgba(245,242,235,.64)!important;font-family:Oswald,sans-serif!important;font-size:8px!important;letter-spacing:.18em!important;line-height:5!important;text-align:center!important;text-transform:uppercase!important;border:1px solid rgba(245,242,235,.18)!important;background:rgba(255,255,255,.012)!important}body[data-ui-experience="obsidian-forge"] #about-copy .target-traits::before{transform:translateZ(45px)!important}body[data-ui-experience="obsidian-forge"] #about-copy .target-traits::after{transform:rotateY(90deg) translateZ(155px)!important;transform-origin:right center!important}body[data-ui-experience="obsidian-forge"] #about-copy .target-traits span{display:none!important}
-@keyframes forgeCube{from{transform:perspective(900px) rotateX(58deg) rotateZ(-22deg) rotateY(-18deg) translateY(0)}to{transform:perspective(900px) rotateX(58deg) rotateZ(-22deg) rotateY(-10deg) translateY(-12px)}}
-body[data-ui-experience="obsidian-forge"] .target-journey,body[data-ui-experience="obsidian-forge"] .target-skill-groups,body[data-ui-experience="obsidian-forge"] .target-certificate-grid,body[data-ui-experience="obsidian-forge"] .target-language-grid,body[data-ui-experience="obsidian-forge"] .target-contact-grid{position:relative!important;z-index:3!important}body[data-ui-experience="obsidian-forge"] .target-skill-panel,body[data-ui-experience="obsidian-forge"] .target-experience-card,body[data-ui-experience="obsidian-forge"] .target-education-card,body[data-ui-experience="obsidian-forge"] .target-certificate-card,body[data-ui-experience="obsidian-forge"] .target-resume-card,body[data-ui-experience="obsidian-forge"] .target-language-card,body[data-ui-experience="obsidian-forge"] .target-contact-card{background:rgba(13,14,16,.62)!important;border:1px solid var(--forge-line-soft)!important;border-radius:3px!important;box-shadow:0 24px 60px rgba(0,0,0,.2)!important}body[data-ui-experience="obsidian-forge"] .target-section:not(#projects):not(#about-copy) .target-section-heading h2{font-size:clamp(3.4rem,7vw,7rem)!important}body[data-ui-experience="obsidian-forge"] .target-section p{color:rgba(238,235,228,.64)!important}body[data-ui-experience="obsidian-forge"] .target-footer{width:100%!important;padding:34px max(44px,calc((100% - 1180px)/2))!important;border-top:1px solid var(--forge-line-soft)!important;background:#050607!important;color:rgba(245,242,235,.7)!important}body[data-ui-experience="obsidian-forge"] .target-footer>div:first-child{font-family:Oswald,sans-serif!important;letter-spacing:.08em!important}body[data-ui-experience="obsidian-forge"] .target-footer>div:first-child small{display:block!important;margin-top:5px!important;color:var(--forge-dim)!important;font-family:Inter,sans-serif!important;font-size:7px!important;letter-spacing:.18em!important}body[data-ui-experience="obsidian-forge"] .target-footer a{color:rgba(245,242,235,.72)!important;font-size:8px!important;letter-spacing:.14em!important;text-transform:uppercase!important}
-@media(max-width:1100px){body[data-ui-experience="obsidian-forge"] .target-nav-inner,body[data-ui-experience="obsidian-forge"] .target-hero-inner,body[data-ui-experience="obsidian-forge"] .target-section{width:min(100% - 48px,920px)!important}body[data-ui-experience="obsidian-forge"] .target-hero-copy{width:min(540px,56vw)!important}body[data-ui-experience="obsidian-forge"] .target-portrait-wrap{width:min(49vw,520px)!important;height:min(70vh,610px)!important;right:-1%!important}body[data-ui-experience="obsidian-forge"] .target-project-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}body[data-ui-experience="obsidian-forge"] .target-project-card,body[data-ui-experience="obsidian-forge"] .target-project-card:nth-child(1),body[data-ui-experience="obsidian-forge"] .target-project-card:nth-child(4){height:500px!important}}
-@media(max-width:900px){body[data-ui-experience="obsidian-forge"] .target-nav{position:fixed!important;min-height:60px!important}body[data-ui-experience="obsidian-forge"] .target-nav-inner{width:calc(100% - 28px)!important;min-height:60px!important}body[data-ui-experience="obsidian-forge"] .target-mobile-menu{background:rgba(5,6,7,.96)!important;border-top:1px solid var(--forge-line-soft)!important}body[data-ui-experience="obsidian-forge"] .target-mobile-menu a{color:var(--forge-text)!important;font-size:10px!important;letter-spacing:.18em!important;text-transform:uppercase!important}body[data-ui-experience="obsidian-forge"] .target-hero{height:auto!important;min-height:850px!important;background-position:60% center!important}body[data-ui-experience="obsidian-forge"] .target-hero-inner{width:calc(100% - 28px)!important;min-height:850px!important;padding-top:112px!important}body[data-ui-experience="obsidian-forge"] .target-hero-copy{width:100%!important}body[data-ui-experience="obsidian-forge"] .target-hero h1{width:7.2ch!important;font-size:clamp(4rem,18vw,6.6rem)!important;line-height:.84!important}body[data-ui-experience="obsidian-forge"] .target-hero-description{width:min(310px,72%)!important;margin-top:18px!important;font-size:11px!important}body[data-ui-experience="obsidian-forge"] .target-actions{margin-top:17px!important;gap:8px!important}body[data-ui-experience="obsidian-forge"] .target-actions a{min-height:38px!important;padding:0 12px!important;font-size:7px!important}body[data-ui-experience="obsidian-forge"] .target-portrait-wrap{position:absolute!important;right:-16%!important;bottom:0!important;width:82vw!important;height:57vh!important;min-height:460px!important}body[data-ui-experience="obsidian-forge"] .target-portrait{clip-path:polygon(20% 0,90% 0,100% 100%,0 100%)!important}body[data-ui-experience="obsidian-forge"] .target-open,body[data-ui-experience="obsidian-forge"] .target-hero-quote{display:none!important}body[data-ui-experience="obsidian-forge"] .target-stats{bottom:20px!important;left:0!important;transform:scale(.82)!important;transform-origin:left bottom!important}body[data-ui-experience="obsidian-forge"] .target-scroll{display:none!important}body[data-ui-experience="obsidian-forge"] #about{width:calc(100% - 28px)!important}body[data-ui-experience="obsidian-forge"] .target-section{width:calc(100% - 28px)!important;padding:78px 0!important}body[data-ui-experience="obsidian-forge"] .target-section-heading h2{font-size:clamp(3.6rem,17vw,6rem)!important}body[data-ui-experience="obsidian-forge"] #projects .target-section-heading{display:block!important}body[data-ui-experience="obsidian-forge"] #projects .target-section-heading h2,body[data-ui-experience="obsidian-forge"] #projects .target-section-heading .target-section-subtitle{margin-bottom:18px!important}body[data-ui-experience="obsidian-forge"] #projects .target-view-all{display:inline-block!important;margin-top:6px!important}body[data-ui-experience="obsidian-forge"] .target-project-grid{grid-template-columns:1fr!important;gap:12px!important}body[data-ui-experience="obsidian-forge"] .target-project-card,body[data-ui-experience="obsidian-forge"] .target-project-card:nth-child(1),body[data-ui-experience="obsidian-forge"] .target-project-card:nth-child(4){height:470px!important}body[data-ui-experience="obsidian-forge"] #about-copy{min-height:700px!important;display:block!important;padding-top:110px!important}body[data-ui-experience="obsidian-forge"] #about-copy .target-about-copy{width:72%!important;margin:28px 0 0!important}body[data-ui-experience="obsidian-forge"] #about-copy .target-traits{left:auto!important;right:-25px!important;top:255px!important;width:215px!important;height:215px!important;transform:perspective(700px) rotateX(58deg) rotateZ(-22deg) rotateY(-16deg)!important}}
-@media(prefers-reduced-motion:reduce){body[data-ui-experience="obsidian-forge"] *,body[data-ui-experience="obsidian-forge"] *::before,body[data-ui-experience="obsidian-forge"] *::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+body[data-ui-experience="obsidian-forge"] .target-site {
+  position: relative;
+  overflow: clip;
+  background:
+    radial-gradient(ellipse at 72% 12%, rgba(255,255,255,.055), transparent 24%),
+    linear-gradient(180deg,#050607 0%,#090a0c 42%,#050607 100%) !important;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-site::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .22;
+  background-image:
+    linear-gradient(115deg, transparent 0 18%, rgba(255,255,255,.08) 18.15%, transparent 18.4% 68%, rgba(255,255,255,.045) 68.15%, transparent 68.4%),
+    radial-gradient(circle at 76% 9%, rgba(255,255,255,.15) 0 1px, transparent 2px),
+    radial-gradient(circle at 19% 30%, rgba(255,255,255,.11) 0 1px, transparent 2px);
+  background-size: 100% 100%, 290px 230px, 410px 320px;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-nav {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  z-index: 80 !important;
+  min-height: 74px !important;
+  background: linear-gradient(180deg, rgba(3,4,5,.7), rgba(3,4,5,.08)) !important;
+  border-bottom: 0 !important;
+  backdrop-filter: blur(8px) !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-nav-inner {
+  width: min(1180px, calc(100% - 88px)) !important;
+  min-height: 74px !important;
+  margin: 0 auto !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-brand {
+  font-family: Oswald, "Arial Narrow", sans-serif !important;
+  font-size: 19px !important;
+  font-weight: 600 !important;
+  letter-spacing: .12em !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-brand span { color: var(--forge-muted) !important; }
+body[data-ui-experience="obsidian-forge"] .target-nav-links { gap: 34px !important; }
+body[data-ui-experience="obsidian-forge"] .target-nav-links a,
+body[data-ui-experience="obsidian-forge"] .target-contact,
+body[data-ui-experience="obsidian-forge"] .target-menu-button {
+  color: rgba(245,242,235,.82) !important;
+  text-transform: uppercase !important;
+  letter-spacing: .15em !important;
+  font-size: 9px !important;
+  font-weight: 500 !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-nav-links a { transition: color .35s ease, opacity .35s ease !important; }
+body[data-ui-experience="obsidian-forge"] .target-nav-links a:hover { color: #fff !important; }
+body[data-ui-experience="obsidian-forge"] .target-contact {
+  border: 1px solid rgba(245,242,235,.45) !important;
+  border-radius: 999px !important;
+  padding: 10px 18px !important;
+  background: rgba(0,0,0,.18) !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-menu-button {
+  border: 1px solid rgba(245,242,235,.3) !important;
+  background: rgba(0,0,0,.2) !important;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-hero {
+  position: relative !important;
+  isolation: isolate !important;
+  min-height: 100svh !important;
+  height: max(760px, 100svh) !important;
+  background:
+    linear-gradient(90deg, rgba(3,4,5,.9) 0%, rgba(3,4,5,.64) 28%, rgba(3,4,5,.08) 62%, rgba(3,4,5,.48) 100%),
+    linear-gradient(180deg, rgba(3,4,5,.12) 0%, transparent 45%, rgba(3,4,5,.78) 100%),
+    url("/obsidian-forge-environment.svg") center / cover no-repeat !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-hero::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 34%;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent, rgba(3,4,5,.94)),
+    radial-gradient(ellipse at 52% 92%, rgba(255,255,255,.11), transparent 28%);
+}
+body[data-ui-experience="obsidian-forge"] .target-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 77% 13%, rgba(255,255,255,.16) 0 1px, transparent 2px),
+    radial-gradient(circle at 69% 16%, rgba(255,255,255,.08), transparent 15%),
+    linear-gradient(90deg, transparent 0 76%, rgba(255,255,255,.04) 76.1%, transparent 76.3%);
+  mix-blend-mode: screen;
+}
+body[data-ui-experience="obsidian-forge"] .target-grid {
+  opacity: .09 !important;
+  background-size: 88px 88px !important;
+  mask-image: linear-gradient(to bottom, black, transparent 62%) !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-hero-inner {
+  position: relative !important;
+  z-index: 5 !important;
+  width: min(1180px, calc(100% - 88px)) !important;
+  min-height: 100% !important;
+  margin: 0 auto !important;
+  padding-top: clamp(150px, 16vh, 190px) !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-hero-copy {
+  position: relative !important;
+  z-index: 9 !important;
+  width: min(590px, 51vw) !important;
+  max-width: none !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-eyebrow {
+  margin-bottom: 16px !important;
+  color: rgba(242,239,232,.72) !important;
+  font-size: 9px !important;
+  font-weight: 500 !important;
+  letter-spacing: .36em !important;
+  text-transform: uppercase !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-hero h1 {
+  position: relative !important;
+  width: 6.9ch !important;
+  max-width: none !important;
+  margin: 0 !important;
+  font-family: Impact, Oswald, "Arial Narrow", sans-serif !important;
+  font-size: clamp(4.9rem, 9.2vw, 9.7rem) !important;
+  font-weight: 700 !important;
+  line-height: .82 !important;
+  letter-spacing: -.055em !important;
+  color: transparent !important;
+  text-transform: uppercase !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-hero h1::before {
+  content: "BUILD\A INTELLIGENT\A SOLUTIONS.";
+  white-space: pre;
+  display: block;
+  color: var(--forge-white);
+  text-shadow: 0 3px 30px rgba(0,0,0,.5);
+}
+body[data-ui-experience="obsidian-forge"] .target-hero h1 > * { visibility: hidden !important; }
+body[data-ui-experience="obsidian-forge"] .target-hero .target-hero-copy > .target-hero-description {
+  position: relative !important;
+  margin-top: 27px !important;
+  width: min(360px, 100%) !important;
+  color: rgba(239,236,229,.72) !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-actions {
+  position: relative !important;
+  z-index: 10 !important;
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+  margin-top: 23px !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-actions a {
+  min-height: 42px !important;
+  padding: 0 19px !important;
+  border: 1px solid rgba(242,239,232,.52) !important;
+  border-radius: 2px !important;
+  background: rgba(6,7,8,.2) !important;
+  color: var(--forge-white) !important;
+  text-transform: uppercase !important;
+  letter-spacing: .13em !important;
+  font-size: 9px !important;
+  backdrop-filter: blur(8px) !important;
+  transition: transform .45s cubic-bezier(.2,.7,.2,1), background .35s ease, border-color .35s ease !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-actions a:hover {
+  transform: translateY(-3px) !important;
+  background: rgba(255,255,255,.08) !important;
+  border-color: rgba(255,255,255,.85) !important;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-portrait-wrap {
+  position: absolute !important;
+  z-index: 8 !important;
+  right: 3.5% !important;
+  bottom: -2% !important;
+  width: min(43vw, 590px) !important;
+  height: min(76vh, 700px) !important;
+  margin: 0 !important;
+  pointer-events: none !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-portrait-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(90deg, rgba(4,5,6,.4), transparent 20%, transparent 76%, rgba(4,5,6,.18));
+  pointer-events: none;
+}
+body[data-ui-experience="obsidian-forge"] .target-portrait {
+  position: absolute !important;
+  inset: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  clip-path: polygon(16% 0, 88% 0, 100% 100%, 0 100%) !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(4,5,6,.04) 58%, rgba(4,5,6,.76) 98%),
+    linear-gradient(90deg, rgba(4,5,6,.32), transparent 22%, transparent 75%, rgba(4,5,6,.15));
+}
+body[data-ui-experience="obsidian-forge"] .target-portrait img {
+  object-position: center top !important;
+  filter: grayscale(.22) contrast(1.12) brightness(.9) !important;
+  transform: scale(1.04) !important;
+  mix-blend-mode: normal !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-portrait-ring { display: none !important; }
+body[data-ui-experience="obsidian-forge"] .target-open {
+  position: absolute !important;
+  z-index: 7 !important;
+  right: 5% !important;
+  bottom: 18% !important;
+  padding: 8px 12px !important;
+  border: 1px solid rgba(242,239,232,.28) !important;
+  border-radius: 2px !important;
+  background: rgba(5,6,7,.52) !important;
+  color: rgba(245,242,235,.82) !important;
+  backdrop-filter: blur(12px) !important;
+  font-size: 8px !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-open span { background: #f4f0e8 !important; }
+body[data-ui-experience="obsidian-forge"] .target-hero-quote {
+  position: absolute !important;
+  z-index: 10 !important;
+  right: 0 !important;
+  top: 28% !important;
+  bottom: auto !important;
+  width: 100px !important;
+  padding-left: 13px !important;
+  border-left: 1px solid rgba(242,239,232,.3) !important;
+  color: rgba(245,242,235,.66) !important;
+  font-size: 9px !important;
+  line-height: 2 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-hero-quote small { display: none !important; }
+body[data-ui-experience="obsidian-forge"] .target-scroll {
+  position: absolute !important;
+  z-index: 12 !important;
+  left: 0 !important;
+  bottom: 28px !important;
+  color: rgba(245,242,235,.55) !important;
+  font-size: 8px !important;
+  letter-spacing: .27em !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-stats {
+  position: absolute !important;
+  left: 0 !important;
+  bottom: 35px !important;
+  z-index: 11 !important;
+  width: auto !important;
+  max-width: none !important;
+  display: flex !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  border-top: 1px solid rgba(242,239,232,.2) !important;
+  padding-top: 11px !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-stats > div {
+  min-width: 110px !important;
+  padding: 0 20px !important;
+  border-right: 1px solid rgba(242,239,232,.2) !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-stats > div:first-child { padding-left: 0 !important; }
+body[data-ui-experience="obsidian-forge"] .target-stats > div:last-child { border-right: 0 !important; }
+body[data-ui-experience="obsidian-forge"] .target-stats b { color: var(--forge-white) !important; font-family: Oswald,sans-serif !important; font-size: 20px !important; line-height: 1 !important; }
+body[data-ui-experience="obsidian-forge"] .target-stats span { color: rgba(245,242,235,.52) !important; font-size: 7px !important; letter-spacing: .18em !important; }
+
+body[data-ui-experience="obsidian-forge"] #about { padding-top: 0 !important; padding-bottom: 22px !important; }
+body[data-ui-experience="obsidian-forge"] .target-about-card {
+  max-width: 1180px !important;
+  margin: 0 auto !important;
+  padding: 15px 0 !important;
+  border-width: 0 0 1px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-about-icon,
+body[data-ui-experience="obsidian-forge"] .target-cgpa { display: none !important; }
+body[data-ui-experience="obsidian-forge"] .target-about-main { width: 100% !important; }
+body[data-ui-experience="obsidian-forge"] .target-about-top strong { color: var(--forge-white) !important; font-family: Oswald,sans-serif !important; font-size: 11px !important; letter-spacing: .14em !important; text-transform: uppercase !important; }
+body[data-ui-experience="obsidian-forge"] .target-about-top span { color: var(--forge-dim) !important; font-size: 9px !important; letter-spacing: .14em !important; text-transform: uppercase !important; }
+body[data-ui-experience="obsidian-forge"] .target-about-main > p,
+body[data-ui-experience="obsidian-forge"] .target-facts { display: none !important; }
+
+body[data-ui-experience="obsidian-forge"] .target-section {
+  position: relative !important;
+  width: min(1180px, calc(100% - 88px)) !important;
+  max-width: 1180px !important;
+  margin: 0 auto !important;
+  padding: clamp(105px, 11vw, 165px) 0 !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-section-heading { max-width: 100% !important; margin-bottom: 48px !important; }
+body[data-ui-experience="obsidian-forge"] .target-section-heading .target-eyebrow { margin-bottom: 14px !important; }
+body[data-ui-experience="obsidian-forge"] .target-section-heading h2 {
+  margin: 0 !important;
+  max-width: 9ch !important;
+  font-family: Impact, Oswald, "Arial Narrow", sans-serif !important;
+  font-size: clamp(4.4rem, 8.5vw, 8.7rem) !important;
+  font-weight: 700 !important;
+  line-height: .84 !important;
+  letter-spacing: -.055em !important;
+  text-transform: uppercase !important;
+  color: var(--forge-white) !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-section-subtitle { width: min(350px,100%) !important; margin-top:20px !important; color:rgba(238,235,228,.66) !important; font-size:13px !important; line-height:1.65 !important; }
+body[data-ui-experience="obsidian-forge"] #projects { padding-top: 100px !important; }
+body[data-ui-experience="obsidian-forge"] #projects .target-section-heading { display:grid !important; grid-template-columns:1fr 1fr auto !important; align-items:end !important; gap:40px !important; }
+body[data-ui-experience="obsidian-forge"] #projects .target-section-heading h2 { grid-column:1 !important; grid-row:2 !important; }
+body[data-ui-experience="obsidian-forge"] #projects .target-section-heading .target-section-subtitle { grid-column:2 !important; grid-row:2 !important; align-self:end !important; margin-bottom:4px !important; }
+body[data-ui-experience="obsidian-forge"] #projects .target-view-all { grid-column:3 !important; grid-row:2 !important; white-space:nowrap !important; align-self:end !important; color:rgba(245,242,235,.78) !important; font-size:8px !important; letter-spacing:.16em !important; text-transform:uppercase !important; }
+
+body[data-ui-experience="obsidian-forge"] .target-project-grid { display:grid !important; grid-template-columns:repeat(4,minmax(0,1fr)) !important; gap:16px !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-card,
+body[data-ui-experience="obsidian-forge"] .target-project-card:nth-child(1),
+body[data-ui-experience="obsidian-forge"] .target-project-card:nth-child(4) {
+  grid-column:auto !important;
+  min-height:0 !important;
+  height:520px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  overflow:hidden !important;
+  border:1px solid rgba(239,236,229,.28) !important;
+  border-radius:4px !important;
+  background:linear-gradient(180deg,rgba(30,31,34,.56),rgba(7,8,10,.94)) !important;
+  box-shadow:0 24px 70px rgba(0,0,0,.32) !important;
+  transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .5s ease,box-shadow .5s ease !important;
+}
+body[data-ui-experience="obsidian-forge"] .target-project-card::before { content:""; position:absolute; inset:0; z-index:4; pointer-events:none; border:1px solid rgba(255,255,255,.025); }
+body[data-ui-experience="obsidian-forge"] .target-project-card:hover { transform:translateY(-8px) !important; border-color:rgba(245,242,235,.48) !important; box-shadow:0 40px 110px rgba(0,0,0,.42) !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-image { position:relative !important; height:56% !important; flex:0 0 56% !important; background:#111216 !important; overflow:hidden !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-image::after { content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg,transparent 50%,rgba(4,5,6,.58)); }
+body[data-ui-experience="obsidian-forge"] .target-project-image img { filter:grayscale(.35) contrast(1.08) brightness(.84) !important; transition:transform .75s cubic-bezier(.2,.7,.2,1),filter .6s ease !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-card:hover .target-project-image img { transform:scale(1.065) !important; filter:grayscale(.05) contrast(1.12) brightness(.96) !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-head { position:relative !important; z-index:5 !important; display:flex !important; justify-content:space-between !important; padding:15px 16px 0 !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-icon { display:none !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-head small { color:rgba(245,242,235,.68) !important; font-family:Oswald,sans-serif !important; font-size:8px !important; letter-spacing:.14em !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-head em { color:rgba(245,242,235,.5) !important; font-size:7px !important; font-style:normal !important; letter-spacing:.12em !important; text-transform:uppercase !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-card h3 { position:relative !important; z-index:5 !important; margin:9px 16px 0 !important; padding:0 !important; color:var(--forge-white) !important; font-family:Oswald,sans-serif !important; font-size:clamp(1.35rem,1.9vw,2rem) !important; font-weight:600 !important; line-height:.95 !important; letter-spacing:-.02em !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-card p { position:relative !important; z-index:5 !important; margin:7px 16px 0 !important; padding:0 !important; color:rgba(238,235,228,.58) !important; font-size:10px !important; line-height:1.5 !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-tags { position:relative !important; z-index:5 !important; display:flex !important; flex-wrap:wrap !important; gap:5px !important; margin:8px 16px 0 !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-tags span { padding:4px 6px !important; border:1px solid rgba(239,236,229,.14) !important; border-radius:0 !important; background:rgba(255,255,255,.025) !important; color:rgba(245,242,235,.52) !important; font-size:6px !important; letter-spacing:.1em !important; text-transform:uppercase !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-links { position:relative !important; z-index:5 !important; margin-top:auto !important; padding:10px 16px 16px !important; display:flex !important; justify-content:space-between !important; gap:6px !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-links a { display:inline-flex !important; align-items:center !important; justify-content:center !important; width:34px !important; height:34px !important; padding:0 !important; border:1px solid rgba(245,242,235,.38) !important; border-radius:50% !important; background:rgba(0,0,0,.2) !important; color:var(--forge-white) !important; font-size:0 !important; transition:transform .4s ease,background .3s ease !important; }
+body[data-ui-experience="obsidian-forge"] .target-project-links a:hover { transform:translateY(-2px) rotate(-8deg) !important; background:rgba(255,255,255,.09) !important; }
+
+body[data-ui-experience="obsidian-forge"] #about-copy { min-height:650px !important; display:grid !important; align-items:center !important; padding-top:125px !important; padding-bottom:125px !important; background:radial-gradient(circle at 72% 55%,rgba(255,255,255,.07),transparent 20%),linear-gradient(180deg,transparent,rgba(255,255,255,.012),transparent); }
+body[data-ui-experience="obsidian-forge"] #about-copy .target-section-heading { position:relative !important; z-index:5 !important; max-width:530px !important; margin:0 !important; }
+body[data-ui-experience="obsidian-forge"] #about-copy .target-section-heading h2 { max-width:6ch !important; }
+body[data-ui-experience="obsidian-forge"] #about-copy .target-about-copy { position:relative !important; z-index:5 !important; width:min(360px,100%) !important; margin-left:47% !important; margin-top:-140px !important; }
+body[data-ui-experience="obsidian-forge"] #about-copy .target-about-copy p { color:rgba(238,235,228,.68) !important; font-size:12px !important; line-height:1.65 !important; }
+body[data-ui-experience="obsidian-forge"] #about-copy .target-traits { position:absolute !important; left:430px !important; top:-65px !important; width:310px !important; height:310px !important; margin:0 !important; display:block !important; transform-style:preserve-3d !important; transform:perspective(900px) rotateX(58deg) rotateZ(-22deg) rotateY(-18deg) !important; border:1px solid rgba(245,242,235,.22) !important; background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.012)) !important; box-shadow:80px 90px 90px rgba(0,0,0,.55),inset 0 0 60px rgba(255,255,255,.025) !important; animation:forgeCube 13s ease-in-out infinite alternate !important; }
+body[data-ui-experience="obsidian-forge"] #about-copy .target-traits::before,
+body[data-ui-experience="obsidian-forge"] #about-copy .target-traits::after { content:"IDEAS     DESIGN     TECHNOLOGY     PEOPLE     IMPACT" !important; position:absolute !important; display:flex !important; align-items:center !important; justify-content:center !important; inset:0 !important; color:rgba(245,242,235,.64) !important; font-family:Oswald,sans-serif !important; font-size:8px !important; letter-spacing:.18em !important; line-height:5 !important; text-align:center !important; text-transform:uppercase !important; border:1px solid rgba(245,242,235,.18) !important; background:rgba(255,255,255,.012) !important; }
+body[data-ui-experience="obsidian-forge"] #about-copy .target-traits::before { transform:translateZ(45px) !important; }
+body[data-ui-experience="obsidian-forge"] #about-copy .target-traits::after { transform:rotateY(90deg) translateZ(155px) !important; transform-origin:right center !important; }
+body[data-ui-experience="obsidian-forge"] #about-copy .target-traits span { display:none !important; }
+@keyframes forgeCube { from { transform:perspective(900px) rotateX(58deg) rotateZ(-22deg) rotateY(-18deg) translateY(0); } to { transform:perspective(900px) rotateX(58deg) rotateZ(-22deg) rotateY(-10deg) translateY(-12px); } }
+
+body[data-ui-experience="obsidian-forge"] .target-journey,
+body[data-ui-experience="obsidian-forge"] .target-skill-groups,
+body[data-ui-experience="obsidian-forge"] .target-certificate-grid,
+body[data-ui-experience="obsidian-forge"] .target-language-grid,
+body[data-ui-experience="obsidian-forge"] .target-contact-grid { position:relative !important; z-index:3 !important; }
+body[data-ui-experience="obsidian-forge"] .target-skill-panel,
+body[data-ui-experience="obsidian-forge"] .target-experience-card,
+body[data-ui-experience="obsidian-forge"] .target-education-card,
+body[data-ui-experience="obsidian-forge"] .target-certificate-card,
+body[data-ui-experience="obsidian-forge"] .target-resume-card,
+body[data-ui-experience="obsidian-forge"] .target-language-card,
+body[data-ui-experience="obsidian-forge"] .target-contact-card { background:rgba(13,14,16,.62) !important; border:1px solid var(--forge-line-soft) !important; border-radius:3px !important; box-shadow:0 24px 60px rgba(0,0,0,.2) !important; }
+body[data-ui-experience="obsidian-forge"] .target-section:not(#projects):not(#about-copy) .target-section-heading h2 { font-size:clamp(3.4rem,7vw,7rem) !important; }
+body[data-ui-experience="obsidian-forge"] .target-section p { color:rgba(238,235,228,.64) !important; }
+body[data-ui-experience="obsidian-forge"] .target-footer { width:100% !important; padding:34px max(44px,calc((100% - 1180px)/2)) !important; border-top:1px solid var(--forge-line-soft) !important; background:#050607 !important; color:rgba(245,242,235,.7) !important; }
+body[data-ui-experience="obsidian-forge"] .target-footer > div:first-child { font-family:Oswald,sans-serif !important; letter-spacing:.08em !important; }
+body[data-ui-experience="obsidian-forge"] .target-footer > div:first-child small { display:block !important; margin-top:5px !important; color:var(--forge-dim) !important; font-family:Inter,sans-serif !important; font-size:7px !important; letter-spacing:.18em !important; }
+body[data-ui-experience="obsidian-forge"] .target-footer a { color:rgba(245,242,235,.72) !important; font-size:8px !important; letter-spacing:.14em !important; text-transform:uppercase !important; }
+
+@media (max-width:1100px) {
+  body[data-ui-experience="obsidian-forge"] .target-nav-inner,
+  body[data-ui-experience="obsidian-forge"] .target-hero-inner,
+  body[data-ui-experience="obsidian-forge"] .target-section { width:min(100% - 48px,920px) !important; }
+  body[data-ui-experience="obsidian-forge"] .target-hero-copy { width:min(540px,56vw) !important; }
+  body[data-ui-experience="obsidian-forge"] .target-portrait-wrap { width:min(49vw,520px) !important; height:min(70vh,610px) !important; right:-1% !important; }
+  body[data-ui-experience="obsidian-forge"] .target-project-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  body[data-ui-experience="obsidian-forge"] .target-project-card,
+  body[data-ui-experience="obsidian-forge"] .target-project-card:nth-child(1),
+  body[data-ui-experience="obsidian-forge"] .target-project-card:nth-child(4) { height:500px !important; }
+}
+@media (max-width:900px) {
+  body[data-ui-experience="obsidian-forge"] .target-nav { position:fixed !important; min-height:60px !important; }
+  body[data-ui-experience="obsidian-forge"] .target-nav-inner { width:calc(100% - 28px) !important; min-height:60px !important; }
+  body[data-ui-experience="obsidian-forge"] .target-mobile-menu { background:rgba(5,6,7,.96) !important; border-top:1px solid var(--forge-line-soft) !important; }
+  body[data-ui-experience="obsidian-forge"] .target-mobile-menu a { color:var(--forge-text) !important; font-size:10px !important; letter-spacing:.18em !important; text-transform:uppercase !important; }
+  body[data-ui-experience="obsidian-forge"] .target-hero { height:auto !important; min-height:850px !important; background-position:60% center !important; }
+  body[data-ui-experience="obsidian-forge"] .target-hero-inner { width:calc(100% - 28px) !important; min-height:850px !important; padding-top:112px !important; }
+  body[data-ui-experience="obsidian-forge"] .target-hero-copy { width:100% !important; }
+  body[data-ui-experience="obsidian-forge"] .target-hero h1 { width:7.2ch !important; font-size:clamp(4rem,18vw,6.6rem) !important; line-height:.84 !important; }
+  body[data-ui-experience="obsidian-forge"] .target-hero-description { width:min(310px,72%) !important; margin-top:18px !important; font-size:11px !important; }
+  body[data-ui-experience="obsidian-forge"] .target-actions { margin-top:17px !important; gap:8px !important; }
+  body[data-ui-experience="obsidian-forge"] .target-actions a { min-height:38px !important; padding:0 12px !important; font-size:7px !important; }
+  body[data-ui-experience="obsidian-forge"] .target-portrait-wrap { position:absolute !important; right:-16% !important; bottom:0 !important; width:82vw !important; height:57vh !important; min-height:460px !important; }
+  body[data-ui-experience="obsidian-forge"] .target-portrait { clip-path:polygon(20% 0,90% 0,100% 100%,0 100%) !important; }
+  body[data-ui-experience="obsidian-forge"] .target-open,
+  body[data-ui-experience="obsidian-forge"] .target-hero-quote { display:none !important; }
+  body[data-ui-experience="obsidian-forge"] .target-stats { bottom:20px !important; left:0 !important; transform:scale(.82) !important; transform-origin:left bottom !important; }
+  body[data-ui-experience="obsidian-forge"] .target-scroll { display:none !important; }
+  body[data-ui-experience="obsidian-forge"] #about { width:calc(100% - 28px) !important; }
+  body[data-ui-experience="obsidian-forge"] .target-section { width:calc(100% - 28px) !important; padding:78px 0 !important; }
+  body[data-ui-experience="obsidian-forge"] .target-section-heading h2 { font-size:clamp(3.6rem,17vw,6rem) !important; }
+  body[data-ui-experience="obsidian-forge"] #projects .target-section-heading { display:block !important; }
+  body[data-ui-experience="obsidian-forge"] #projects .target-section-heading h2,
+  body[data-ui-experience="obsidian-forge"] #projects .target-section-heading .target-section-subtitle { margin-bottom:18px !important; }
+  body[data-ui-experience="obsidian-forge"] #projects .target-view-all { display:inline-block !important; margin-top:6px !important; }
+  body[data-ui-experience="obsidian-forge"] .target-project-grid { grid-template-columns:1fr !important; gap:12px !important; }
+  body[data-ui-experience="obsidian-forge"] .target-project-card,
+  body[data-ui-experience="obsidian-forge"] .target-project-card:nth-child(1),
+  body[data-ui-experience="obsidian-forge"] .target-project-card:nth-child(4) { height:470px !important; }
+  body[data-ui-experience="obsidian-forge"] #about-copy { min-height:700px !important; display:block !important; padding-top:110px !important; }
+  body[data-ui-experience="obsidian-forge"] #about-copy .target-about-copy { width:72% !important; margin:28px 0 0 !important; }
+  body[data-ui-experience="obsidian-forge"] #about-copy .target-traits { left:auto !important; right:-25px !important; top:255px !important; width:215px !important; height:215px !important; transform:perspective(700px) rotateX(58deg) rotateZ(-22deg) rotateY(-16deg) !important; }
+}
+@media (prefers-reduced-motion:reduce) {
+  body[data-ui-experience="obsidian-forge"] *,
+  body[data-ui-experience="obsidian-forge"] *::before,
+  body[data-ui-experience="obsidian-forge"] *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+}
