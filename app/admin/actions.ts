@@ -12,7 +12,7 @@ const projectDeploymentTypes = new Set(['deployed', 'local'])
 const projectTagColors = new Set(['green', 'blue', 'yellow'])
 const projectIcons = new Set(['Eye', 'Layers', 'Monitor', 'HelpCircle', 'Scissors', 'Code', 'Cpu', 'Boxes', 'Database'])
 const allowedFields: Record<string, string[]> = {
-  projects:['title','slug','short_description','detailed_description','technologies','category','github_url','live_demo_url','tag','deployment_type','tag_color','icon','accent_color','display_order'],
+  projects:['title','slug','short_description','detailed_description','technologies','category','thumbnail','github_url','live_demo_url','tag','deployment_type','tag_color','icon','accent_color','display_order'],
   skills:['name','proficiency','category','accent_color','icon','display_order','active'],
   languages:['name','proficiency_level','percentage','accent_color','display_order','active'],
   experience:['company','role','period','description','technologies','location','currently_working','display_order','active'],
