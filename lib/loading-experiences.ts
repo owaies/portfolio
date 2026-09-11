@@ -18,4 +18,8 @@ export const LOADING_EXPERIENCES: Record<UIExperienceId, LoadingExperienceAssets
     desktop: '/loading/neural-interface-desktop.mp4',
     mobile: '/loading/neural-interface-mobile.mp4',
   },
+  'obsidian-forge': {
+    desktop: '/loading/obsidian-forge-desktop.mp4',
+    mobile: '/loading/obsidian-forge-mobile.mp4',
+  },
 }
