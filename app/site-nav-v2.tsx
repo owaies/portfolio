@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
 import { ArrowUpRight, Menu, X } from "lucide-react"
 
 const links = [
