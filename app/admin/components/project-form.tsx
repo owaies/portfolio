@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useState, type FormEvent } from 'react'
-import { X, Save } from 'lucide-react'
+import { X, Save, Upload, Image as ImageIcon } from 'lucide-react'
 import type { Project } from '@/types/portfolio'
+import { createClient } from '@/lib/supabase/client'
 
 type ProjectDraft = Partial<Project> & { id?: string }
 type ProjectField = 'title' | 'description' | 'tag' | 'deployment_type' | 'github_url' | 'live_demo_url' | 'tag_color' | 'icon' | 'accent_color' | 'technologies' | 'display_order'
@@ -26,6 +27,10 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
   const [accentColor, setAccentColor] = useState(editing.accent_color ?? '#00d4ff')
   const [technologies, setTechnologies] = useState(Array.isArray(editing.technologies) ? editing.technologies.join(', ') : '')
   const [displayOrder, setDisplayOrder] = useState(String(editing.display_order ?? 0))
+  const [thumbnail, setThumbnail] = useState(String(editing.thumbnail ?? ''))
+  const [selectedImage, setSelectedImage] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState(String(editing.thumbnail ?? ''))
+  const [uploadError, setUploadError] = useState('')
   const [errors, setErrors] = useState<Partial<Record<ProjectField, string>>>({})
   const [submitError, setSubmitError] = useState('')
 
@@ -34,6 +39,33 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [busy, onClose])
+
+  useEffect(() => {
+    if (!selectedImage) {
+      setImagePreview(thumbnail)
+      return
+    }
+    const objectUrl = URL.createObjectURL(selectedImage)
+    setImagePreview(objectUrl)
+    return () => URL.revokeObjectURL(objectUrl)
+  }, [selectedImage, thumbnail])
+
+  const handleImageChange = (file: File | null) => {
+    setUploadError('')
+    if (!file) {
+      setSelectedImage(null)
+      return
+    }
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Please select an image file.')
+      return
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError('Project images must be 10 MB or smaller.')
+      return
+    }
+    setSelectedImage(file)
+  }
 
   const validate = () => {
     const next: Partial<Record<ProjectField, string>> = {}
@@ -61,14 +93,32 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
   }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); setSubmitError(''); if (!validate()) return
+    event.preventDefault(); setSubmitError(''); setUploadError(''); if (!validate()) return
     const formData = new FormData(); formData.set('table', 'projects')
     if (editing.id) formData.set('id', editing.id)
     formData.set('title', title.trim()); formData.set('slug', editing.slug ?? slugify(title)); formData.set('detailed_description', description.trim())
     formData.set('tag', tag.trim() || 'Project'); formData.set('deployment_type', deploymentType); formData.set('github_url', githubUrl.trim())
     formData.set('live_demo_url', deploymentType === 'deployed' ? liveDemoUrl.trim() : ''); formData.set('tag_color', tagColor ?? ''); formData.set('icon', icon ?? '')
     formData.set('accent_color', accentColor.toLowerCase()); formData.set('technologies', technologies); formData.set('display_order', displayOrder)
-    try { await onSubmit(formData) } catch (error) { setSubmitError(error instanceof Error ? error.message : 'Unable to save project.') }
+
+    try {
+      if (selectedImage) {
+        const supabase = createClient()
+        const safeName = selectedImage.name.replace(/[^a-zA-Z0-9._-]/g, '-').replace(/-+/g, '-')
+        const path = `projects/${crypto.randomUUID()}-${safeName || 'project-image'}`
+        const { error } = await supabase.storage.from('project-images').upload(path, selectedImage, {
+          upsert: false,
+          contentType: selectedImage.type || undefined,
+        })
+        if (error) throw new Error(`Project image upload failed: ${error.message}`)
+        const { data } = supabase.storage.from('project-images').getPublicUrl(path)
+        if (!data.publicUrl) throw new Error('Unable to create a public project image URL.')
+        formData.set('thumbnail', data.publicUrl)
+      } else if (thumbnail) {
+        formData.set('thumbnail', thumbnail)
+      }
+      await onSubmit(formData)
+    } catch (error) { setSubmitError(error instanceof Error ? error.message : 'Unable to save project.') }
   }
 
   const fieldError = (field: ProjectField) => errors[field]
@@ -85,6 +135,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
         <div className="space-y-7">
           <label className={labelClass}><span>Title</span><input className={fieldClass} name="title" value={title} onChange={e=>setTitle(e.target.value)} placeholder="Title" required autoFocus/>{fieldError('title')&&<small className="text-red-300">{fieldError('title')}</small>}</label>
           <label className={labelClass}><span>Description</span><textarea className={`${fieldClass} min-h-[145px] resize-y`} name="detailed_description" value={description} onChange={e=>setDescription(e.target.value)} placeholder="Description" required rows={5}/>{fieldError('description')&&<small className="text-red-300">{fieldError('description')}</small>}</label>
+          <label className={labelClass}><span>Project Image</span><div className="rounded-[22px] border border-white/10 bg-black/20 p-4"><div className="relative aspect-[16/9] w-full overflow-hidden rounded-[16px] border border-white/10 bg-slate-950">{imagePreview ? <img src={imagePreview} alt="Project image preview" className="h-full w-full object-cover"/> : <div className="flex h-full flex-col items-center justify-center gap-2 text-slate-600"><ImageIcon size={34}/><span className="text-sm">No project image selected</span></div>}</div><label className="mt-4 flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-cyan-300/20 bg-cyan-300/5 px-4 py-3 text-sm font-semibold text-cyan-200 transition hover:border-cyan-300/35 hover:bg-cyan-300/10"><Upload size={17}/>{selectedImage ? 'Replace Project Image' : thumbnail ? 'Replace Project Image' : 'Upload Project Image'}<input type="file" accept="image/*" className="sr-only" onChange={e=>handleImageChange(e.target.files?.[0] ?? null)}/></label>{uploadError&&<small className="mt-2 block text-red-300">{uploadError}</small>}<p className="mt-2 text-xs text-slate-600">JPG, PNG, WEBP and other browser-supported images · max 10 MB</p></div></label>
           <label className={labelClass}><span>Tag</span><input className={fieldClass} name="tag" value={tag} onChange={e=>setTag(e.target.value)} placeholder="Project"/></label>
           <label className={labelClass}><span className="font-mono">Deployment Type</span><select className={fieldClass} name="deployment_type" value={deploymentType} onChange={e=>setDeploymentType(e.target.value as NonNullable<Project['deployment_type']> | '')}><option value="">Select...</option><option value="deployed">deployed</option><option value="local">local</option></select>{fieldError('deployment_type')&&<small className="text-red-300">{fieldError('deployment_type')}</small>}</label>
           <label className={labelClass}><span>GitHub URL</span><input className={fieldClass} name="github_url" type="url" value={githubUrl} onChange={e=>setGithubUrl(e.target.value)} placeholder="GitHub URL" inputMode="url"/>{fieldError('github_url')&&<small className="text-red-300">{fieldError('github_url')}</small>}</label>
