@@ -1,96 +1,41 @@
 'use client'
 
-import { useLayoutEffect } from 'react'
-import { usePathname } from 'next/navigation'
-import { isUIExperienceId, type UIExperienceId } from '@/lib/ui-experiences'
-import { createClient } from '@/lib/supabase/client'
+import { useEffect, useRef } from 'react'
+import type { UIExperienceId } from '@/lib/ui-experiences'
 
-const CHROME = {
+const CHROME: Record<UIExperienceId, { theme: string; scheme: string }> = {
   'digital-architecture': { theme: '#f7faff', scheme: 'light' },
   'organic-intelligence': { theme: '#081c14', scheme: 'dark' },
   'neural-interface': { theme: '#061021', scheme: 'dark' },
-} as const
-
-const ADMIN_CHROME = { theme: '#030407', scheme: 'dark' } as const
+  'obsidian-forge': { theme: '#08090b', scheme: 'dark' },
+}
+const ADMIN_CHROME = { theme: '#030407', scheme: 'dark' }
 
 export default function UIExperienceRuntime({ active }: { active: UIExperienceId }) {
-  const pathname = usePathname()
-
-  useLayoutEffect(() => {
-    const isAdminRoute = pathname.startsWith('/admin')
-    const params = new URLSearchParams(window.location.search)
-    const preview = params.get('ui-preview')
-    const experience = !isAdminRoute && isUIExperienceId(preview) ? preview : !isAdminRoute ? active : null
-
-    if (!experience) {
-      document.body.dataset.uiExperience = 'admin'
+  const activeRef = useRef<UIExperienceId>(active)
+  useEffect(() => { activeRef.current = active }, [active])
+  useEffect(() => {
+    const applyChrome = (experience: UIExperienceId | 'admin') => {
+      document.body.dataset.uiExperience = experience
+      const chrome = experience === 'admin' ? ADMIN_CHROME : CHROME[experience]
       const themeMeta = document.querySelector('meta[name="theme-color"]') ?? document.createElement('meta')
-      themeMeta.setAttribute('name', 'theme-color')
-      themeMeta.setAttribute('content', ADMIN_CHROME.theme)
+      themeMeta.setAttribute('name', 'theme-color'); themeMeta.setAttribute('content', chrome.theme)
       if (!themeMeta.parentElement) document.head.appendChild(themeMeta)
       const schemeMeta = document.querySelector('meta[name="color-scheme"]') ?? document.createElement('meta')
-      schemeMeta.setAttribute('name', 'color-scheme')
-      schemeMeta.setAttribute('content', ADMIN_CHROME.scheme)
+      schemeMeta.setAttribute('name', 'color-scheme'); schemeMeta.setAttribute('content', chrome.scheme)
       if (!schemeMeta.parentElement) document.head.appendChild(schemeMeta)
-      return
     }
-
-    document.body.dataset.uiExperience = experience
-    const chrome = CHROME[experience]
-    const themeMeta = document.querySelector('meta[name="theme-color"]') ?? document.createElement('meta')
-    themeMeta.setAttribute('name', 'theme-color')
-    themeMeta.setAttribute('content', chrome.theme)
-    if (!themeMeta.parentElement) document.head.appendChild(themeMeta)
-    const schemeMeta = document.querySelector('meta[name="color-scheme"]') ?? document.createElement('meta')
-    schemeMeta.setAttribute('name', 'color-scheme')
-    schemeMeta.setAttribute('content', chrome.scheme)
-    if (!schemeMeta.parentElement) document.head.appendChild(schemeMeta)
-
-    let cancelled = false
-    let observer: MutationObserver | null = null
-    const imageKey = `profile_image_${experience}`
-
-    const applyProfileImage = (url: string) => {
-      if (cancelled || !url) return false
-      const image = document.querySelector<HTMLImageElement>('.target-portrait img')
-      if (!image) return false
-      if (image.getAttribute('src') === url || image.currentSrc === url || image.src === url) return true
-      image.src = url
-      image.setAttribute('data-experience-profile-image', experience)
-      return true
+    const applyExperience = () => {
+      const isAdmin = window.location.pathname.startsWith('/admin')
+      if (isAdmin) { applyChrome('admin'); return }
+      const preview = new URLSearchParams(window.location.search).get('ui-preview')
+      if (preview === 'digital-architecture' || preview === 'organic-intelligence' || preview === 'neural-interface' || preview === 'obsidian-forge') applyChrome(preview)
+      else applyChrome(activeRef.current)
     }
-
-    const loadOverride = async () => {
-      try {
-        const supabase = createClient()
-        const { data } = await supabase.from('site_content').select('value').eq('key', imageKey).maybeSingle()
-        const url = data?.value?.trim()
-        if (!url || cancelled) return
-
-        // Next Image can mount its <img> a tick after the page component. Keep
-        // watching briefly so preview always receives the same image as the
-        // profile-picture manager, rather than falling back to the default.
-        if (applyProfileImage(url)) return
-        observer = new MutationObserver(() => {
-          if (applyProfileImage(url)) {
-            observer?.disconnect()
-            observer = null
-          }
-        })
-        observer.observe(document.body, { childList: true, subtree: true })
-        const retry = () => {
-          if (cancelled || applyProfileImage(url)) return
-          window.requestAnimationFrame(retry)
-        }
-        window.requestAnimationFrame(retry)
-      } catch {
-        // Keep the server-rendered profile image if the optional override cannot load.
-      }
-    }
-
-    void loadOverride()
-    return () => { cancelled = true; observer?.disconnect() }
-  }, [active, pathname])
-
+    applyExperience()
+    const onPop = () => applyExperience()
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [active])
   return null
 }
