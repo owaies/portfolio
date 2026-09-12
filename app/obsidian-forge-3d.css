@@ -1,0 +1,56 @@
+/* Obsidian Forge V7: the GLB is the hero object, not a CSS illustration. */
+body[data-ui-experience="obsidian-forge"] .target-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+
+body[data-ui-experience="obsidian-forge"] .obsidian-forge-3d {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+body[data-ui-experience="obsidian-forge"] .obsidian-forge-3d canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-grid,
+body[data-ui-experience="obsidian-forge"] .target-hero-inner {
+  position: relative;
+  z-index: 2;
+}
+
+/* Keep the architectural object to the right of the editorial copy. */
+body[data-ui-experience="obsidian-forge"] .target-hero-copy {
+  position: relative;
+  z-index: 3;
+  max-width: min(620px, 48vw);
+}
+
+@media (max-width: 900px) {
+  body[data-ui-experience="obsidian-forge"] .target-hero-copy {
+    max-width: min(600px, 58vw);
+  }
+}
+
+@media (max-width: 760px) {
+  body[data-ui-experience="obsidian-forge"] .obsidian-forge-3d {
+    inset: 7% -24% 0 -8%;
+    opacity: .94;
+  }
+
+  body[data-ui-experience="obsidian-forge"] .target-hero-copy {
+    max-width: 82vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-ui-experience="obsidian-forge"] .obsidian-forge-3d {
+    opacity: .88;
+  }
+}
