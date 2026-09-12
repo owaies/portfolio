@@ -92,21 +92,16 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
     if (!(camera instanceof THREE.PerspectiveCamera)) return
     if (size.width <= 0 || size.height <= 0) return
 
+    // Keep the supplied V7 GLB at native scale. Framing is achieved by positioning
+    // the loaded scene and camera only, never by changing the authored geometry.
     preparedScene.scale.setScalar(1)
     preparedScene.position.set(0, 0, 0)
     preparedScene.updateMatrixWorld(true)
 
-    // Use the complete loaded GLB bounds. The bounding sphere encloses every mesh,
-    // including the asymmetric shoulders, seams, supports, and rear tower.
-    const box = new THREE.Box3().setFromObject(preparedScene)
-    const center = box.getCenter(new THREE.Vector3())
-    const sphere = box.getBoundingSphere(new THREE.Sphere())
-    const radius = Math.max(sphere.radius, 0.001)
-
-    // Keep the authored V7 geometry at native scale. Only the camera framing changes.
-    const target = new THREE.Vector3(mobile ? 0.85 : 2.05, 0, 0)
-    preparedScene.position.copy(target).sub(center)
-    preparedScene.updateMatrixWorld(true)
+    const sourceBox = new THREE.Box3().setFromObject(preparedScene)
+    const sourceCenter = sourceBox.getCenter(new THREE.Vector3())
+    const sourceSphere = sourceBox.getBoundingSphere(new THREE.Sphere())
+    const radius = Math.max(sourceSphere.radius, 0.001)
 
     const aspect = size.width / size.height
     camera.aspect = aspect
@@ -119,23 +114,80 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
       Math.min(verticalHalfFov, horizontalHalfFov),
     )
 
-    // Distance for a complete bounding-sphere fit, then a 20-30% safety margin.
-    // This keeps the monolith substantial while preventing any edge clipping.
-    const exactFitDistance = radius / Math.sin(limitingHalfFov)
-    const safetyMargin = mobile ? 1.25 : 1.22
-    const distance = exactFitDistance * safetyMargin
+    // The mobile composition gives the monolith a deliberate right-side field so
+    // the editorial headline owns the left side without swallowing the silhouette.
+    // Desktop remains closer to center while preserving the same architectural read.
+    const frameTarget = new THREE.Vector3(mobile ? 0 : 0.35, 0, 0)
+    const modelOffset = new THREE.Vector3(mobile ? 2.0 : 0.8, 0, 0)
+    preparedScene.position.copy(frameTarget).add(modelOffset).sub(sourceCenter)
+    preparedScene.updateMatrixWorld(true)
 
-    // Small lateral/elevation offsets preserve the intended architectural perspective.
-    const cameraOffsetX = mobile ? 0.16 : 0.22
-    const cameraOffsetY = mobile ? 0.035 : 0.055
+    const framedBox = new THREE.Box3().setFromObject(preparedScene)
+    const framedSphere = framedBox.getBoundingSphere(new THREE.Sphere())
+    const framedRadius = Math.max(framedSphere.radius, radius, 0.001)
+    const corners: THREE.Vector3[] = []
+    const min = framedBox.min
+    const max = framedBox.max
+    for (const x of [min.x, max.x]) {
+      for (const y of [min.y, max.y]) {
+        for (const z of [min.z, max.z]) corners.push(new THREE.Vector3(x, y, z))
+      }
+    }
+
+    const cameraOffset = new THREE.Vector3(mobile ? 0.45 : 0.75, mobile ? 0.25 : 0.35, 0)
+    const safetyMargin = mobile ? 1.25 : 1.22
+    const targetOccupancy = 1 / safetyMargin
+
+    // Use the complete bounding sphere to establish a conservative starting
+    // distance, then solve against every bounding-box corner. This avoids the
+    // sphere's depth from making the V7 look undersized while still guaranteeing
+    // the complete loaded silhouette remains inside the requested safety margin.
+    const sphereDistanceReference = (framedRadius / Math.sin(limitingHalfFov)) * safetyMargin
+
+    const projectFits = (distance: number) => {
+      camera.position.set(
+        frameTarget.x + cameraOffset.x,
+        frameTarget.y + cameraOffset.y,
+        frameTarget.z + distance,
+      )
+      camera.lookAt(frameTarget)
+      camera.updateProjectionMatrix()
+      camera.updateMatrixWorld(true)
+
+      return corners.every((corner) => {
+        const projected = corner.clone().project(camera)
+        return (
+          Number.isFinite(projected.x) &&
+          Number.isFinite(projected.y) &&
+          projected.z >= -1 &&
+          projected.z <= 1 &&
+          Math.abs(projected.x) <= targetOccupancy &&
+          Math.abs(projected.y) <= targetOccupancy
+        )
+      })
+    }
+
+    let low = Math.max(24, framedRadius * 1.5)
+    let high = Math.max(48, sphereDistanceReference)
+    while (!projectFits(high) && high < 2048) high *= 1.35
+
+    // Find the nearest camera distance that fits the complete Box3 at the
+    // 1.20-1.30 safety level. No arbitrary model scaling is involved.
+    for (let iteration = 0; iteration < 32; iteration += 1) {
+      const mid = (low + high) * 0.5
+      if (projectFits(mid)) high = mid
+      else low = mid
+    }
+
+    const distance = high
     camera.position.set(
-      target.x + distance * cameraOffsetX,
-      target.y + distance * cameraOffsetY,
-      target.z + distance,
+      frameTarget.x + cameraOffset.x,
+      frameTarget.y + cameraOffset.y,
+      frameTarget.z + distance,
     )
     camera.near = 0.1
     camera.far = Math.max(120, distance * 5)
-    camera.lookAt(target)
+    camera.lookAt(frameTarget)
     camera.updateProjectionMatrix()
 
     void fitVersion
