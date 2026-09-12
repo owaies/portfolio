@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react'
 const VIDEO_SRC = '/herovideo.mp4'
 const PORTRAIT_SRC = '/herome.png'
 
+// Forge Mode 4 is intentionally video + portrait + editorial UI only.
 const FORGE_STYLE = `
 body[data-ui-experience="obsidian-forge"] .forge-cinematic-hero{position:absolute;inset:0;z-index:3;overflow:hidden;pointer-events:none;background:#050607}
 body[data-ui-experience="obsidian-forge"] .forge-cinematic-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;opacity:.94;filter:saturate(.72) contrast(1.08) brightness(.72)}
