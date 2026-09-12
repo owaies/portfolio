@@ -17,6 +17,8 @@ export default function UIExperienceRuntime({ active }: { active: UIExperienceId
   useEffect(() => {
     const applyChrome = (experience: UIExperienceId | 'admin') => {
       document.body.dataset.uiExperience = experience
+      const forgeRoot = document.querySelector('main.target-site')
+      forgeRoot?.classList.toggle('obsidian-forge-experience', experience === 'obsidian-forge')
       const chrome = experience === 'admin' ? ADMIN_CHROME : CHROME[experience]
       const themeMeta = document.querySelector('meta[name="theme-color"]') ?? document.createElement('meta')
       themeMeta.setAttribute('name', 'theme-color'); themeMeta.setAttribute('content', chrome.theme)
