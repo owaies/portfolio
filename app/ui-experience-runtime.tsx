@@ -11,6 +11,17 @@ const CHROME: Record<UIExperienceId, { theme: string; scheme: string }> = {
 }
 const ADMIN_CHROME = { theme: '#030407', scheme: 'dark' }
 
+function isAndroidChromeDesktopSite() {
+  const userAgent = navigator.userAgent
+  const userAgentData = (navigator as Navigator & {
+    userAgentData?: { mobile?: boolean; platform?: string }
+  }).userAgentData
+  const android = userAgentData?.platform?.toLowerCase() === 'android' || /android/i.test(userAgent)
+  if (!android) return false
+  if (userAgentData?.mobile === false) return true
+  return userAgentData?.mobile === undefined && !/mobile/i.test(userAgent)
+}
+
 export default function UIExperienceRuntime({ active }: { active: UIExperienceId }) {
   const activeRef = useRef<UIExperienceId>(active)
   useEffect(() => { activeRef.current = active }, [active])
@@ -19,6 +30,10 @@ export default function UIExperienceRuntime({ active }: { active: UIExperienceId
       document.body.dataset.uiExperience = experience
       const forgeRoot = document.querySelector('main.target-site')
       forgeRoot?.classList.toggle('obsidian-forge-experience', experience === 'obsidian-forge')
+      document.body.classList.toggle(
+        'forge-desktop-site',
+        experience === 'obsidian-forge' && isAndroidChromeDesktopSite(),
+      )
       const chrome = experience === 'admin' ? ADMIN_CHROME : CHROME[experience]
       const themeMeta = document.querySelector('meta[name="theme-color"]') ?? document.createElement('meta')
       themeMeta.setAttribute('name', 'theme-color'); themeMeta.setAttribute('content', chrome.theme)
