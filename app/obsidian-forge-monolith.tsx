@@ -25,10 +25,6 @@ function audit(event: string, extra: Record<string, unknown> = {}) {
   }).catch(() => {})
 }
 
-/**
- * Mounts the heavyweight R3F scene only while Obsidian Forge is active.
- * Other portfolio experiences never download or instantiate the GLB viewer.
- */
 export default function ObsidianForgeMonolith() {
   const [active, setActive] = useState(false)
 
@@ -42,7 +38,6 @@ export default function ObsidianForgeMonolith() {
     update()
     const observer = new MutationObserver(update)
     observer.observe(document.body, { attributes: true, attributeFilter: ['data-ui-experience'] })
-
     return () => observer.disconnect()
   }, [])
 
@@ -52,6 +47,7 @@ export default function ObsidianForgeMonolith() {
     <>
       <div
         data-forge-runtime-indicator="active"
+        data-forge-audit-version="2026-09-12"
         style={{
           position: 'fixed',
           top: 86,
