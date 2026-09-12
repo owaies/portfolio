@@ -3,6 +3,6 @@
   "version":"1.1.0",
   "private":true,
   "scripts":{"dev":"next dev","build":"next build","start":"next start","lint":"eslint .","typecheck":"tsc --noEmit"},
-  "dependencies":{"@supabase/ssr":"latest","@supabase/supabase-js":"latest","@react-three/drei":"latest","@react-three/fiber":"latest","framer-motion":"latest","lucide-react":"latest","next":"latest","react":"latest","react-dom":"latest","three":"latest"},
-  "devDependencies":{"@tailwindcss/postcss":"latest","@types/node":"latest","@types/react":"latest","@types/react-dom":"latest","@types/three":"latest","autoprefixer":"latest","eslint":"latest","eslint-config-next":"latest","postcss":"latest","tailwindcss":"latest","typescript":"latest"}
+  "dependencies":{"@supabase/ssr":"latest","@supabase/supabase-js":"latest","@react-three/drei":"10.7.8","@react-three/fiber":"9.7.0","framer-motion":"latest","lucide-react":"latest","next":"latest","react":"19.2.0","react-dom":"19.2.0","three":"0.180.0"},
+  "devDependencies":{"@tailwindcss/postcss":"latest","@types/node":"latest","@types/react":"latest","@types/react-dom":"latest","@types/three":"0.180.0","autoprefixer":"latest","eslint":"latest","eslint-config-next":"latest","postcss":"latest","tailwindcss":"latest","typescript":"latest"}
 }
