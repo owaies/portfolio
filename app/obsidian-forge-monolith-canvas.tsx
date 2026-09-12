@@ -1,11 +1,44 @@
 'use client'
 
-import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { Component, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useGLTF } from '@react-three/drei'
+import { useGLTF, useProgress } from '@react-three/drei'
 import * as THREE from 'three'
 
 const MODEL_URL = '/models/Photorealistic_Obsidian_Forge_Monolith_V7.glb'
+
+type DiagnosticStage =
+  | 'canvas-component-mounted'
+  | 'canvas-dom-measured'
+  | 'webgl-renderer-ready'
+  | 'gltf-loading-started'
+  | 'gltf-loaded'
+  | 'scene-mesh-count'
+  | 'bounding-box'
+  | 'model-scale'
+  | 'model-position'
+  | 'camera-position'
+  | 'camera-target'
+  | 'render-error'
+
+type DiagnosticState = Record<DiagnosticStage, string>
+
+const initialDiagnostics: DiagnosticState = {
+  'canvas-component-mounted': 'WAIT',
+  'canvas-dom-measured': 'WAIT',
+  'webgl-renderer-ready': 'WAIT',
+  'gltf-loading-started': 'WAIT',
+  'gltf-loaded': 'WAIT',
+  'scene-mesh-count': 'WAIT',
+  'bounding-box': 'WAIT',
+  'model-scale': 'WAIT',
+  'model-position': 'WAIT',
+  'camera-position': 'WAIT',
+  'camera-target': 'WAIT',
+  'render-error': 'NONE',
+}
+
+const diagnosticState: DiagnosticState = { ...initialDiagnostics }
 
 function audit(event: string, extra: Record<string, unknown> = {}) {
   const payload = {
@@ -15,6 +48,17 @@ function audit(event: string, extra: Record<string, unknown> = {}) {
     timestamp: new Date().toISOString(),
     ...extra,
   }
+
+  if (event in diagnosticState) {
+    const detail = Object.entries(extra)
+      .map(([key, value]) => `${key}=${typeof value === 'string' ? value : JSON.stringify(value)}`)
+      .join(' ')
+    diagnosticState[event as DiagnosticStage] = detail || 'OK'
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('forge-runtime-audit', { detail: { event, value: diagnosticState[event as DiagnosticStage] } }))
+    }
+  }
+
   console.info('[Forge runtime audit]', payload)
   if (typeof window !== 'undefined') {
     void fetch('/api/forge-runtime', {
@@ -50,11 +94,29 @@ function useMobile() {
   return mobile
 }
 
+function ForgeAssetLoadingAudit() {
+  const { active, loaded, total, item } = useProgress()
+
+  useEffect(() => {
+    audit('gltf-loading-started', { model: MODEL_URL, active, loaded, total, item: item || null })
+  }, [])
+
+  useEffect(() => {
+    if (active || loaded > 0 || total > 0) {
+      audit('gltf-loading-started', { model: MODEL_URL, active, loaded, total, item: item || null })
+    }
+  }, [active, item, loaded, total])
+
+  return null
+}
+
 function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMotion: boolean }) {
   const { scene } = useGLTF(MODEL_URL)
   const group = useRef<THREE.Group>(null)
   const { camera, gl } = useThree()
   const [scrollY, setScrollY] = useState(0)
+  const [diagnosticBox, setDiagnosticBox] = useState<THREE.Box3 | null>(null)
+  const [testPosition, setTestPosition] = useState<[number, number, number]>([-3, 5, 0])
 
   const preparedScene = useMemo(() => {
     scene.traverse((object) => {
@@ -104,6 +166,7 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
     preparedScene.position.set(target.x - scaledCenter.x, target.y - scaledCenter.y, -scaledCenter.z)
     preparedScene.updateMatrixWorld(true)
 
+    const worldBox = new THREE.Box3().setFromObject(preparedScene)
     const fovRadians = THREE.MathUtils.degToRad(34)
     const fitDistance = (scaledRadius / Math.sin(fovRadians * 0.5)) * (mobile ? 1.18 : 1.12)
     const distance = THREE.MathUtils.clamp(fitDistance, mobile ? 13 : 16, mobile ? 30 : 34)
@@ -121,21 +184,39 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
 
     const meshes: THREE.Mesh[] = []
     scene.traverse((object) => { if (object instanceof THREE.Mesh) meshes.push(object) })
-    const runtimeState = {
+
+    setDiagnosticBox(worldBox.clone())
+    const nextTestPosition: [number, number, number] = [
+      target.x - Math.max(scaledSize.x * 0.65, 2.2),
+      target.y + 0.2,
+      0,
+    ]
+    setTestPosition(nextTestPosition)
+
+    const common = {
       model: MODEL_URL,
       mobile,
       canvas: { width: gl.domElement.clientWidth, height: gl.domElement.clientHeight },
       sceneChildren: scene.children.length,
       meshCount: meshes.length,
-      boundingBox: { min: box.min.toArray(), max: box.max.toArray() },
       dimensions: size.toArray(),
+      boundingBox: { min: box.min.toArray(), max: box.max.toArray() },
+      worldBoundingBox: { min: worldBox.min.toArray(), max: worldBox.max.toArray() },
       scale,
       position: preparedScene.position.toArray(),
       camera: camera.position.toArray(),
       target: target.toArray(),
     }
+
     document.body.dataset.forgeV7State = 'loaded'
-    audit('gltf-loaded-and-framed', runtimeState)
+    audit('gltf-loaded', { model: MODEL_URL })
+    audit('scene-mesh-count', { count: meshes.length, sceneChildren: scene.children.length })
+    audit('bounding-box', { dimensions: size.toArray(), min: box.min.toArray(), max: box.max.toArray(), worldMin: worldBox.min.toArray(), worldMax: worldBox.max.toArray() })
+    audit('model-scale', { scale })
+    audit('model-position', { position: preparedScene.position.toArray() })
+    audit('camera-position', { position: camera.position.toArray(), near: camera.near, far: camera.far })
+    audit('camera-target', { target: target.toArray() })
+    audit('gltf-loaded-and-framed', common)
   }, [camera, gl, mobile, preparedScene, scene])
 
   useFrame((state) => {
@@ -161,7 +242,16 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
     camera.lookAt(target.x - scrollProgress * (mobile ? 0.12 : 0.25), target.y - scrollProgress * 0.18, 0)
   })
 
-  return <group ref={group}><primitive object={preparedScene} /></group>
+  return (
+    <group ref={group}>
+      <primitive object={preparedScene} />
+      {diagnosticBox && <primitive object={new THREE.Box3Helper(diagnosticBox, new THREE.Color(0x00ff66))} />}
+      <mesh position={testPosition}>
+        <boxGeometry args={[1.25, 1.25, 1.25]} />
+        <meshBasicMaterial color={0xff00ff} wireframe={false} />
+      </mesh>
+    </group>
+  )
 }
 
 function ForgeLighting({ mobile }: { mobile: boolean }) {
@@ -196,6 +286,63 @@ class ForgeRuntimeErrorBoundary extends Component<{ children: ReactNode }, { err
   }
 }
 
+function ForgeDiagnosticsPanel() {
+  const [, forceUpdate] = useState(0)
+
+  useEffect(() => {
+    const onAudit = () => forceUpdate((value) => value + 1)
+    window.addEventListener('forge-runtime-audit', onAudit)
+    return () => window.removeEventListener('forge-runtime-audit', onAudit)
+  }, [])
+
+  const rows: Array<[DiagnosticStage, string]> = [
+    ['canvas-component-mounted', '1 Canvas component mounted'],
+    ['canvas-dom-measured', '2 Canvas DOM width × height'],
+    ['webgl-renderer-ready', '3 WebGL renderer created'],
+    ['gltf-loading-started', '4 useGLTF loading started'],
+    ['gltf-loaded', '5 GLTF loaded'],
+    ['scene-mesh-count', '6 scene mesh count'],
+    ['bounding-box', '7 bounding-box dimensions'],
+    ['model-scale', '8 model scale'],
+    ['model-position', '9 model position'],
+    ['camera-position', '10 camera position'],
+    ['camera-target', '11 camera target'],
+    ['render-error', '12 render-error'],
+  ]
+
+  return (
+    <div
+      data-forge-runtime-diagnostics="panel"
+      style={{
+        position: 'absolute',
+        top: 42,
+        left: 10,
+        zIndex: 101,
+        width: 'min(430px, calc(100% - 20px))',
+        maxHeight: 'calc(100% - 52px)',
+        overflow: 'auto',
+        padding: '8px 10px',
+        border: '1px solid rgba(0,255,102,.55)',
+        borderRadius: 3,
+        background: 'rgba(0,0,0,.86)',
+        color: '#fff',
+        font: '500 9px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace',
+        letterSpacing: '.02em',
+        pointerEvents: 'none',
+      }}
+    >
+      <div style={{ fontWeight: 800, marginBottom: 5, letterSpacing: '.1em' }}>FORGE V7 POST-ACTIVATION DIAGNOSTICS</div>
+      {rows.map(([stage, label]) => (
+        <div key={stage} style={{ marginBottom: 3 }}>
+          <span style={{ fontWeight: 800 }}>{label}: </span>
+          <span>{diagnosticState[stage]}</span>
+        </div>
+      ))}
+      <div style={{ marginTop: 5, opacity: .7 }}>TEST MESH = MAGENTA CUBE · BOX HELPER = GREEN</div>
+    </div>
+  )
+}
+
 export default function ObsidianForgeMonolithCanvas() {
   const mobile = useMobile()
   const reducedMotion = useReducedMotion()
@@ -206,7 +353,7 @@ export default function ObsidianForgeMonolithCanvas() {
       viewport: { width: window.innerWidth, height: window.innerHeight },
     })
 
-    const frame = requestAnimationFrame(() => {
+    const measure = () => {
       const canvas = document.querySelector<HTMLCanvasElement>('[data-forge-canvas="v7"] canvas')
       const rect = canvas?.getBoundingClientRect()
       audit('canvas-dom-measured', {
@@ -217,8 +364,9 @@ export default function ObsidianForgeMonolithCanvas() {
         visibility: canvas ? getComputedStyle(canvas).visibility : null,
         opacity: canvas ? getComputedStyle(canvas).opacity : null,
       })
-    })
+    }
 
+    const frame = requestAnimationFrame(measure)
     return () => {
       cancelAnimationFrame(frame)
       delete document.body.dataset.forgeV7State
@@ -232,8 +380,8 @@ export default function ObsidianForgeMonolithCanvas() {
         style={{
           position: 'absolute',
           top: 10,
-          left: 10,
-          zIndex: 100,
+          right: 10,
+          zIndex: 102,
           padding: '5px 8px',
           border: '1px solid rgba(255,255,255,.45)',
           borderRadius: 2,
@@ -246,6 +394,7 @@ export default function ObsidianForgeMonolithCanvas() {
       >
         FORGE 3D CANVAS MOUNTED
       </div>
+      <ForgeDiagnosticsPanel />
       <Canvas
         dpr={mobile ? [1, 1.35] : [1, 1.8]}
         frameloop="always"
@@ -258,13 +407,17 @@ export default function ObsidianForgeMonolithCanvas() {
           gl.toneMappingExposure = 0.8
           audit('webgl-renderer-ready', {
             renderer: gl.getContext().getParameter(gl.getContext().RENDERER),
+            vendor: gl.getContext().getParameter(gl.getContext().VENDOR),
             canvas: { width: gl.domElement.clientWidth, height: gl.domElement.clientHeight },
           })
         }}
       >
         <ForgeRuntimeErrorBoundary>
+          <ForgeAssetLoadingAudit />
           <ForgeLighting mobile={mobile} />
-          <ObsidianModel mobile={mobile} reducedMotion={reducedMotion} />
+          <Suspense fallback={null}>
+            <ObsidianModel mobile={mobile} reducedMotion={reducedMotion} />
+          </Suspense>
         </ForgeRuntimeErrorBoundary>
       </Canvas>
     </div>
