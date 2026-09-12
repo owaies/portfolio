@@ -52,7 +52,7 @@ function ProfileImageManager({ initialImages }: { initialImages: Record<UIExperi
   return <section className="ui-profile-manager" aria-labelledby="ui-profile-title" style={{ display: 'block', marginBottom: '2rem' }}>
     <div className="ui-profile-manager-heading">
       <div><p className="mono ui-experience-kicker">PROFILE PICTURE</p><h2 id="ui-profile-title">Change your profile picture</h2><p>Upload a separate portrait for each UI experience. This controls the actual profile photo shown on the public portfolio.</p></div>
-      <div className="ui-profile-manager-note"><Camera size={16}/> <span>3 independent profile pictures</span></div>
+      <div className="ui-profile-manager-note"><Camera size={16}/> <span>3 independent profile pictures · Modes 1–3</span></div>
     </div>
     {message && <div className="ui-profile-message" role="status">{message}</div>}
     <div className="ui-profile-grid">
