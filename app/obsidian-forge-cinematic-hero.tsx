@@ -22,15 +22,17 @@ body[data-ui-experience="obsidian-forge"] .target-hero-inner{z-index:12!importan
 body[data-ui-experience="obsidian-forge"] .target-hero{background:#050607!important}
 body[data-ui-experience="obsidian-forge"] .target-hero::before{z-index:10!important;opacity:.28}
 body[data-ui-experience="obsidian-forge"] .target-hero::after{z-index:11!important}
-body[data-ui-experience="obsidian-forge"] .target-hero[data-forge-video-ready="true"] .target-portrait-wrap{display:none!important}
+body[data-ui-experience="obsidian-forge"] .target-hero[data-forge-cinematic-ready="true"] .target-portrait-wrap{display:none!important}
 @media(max-width:760px){body[data-ui-experience="obsidian-forge"] .forge-cinematic-video{object-position:62% center;opacity:.92;filter:saturate(.7) contrast(1.08) brightness(.68)}body[data-ui-experience="obsidian-forge"] .forge-cinematic-portrait{left:61%;bottom:-4%;width:min(94vw,620px);height:min(79dvh,700px);transform:translateX(-48%);filter:contrast(1.08) brightness(.85) saturate(.82) drop-shadow(9px 3px 15px rgba(255,145,72,.13))}body[data-ui-experience="obsidian-forge"] .forge-cinematic-rim{left:61%;bottom:0;width:min(94vw,620px);height:min(79dvh,700px);transform:translateX(-48%)}body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy-veil{inset:16% auto 12% 0;width:88%;background:linear-gradient(90deg,rgba(3,4,5,.68),rgba(3,4,5,.28) 64%,transparent)}}
 @media(prefers-reduced-motion:reduce){body[data-ui-experience="obsidian-forge"] .forge-cinematic-portrait,body[data-ui-experience="obsidian-forge"] .forge-cinematic-rim{transition:none!important}}
 `
 
 export default function ObsidianForgeCinematicHero(){
   const videoRef=useRef<HTMLVideoElement>(null)
-  const [failed,setFailed]=useState(false)
-  const [ready,setReady]=useState(false)
+  const [videoReady,setVideoReady]=useState(false)
+  const [portraitReady,setPortraitReady]=useState(false)
+  const [videoFailed,setVideoFailed]=useState(false)
+  const cinematicReady=videoReady&&portraitReady&&!videoFailed
 
   useEffect(()=>{
     const video=videoRef.current
@@ -48,21 +50,21 @@ export default function ObsidianForgeCinematicHero(){
   useEffect(()=>{
     const hero=document.querySelector('.target-hero')
     if(!hero)return
-    hero.setAttribute('data-forge-video-ready',ready&&!failed?'true':'false')
-    return()=>hero.removeAttribute('data-forge-video-ready')
-  },[ready,failed])
+    hero.setAttribute('data-forge-cinematic-ready',cinematicReady?'true':'false')
+    return()=>hero.removeAttribute('data-forge-cinematic-ready')
+  },[cinematicReady])
 
-  if(failed)return <ObsidianForgeMonolithCanvas/>
+  if(videoFailed)return <ObsidianForgeMonolithCanvas/>
 
   return <>
     <style dangerouslySetInnerHTML={{__html:FORGE_STYLE}}/>
     <div className="forge-cinematic-hero" aria-hidden="true">
-      <video ref={videoRef} className="forge-cinematic-video" autoPlay muted playsInline loop preload="metadata" poster="/obsidian-forge-environment.svg" onCanPlay={()=>setReady(true)} onError={()=>setFailed(true)}>
+      <video ref={videoRef} className="forge-cinematic-video" autoPlay muted playsInline loop preload="metadata" poster="/obsidian-forge-environment.svg" onCanPlay={()=>setVideoReady(true)} onError={()=>setVideoFailed(true)}>
         <source src={MOBILE_VIDEO} media="(max-width:760px)" type="video/mp4"/>
         <source src={DESKTOP_VIDEO} type="video/mp4"/>
       </video>
       <div className="forge-cinematic-grade"/><div className="forge-cinematic-haze"/>
-      <img className="forge-cinematic-portrait" src={FORGE_PORTRAIT} alt="" draggable={false}/>
+      <img className="forge-cinematic-portrait" src={FORGE_PORTRAIT} alt="" draggable={false} onLoad={()=>setPortraitReady(true)} onError={()=>setPortraitReady(false)}/>
       <div className="forge-cinematic-rim"/><div className="forge-cinematic-copy-veil"/><div className="forge-cinematic-grain"/>
     </div>
   </>
