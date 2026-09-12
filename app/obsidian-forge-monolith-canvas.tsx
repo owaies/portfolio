@@ -84,8 +84,6 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
     if (!(camera instanceof THREE.PerspectiveCamera)) return
     if (size.width <= 0 || size.height <= 0) return
 
-    // Keep the supplied V7 GLB at native scale. Framing is achieved by positioning
-    // the loaded scene and camera only, never by changing the authored geometry.
     preparedScene.scale.setScalar(1)
     preparedScene.position.set(0, 0, 0)
     preparedScene.updateMatrixWorld(true)
@@ -106,9 +104,6 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
       Math.min(verticalHalfFov, horizontalHalfFov),
     )
 
-    // The mobile composition gives the monolith a deliberate right-side field so
-    // the editorial headline owns the left side without swallowing the silhouette.
-    // Desktop remains closer to center while preserving the same architectural read.
     const frameTarget = new THREE.Vector3(mobile ? 0 : 0.35, 0, 0)
     const modelOffset = new THREE.Vector3(mobile ? 2.0 : 0.8, 0, 0)
     preparedScene.position.copy(frameTarget).add(modelOffset).sub(sourceCenter)
@@ -129,11 +124,6 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
     const cameraOffset = new THREE.Vector3(mobile ? 0.45 : 0.75, mobile ? 0.25 : 0.35, 0)
     const safetyMargin = mobile ? 1.25 : 1.22
     const targetOccupancy = 1 / safetyMargin
-
-    // Use the complete bounding sphere to establish a conservative starting
-    // distance, then solve against every bounding-box corner. This avoids the
-    // sphere's depth from making the V7 look undersized while still guaranteeing
-    // the complete loaded silhouette remains inside the requested safety margin.
     const sphereDistanceReference = (framedRadius / Math.sin(limitingHalfFov)) * safetyMargin
 
     const projectFits = (distance: number) => {
@@ -163,8 +153,6 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
     let high = Math.max(48, sphereDistanceReference)
     while (!projectFits(high) && high < 2048) high *= 1.35
 
-    // Find the nearest camera distance that fits the complete Box3 at the
-    // 1.20-1.30 safety level. No arbitrary model scaling is involved.
     for (let iteration = 0; iteration < 32; iteration += 1) {
       const mid = (low + high) * 0.5
       if (projectFits(mid)) high = mid
@@ -188,21 +176,16 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
   useFrame((state) => {
     if (!group.current) return
 
-    // Slow, non-turntable idle motion. The V7 stays at its fitted native scale and
-    // only the model group moves, leaving typography, portrait and camera stable.
-    // Desktop: ±4° yaw / ±1° pitch. Mobile: ±3.5° yaw / ±0.85° pitch.
-    const elapsed = state.clock.getElapsedTime()
-    const motion = reducedMotion ? 0 : 1
+    // The monolith rotates around its vertical Y axis only. A complete
+    // left -> right -> left oscillation takes 8 seconds, never a 360-degree spin.
     const yawAmplitude = THREE.MathUtils.degToRad(mobile ? 3.5 : 4)
-    const pitchAmplitude = THREE.MathUtils.degToRad(mobile ? 0.85 : 1)
-    const yawPeriod = 17
-    const pitchPeriod = 19
+    const yawPeriod = 8
+    const yaw = reducedMotion ? 0 : Math.sin((state.clock.getElapsedTime() / yawPeriod) * Math.PI * 2) * yawAmplitude
 
-    const targetYaw = Math.sin((elapsed / yawPeriod) * Math.PI * 2) * yawAmplitude * motion
-    const targetPitch = Math.sin((elapsed / pitchPeriod) * Math.PI * 2 + Math.PI * 0.23) * pitchAmplitude * motion
-
-    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, targetYaw, 0.045)
-    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, targetPitch, 0.035)
+    group.current.rotation.y = yaw
+    group.current.rotation.x = 0
+    group.current.rotation.z = 0
+    group.current.position.set(0, 0, 0)
   })
 
   return (
