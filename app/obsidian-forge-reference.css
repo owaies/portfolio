@@ -76,9 +76,7 @@ body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{font-size:cla
  body[data-ui-experience="obsidian-forge"] .forge-identity-card{right:13%!important;bottom:22%!important;width:280px!important}
 }
 
-/* Android Chrome "Desktop site" only: use a fixed desktop Forge canvas so the
-   existing desktop relationships are preserved while the narrow CSS viewport
-   simply crops that canvas. Normal mobile and actual desktop rules are untouched. */
+/* Android Chrome "Desktop site" only: fixed desktop Forge canvas. */
 @media (max-width:900px){
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .target-hero{overflow:hidden!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-cinematic-hero{width:1280px!important;height:100%!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;transform-origin:center top!important}
