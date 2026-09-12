@@ -39,7 +39,6 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
   const { scene } = useGLTF(MODEL_URL)
   const group = useRef<THREE.Group>(null)
   const { camera, gl, size } = useThree()
-  const [scrollY, setScrollY] = useState(0)
   const [fitVersion, setFitVersion] = useState(0)
 
   const preparedScene = useMemo(() => {
@@ -65,13 +64,6 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
 
     return scene
   }, [mobile, scene])
-
-  useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY || 0)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   useEffect(() => {
     const requestRefit = () => setFitVersion((version) => version + 1)
@@ -196,30 +188,21 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
   useFrame((state) => {
     if (!group.current) return
 
+    // Slow, non-turntable idle motion. The V7 stays at its fitted native scale and
+    // only the model group moves, leaving typography, portrait and camera stable.
+    // Desktop: ±4° yaw / ±1° pitch. Mobile: ±3.5° yaw / ±0.85° pitch.
     const elapsed = state.clock.getElapsedTime()
-    const scrollProgress = Math.min(1, scrollY / Math.max(window.innerHeight * 3.2, 1))
     const motion = reducedMotion ? 0 : 1
+    const yawAmplitude = THREE.MathUtils.degToRad(mobile ? 3.5 : 4)
+    const pitchAmplitude = THREE.MathUtils.degToRad(mobile ? 0.85 : 1)
+    const yawPeriod = 17
+    const pitchPeriod = 19
 
-    group.current.rotation.y = THREE.MathUtils.lerp(
-      group.current.rotation.y,
-      Math.sin(elapsed * 0.055) * 0.035 * motion + scrollProgress * 0.055 * motion,
-      0.035,
-    )
-    group.current.rotation.x = THREE.MathUtils.lerp(
-      group.current.rotation.x,
-      Math.sin(elapsed * 0.035) * 0.008 * motion,
-      0.025,
-    )
-    group.current.position.x = THREE.MathUtils.lerp(
-      group.current.position.x,
-      Math.sin(elapsed * 0.035) * 0.08 * motion + scrollProgress * (mobile ? -0.12 : -0.35),
-      0.025,
-    )
-    group.current.position.y = THREE.MathUtils.lerp(
-      group.current.position.y,
-      Math.sin(elapsed * 0.045) * 0.035 * motion - scrollProgress * 0.22,
-      0.025,
-    )
+    const targetYaw = Math.sin((elapsed / yawPeriod) * Math.PI * 2) * yawAmplitude * motion
+    const targetPitch = Math.sin((elapsed / pitchPeriod) * Math.PI * 2 + Math.PI * 0.23) * pitchAmplitude * motion
+
+    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, targetYaw, 0.045)
+    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, targetPitch, 0.035)
   })
 
   return (
