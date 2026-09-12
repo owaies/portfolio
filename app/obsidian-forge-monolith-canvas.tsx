@@ -116,7 +116,6 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
   const { camera, gl } = useThree()
   const [scrollY, setScrollY] = useState(0)
   const [diagnosticBox, setDiagnosticBox] = useState<THREE.Box3 | null>(null)
-  const [testPosition, setTestPosition] = useState<[number, number, number]>([-3, 5, 0])
 
   const preparedScene = useMemo(() => {
     scene.traverse((object) => {
@@ -186,12 +185,6 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
     scene.traverse((object) => { if (object instanceof THREE.Mesh) meshes.push(object) })
 
     setDiagnosticBox(worldBox.clone())
-    const nextTestPosition: [number, number, number] = [
-      target.x - Math.max(scaledSize.x * 0.65, 2.2),
-      target.y + 0.2,
-      0,
-    ]
-    setTestPosition(nextTestPosition)
 
     const common = {
       model: MODEL_URL,
@@ -246,10 +239,6 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
     <group ref={group}>
       <primitive object={preparedScene} />
       {diagnosticBox && <primitive object={new THREE.Box3Helper(diagnosticBox, new THREE.Color(0x00ff66))} />}
-      <mesh position={testPosition}>
-        <boxGeometry args={[1.25, 1.25, 1.25]} />
-        <meshBasicMaterial color={0xff00ff} wireframe={false} />
-      </mesh>
     </group>
   )
 }
@@ -264,6 +253,15 @@ function ForgeLighting({ mobile }: { mobile: boolean }) {
       <pointLight position={[0.8, 7.0, 8.5]} intensity={mobile ? 0.7 : 1.05} distance={14} decay={2} color="#ff9b5a" />
       <pointLight position={[-1.5, 13.0, 1.5]} intensity={mobile ? 0.4 : 0.5} distance={18} decay={2} color="#d47c46" />
     </>
+  )
+}
+
+function ForgeDiagnosticTestMesh() {
+  return (
+    <mesh position={[-4, 5, 0]}>
+      <boxGeometry args={[1.4, 1.4, 1.4]} />
+      <meshBasicMaterial color={0xff00ff} />
+    </mesh>
   )
 }
 
@@ -415,6 +413,7 @@ export default function ObsidianForgeMonolithCanvas() {
         <ForgeRuntimeErrorBoundary>
           <ForgeAssetLoadingAudit />
           <ForgeLighting mobile={mobile} />
+          <ForgeDiagnosticTestMesh />
           <Suspense fallback={null}>
             <ObsidianModel mobile={mobile} reducedMotion={reducedMotion} />
           </Suspense>
