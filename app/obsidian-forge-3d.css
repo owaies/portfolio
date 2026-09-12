@@ -1,35 +1,67 @@
-/* Obsidian Forge V7: the GLB is the hero object, not a CSS illustration. */
+/* Obsidian Forge V7: the supplied GLB is the primary hero object. */
 body[data-ui-experience="obsidian-forge"] .target-hero {
   position: relative;
   isolation: isolate;
   overflow: clip;
 }
 
+/* The canvas must sit above the decorative hero pseudo-elements. The editorial
+   content and portrait remain above the model. */
 body[data-ui-experience="obsidian-forge"] .obsidian-forge-3d {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 3;
   pointer-events: none;
   overflow: hidden;
+  display: block;
+  visibility: visible;
+  opacity: 1;
 }
 
 body[data-ui-experience="obsidian-forge"] .obsidian-forge-3d canvas {
-  display: block;
+  display: block !important;
   width: 100% !important;
   height: 100% !important;
+  min-width: 1px;
+  min-height: 1px;
 }
 
-body[data-ui-experience="obsidian-forge"] .target-grid,
-body[data-ui-experience="obsidian-forge"] .target-hero-inner {
+body[data-ui-experience="obsidian-forge"] .target-hero::before {
+  z-index: 0;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-hero::after {
+  z-index: 2;
+  pointer-events: none;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-grid {
   position: relative;
   z-index: 2;
 }
 
-/* Keep the architectural object to the right of the editorial copy. */
+body[data-ui-experience="obsidian-forge"] .target-hero-inner {
+  position: relative;
+  z-index: 5;
+}
+
+/* Keep editorial UI above the GLB while allowing the model to occupy the
+   right/center hero field. */
 body[data-ui-experience="obsidian-forge"] .target-hero-copy {
   position: relative;
-  z-index: 3;
+  z-index: 6;
   max-width: min(620px, 48vw);
+}
+
+body[data-ui-experience="obsidian-forge"] .target-portrait-wrap {
+  z-index: 7 !important;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-hero-quote,
+body[data-ui-experience="obsidian-forge"] .target-scroll,
+body[data-ui-experience="obsidian-forge"] .target-stats,
+body[data-ui-experience="obsidian-forge"] .target-open {
+  z-index: 8 !important;
 }
 
 @media (max-width: 900px) {
@@ -40,8 +72,8 @@ body[data-ui-experience="obsidian-forge"] .target-hero-copy {
 
 @media (max-width: 760px) {
   body[data-ui-experience="obsidian-forge"] .obsidian-forge-3d {
-    inset: 7% -24% 0 -8%;
-    opacity: .94;
+    inset: 0;
+    opacity: 1;
   }
 
   body[data-ui-experience="obsidian-forge"] .target-hero-copy {
@@ -51,6 +83,6 @@ body[data-ui-experience="obsidian-forge"] .target-hero-copy {
 
 @media (prefers-reduced-motion: reduce) {
   body[data-ui-experience="obsidian-forge"] .obsidian-forge-3d {
-    opacity: .88;
+    opacity: 1;
   }
 }
