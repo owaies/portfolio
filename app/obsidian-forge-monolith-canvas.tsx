@@ -1,11 +1,30 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
 const MODEL_URL = '/models/Photorealistic_Obsidian_Forge_Monolith_V7.glb'
+
+function audit(event: string, extra: Record<string, unknown> = {}) {
+  const payload = {
+    event,
+    experience: typeof document !== 'undefined' ? document.body.dataset.uiExperience || null : null,
+    path: typeof window !== 'undefined' ? window.location.pathname : null,
+    timestamp: new Date().toISOString(),
+    ...extra,
+  }
+  console.info('[Forge runtime audit]', payload)
+  if (typeof window !== 'undefined') {
+    void fetch('/api/forge-runtime', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload),
+      keepalive: true,
+    }).catch(() => {})
+  }
+}
 
 function useReducedMotion() {
   const [reduced, setReduced] = useState(false)
@@ -38,8 +57,6 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
   const [scrollY, setScrollY] = useState(0)
 
   const preparedScene = useMemo(() => {
-    // Preserve the authored V7 PBR materials. Only renderer-facing texture
-    // color spaces, visibility, and shadow flags are adjusted.
     scene.traverse((object) => {
       if (!(object instanceof THREE.Mesh)) return
       object.visible = true
@@ -69,7 +86,6 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
   }, [])
 
   useEffect(() => {
-    // Reset before measuring so responsive changes never compound transforms.
     preparedScene.scale.setScalar(1)
     preparedScene.position.set(0, 0, 0)
     preparedScene.updateMatrixWorld(true)
@@ -83,7 +99,6 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
     const scaledCenter = center.clone().multiplyScalar(scale)
     const scaledRadius = Math.max(scaledSize.length() * 0.5, 0.5)
 
-    // Frame from the actual loaded bounds rather than assuming authored scale.
     const target = new THREE.Vector3(mobile ? 0.9 : 2.1, scaledSize.y * 0.48 - 0.55, 0)
     preparedScene.scale.setScalar(scale)
     preparedScene.position.set(target.x - scaledCenter.x, target.y - scaledCenter.y, -scaledCenter.z)
@@ -120,7 +135,7 @@ function ObsidianModel({ mobile, reducedMotion }: { mobile: boolean; reducedMoti
       target: target.toArray(),
     }
     document.body.dataset.forgeV7State = 'loaded'
-    console.info('[Forge V7] loaded and auto-framed', runtimeState)
+    audit('gltf-loaded-and-framed', runtimeState)
   }, [camera, gl, mobile, preparedScene, scene])
 
   useFrame((state) => {
@@ -162,21 +177,75 @@ function ForgeLighting({ mobile }: { mobile: boolean }) {
   )
 }
 
+class ForgeRuntimeErrorBoundary extends Component<{ children: ReactNode }, { error: string | null }> {
+  state = { error: null as string | null }
+
+  static getDerivedStateFromError(error: unknown) {
+    return { error: error instanceof Error ? error.message : String(error) }
+  }
+
+  componentDidCatch(error: unknown) {
+    audit('render-error', { error: error instanceof Error ? error.message : String(error) })
+  }
+
+  render() {
+    if (this.state.error) {
+      return <div data-forge-runtime-error={this.state.error} />
+    }
+    return this.props.children
+  }
+}
+
 export default function ObsidianForgeMonolithCanvas() {
   const mobile = useMobile()
   const reducedMotion = useReducedMotion()
 
   useEffect(() => {
     document.body.dataset.forgeV7State = 'mounting'
-    console.info('[Forge V7] Canvas component mounted', {
-      experience: document.body.dataset.uiExperience,
+    audit('canvas-component-mounted', {
       viewport: { width: window.innerWidth, height: window.innerHeight },
     })
-    return () => { delete document.body.dataset.forgeV7State }
+
+    const frame = requestAnimationFrame(() => {
+      const canvas = document.querySelector<HTMLCanvasElement>('[data-forge-canvas="v7"] canvas')
+      const rect = canvas?.getBoundingClientRect()
+      audit('canvas-dom-measured', {
+        present: Boolean(canvas),
+        width: rect?.width ?? 0,
+        height: rect?.height ?? 0,
+        display: canvas ? getComputedStyle(canvas).display : null,
+        visibility: canvas ? getComputedStyle(canvas).visibility : null,
+        opacity: canvas ? getComputedStyle(canvas).opacity : null,
+      })
+    })
+
+    return () => {
+      cancelAnimationFrame(frame)
+      delete document.body.dataset.forgeV7State
+    }
   }, [])
 
   return (
     <div className="obsidian-forge-3d" aria-hidden="true" data-forge-canvas="v7">
+      <div
+        data-forge-runtime-indicator="canvas"
+        style={{
+          position: 'absolute',
+          top: 10,
+          left: 10,
+          zIndex: 100,
+          padding: '5px 8px',
+          border: '1px solid rgba(255,255,255,.45)',
+          borderRadius: 2,
+          background: 'rgba(0,0,0,.72)',
+          color: '#fff',
+          font: '600 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace',
+          letterSpacing: '.1em',
+          pointerEvents: 'none',
+        }}
+      >
+        FORGE 3D CANVAS MOUNTED
+      </div>
       <Canvas
         dpr={mobile ? [1, 1.35] : [1, 1.8]}
         frameloop="always"
@@ -187,14 +256,16 @@ export default function ObsidianForgeMonolithCanvas() {
           gl.outputColorSpace = THREE.SRGBColorSpace
           gl.toneMapping = THREE.ACESFilmicToneMapping
           gl.toneMappingExposure = 0.8
-          console.info('[Forge V7] WebGL renderer ready', {
+          audit('webgl-renderer-ready', {
             renderer: gl.getContext().getParameter(gl.getContext().RENDERER),
             canvas: { width: gl.domElement.clientWidth, height: gl.domElement.clientHeight },
           })
         }}
       >
-        <ForgeLighting mobile={mobile} />
-        <ObsidianModel mobile={mobile} reducedMotion={reducedMotion} />
+        <ForgeRuntimeErrorBoundary>
+          <ForgeLighting mobile={mobile} />
+          <ObsidianModel mobile={mobile} reducedMotion={reducedMotion} />
+        </ForgeRuntimeErrorBoundary>
       </Canvas>
     </div>
   )
