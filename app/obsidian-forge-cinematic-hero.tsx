@@ -2,17 +2,17 @@
 
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
-import { PROFILE_IMAGE_DATA_URL } from '@/lib/profile-image'
 
 const ObsidianForgeMonolithCanvas = dynamic(() => import('./obsidian-forge-monolith-canvas'), { ssr: false })
 const DESKTOP_VIDEO = '/videos/obsidian-forge-hero.mp4'
 const MOBILE_VIDEO = '/videos/obsidian-forge-hero-mobile.mp4'
+const FORGE_PORTRAIT = '/images/forge-profile-cutout.webp'
 
 const FORGE_STYLE = `
 body[data-ui-experience="obsidian-forge"] .forge-cinematic-hero{position:absolute;inset:0;z-index:3;overflow:hidden;pointer-events:none;background:#050607}
 body[data-ui-experience="obsidian-forge"] .forge-cinematic-video,body[data-ui-experience="obsidian-forge"] .forge-cinematic-grade,body[data-ui-experience="obsidian-forge"] .forge-cinematic-haze,body[data-ui-experience="obsidian-forge"] .forge-cinematic-grain{position:absolute;inset:0;width:100%;height:100%}
 body[data-ui-experience="obsidian-forge"] .forge-cinematic-video{object-fit:cover;object-position:center center;opacity:.94;filter:saturate(.72) contrast(1.08) brightness(.72)}
-body[data-ui-experience="obsidian-forge"] .forge-cinematic-grade{z-index:1;background:linear-gradient(90deg,rgba(3,4,5,.74),rgba(3,4,5,.42) 34%,rgba(3,4,5,.08) 62%,rgba(3,4,5,.28)),linear-gradient(180deg,rgba(2,3,4,.36),transparent 34%,rgba(2,3,4,.76) 100%)}
+body[data-ui-experience="obsidian-forge"] .forge-cinematic-grade{z-index:1;background:linear-gradient(90deg,rgba(3,4,5,.74),rgba(3,4,5,.42) 34%,rgba(3,4,5,.08) 62%,rgba(3,4,5,.28) 100%),linear-gradient(180deg,rgba(2,3,4,.36),transparent 34%,rgba(2,3,4,.76) 100%)}
 body[data-ui-experience="obsidian-forge"] .forge-cinematic-haze{z-index:2;background:radial-gradient(ellipse at 78% 22%,rgba(255,167,94,.13),transparent 24%),radial-gradient(ellipse at 53% 70%,rgba(255,205,155,.06),transparent 30%);mix-blend-mode:screen}
 body[data-ui-experience="obsidian-forge"] .forge-cinematic-grain{z-index:7;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");mix-blend-mode:soft-light}
 body[data-ui-experience="obsidian-forge"] .forge-cinematic-portrait{position:absolute;z-index:5;left:55%;bottom:-7%;width:min(48vw,700px);height:min(88vh,820px);transform:translateX(-43%);object-fit:contain;object-position:center bottom;filter:contrast(1.08) brightness(.82) saturate(.84) drop-shadow(12px 4px 18px rgba(255,145,72,.13));-webkit-mask-image:linear-gradient(to bottom,#000 0 70%,rgba(0,0,0,.88) 82%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0 70%,rgba(0,0,0,.88) 82%,transparent 100%)}
@@ -62,7 +62,7 @@ export default function ObsidianForgeCinematicHero(){
         <source src={DESKTOP_VIDEO} type="video/mp4"/>
       </video>
       <div className="forge-cinematic-grade"/><div className="forge-cinematic-haze"/>
-      <img className="forge-cinematic-portrait" src={PROFILE_IMAGE_DATA_URL} alt="" draggable={false}/>
+      <img className="forge-cinematic-portrait" src={FORGE_PORTRAIT} alt="" draggable={false}/>
       <div className="forge-cinematic-rim"/><div className="forge-cinematic-copy-veil"/><div className="forge-cinematic-grain"/>
     </div>
   </>
