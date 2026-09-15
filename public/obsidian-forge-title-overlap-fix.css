@@ -1,0 +1,27 @@
+/* Final, Forge-only title rhythm correction. Loaded after all existing Forge art-direction CSS. */
+body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1 {
+  line-height: .94 !important;
+}
+
+@media (max-width: 767px) {
+  body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1 {
+    line-height: .94 !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1 {
+    line-height: .94 !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1 {
+    line-height: .94 !important;
+  }
+}
+
+/* Desktop Site mode uses its own scaled reference canvas, so override that rule too. */
+body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1 {
+  line-height: .94 !important;
+}
