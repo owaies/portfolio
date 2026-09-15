@@ -16,10 +16,22 @@ function isAndroidChromeDesktopSite() {
   const userAgentData = (navigator as Navigator & {
     userAgentData?: { mobile?: boolean; platform?: string }
   }).userAgentData
-  const android = userAgentData?.platform?.toLowerCase() === 'android' || /android/i.test(userAgent)
-  if (!android) return false
-  if (userAgentData?.mobile === false) return true
-  return userAgentData?.mobile === undefined && !/mobile/i.test(userAgent)
+  const androidUA = /android/i.test(userAgent)
+  const androidPlatform = userAgentData?.platform?.toLowerCase() === 'android'
+  if (androidUA || androidPlatform) {
+    if (userAgentData?.mobile === false) return true
+    if (userAgentData?.mobile === undefined && !/mobile/i.test(userAgent)) return true
+  }
+
+  // Chrome's Android "Desktop site" can intentionally remove Android/mobile
+  // markers from both legacy UA and UA-CH. Recover that state from the device
+  // itself, but only for a touch device whose physical screen is phone-sized
+  // while the browser exposes a desktop-sized layout viewport.
+  const touchDevice = navigator.maxTouchPoints > 0
+  const phoneSizedScreen = Math.min(screen.width, screen.height) <= 600
+  const desktopLayoutViewport = window.innerWidth >= 800
+  const chromeLike = /chrome|crios/i.test(userAgent) || !!userAgentData
+  return touchDevice && phoneSizedScreen && desktopLayoutViewport && chromeLike
 }
 
 export default function UIExperienceRuntime({ active }: { active: UIExperienceId }) {
