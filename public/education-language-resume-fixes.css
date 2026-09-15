@@ -1,7 +1,6 @@
 /* Public content fixes: education, languages, resume and readable typography. */
 
-/* EDUCATION
-   Keep institution, qualification, period and CGPA as separate visual fields. */
+/* EDUCATION: keep institution, qualification, period and CGPA as separate visual fields. */
 .target-education-card > div:last-child {
   display:grid !important;
   grid-template-columns:minmax(0,1fr) auto !important;
@@ -17,14 +16,38 @@
 .target-education-card > div:last-child > b { grid-area:cgpa !important; display:inline-flex !important; align-items:center !important; width:max-content !important; margin:2px 0 0 !important; padding:6px 10px !important; border:1px solid rgba(17,223,255,.18) !important; border-radius:999px !important; font:700 11px/1 'JetBrains Mono',monospace !important; letter-spacing:.04em !important; }
 .target-education-card > div:last-child > b::before { content:"CGPA  " !important; opacity:.55 !important; font-weight:500 !important; }
 
-/* LANGUAGES
-   Make the language name and proficiency two distinct pieces of information. */
-.target-language-card > div:first-child { display:flex !important; align-items:baseline !important; justify-content:space-between !important; gap:22px !important; min-width:0 !important; }
-.target-language-card > div:first-child > span { display:block !important; min-width:0 !important; margin-right:auto !important; font-size:15px !important; line-height:1.4 !important; overflow-wrap:anywhere !important; }
-.target-language-card > div:first-child > b { display:block !important; flex:0 0 auto !important; margin-left:12px !important; padding-left:14px !important; border-left:1px solid currentColor !important; opacity:.92 !important; white-space:nowrap !important; font-size:12px !important; line-height:1.4 !important; }
+/* LANGUAGES: the actual card markup is <b>name</b><span>proficiency</span>.
+   Style the article itself so the two fields cannot collapse into one text run. */
+.target-language-card {
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  align-items:center !important;
+  column-gap:18px !important;
+  min-width:0 !important;
+}
+.target-language-card > b {
+  display:block !important;
+  min-width:0 !important;
+  margin:0 !important;
+  font-size:16px !important;
+  line-height:1.35 !important;
+  overflow-wrap:anywhere !important;
+}
+.target-language-card > span {
+  display:block !important;
+  flex:none !important;
+  min-width:112px !important;
+  margin:0 !important;
+  padding:6px 0 6px 16px !important;
+  border-left:1px solid currentColor !important;
+  opacity:.88 !important;
+  white-space:nowrap !important;
+  text-align:left !important;
+  font-size:12px !important;
+  line-height:1.35 !important;
+}
 
-/* RESUME
-   Present the document as an intentional preview instead of an empty loading box. */
+/* RESUME: present the document as an intentional preview instead of an empty loading box. */
 .target-resume-card { position:relative !important; overflow:hidden !important; }
 .target-resume-preview { position:relative !important; display:grid !important; place-items:center !important; min-height:320px !important; overflow:hidden !important; background:radial-gradient(circle at 50% 40%,rgba(71,233,255,.07),transparent 42%),linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.018)),repeating-linear-gradient(0deg,transparent 0 20px,rgba(255,255,255,.026) 21px,transparent 22px) !important; border:1px solid rgba(255,255,255,.11) !important; border-radius:14px !important; }
 .target-resume-preview::before { content:"RESUME  /  PDF DOCUMENT" !important; position:absolute !important; top:16px !important; left:16px !important; padding:6px 9px !important; border:1px solid rgba(17,223,255,.22) !important; border-radius:6px !important; background:rgba(2,8,14,.78) !important; color:#9defff !important; font:600 9px/1 'JetBrains Mono',monospace !important; letter-spacing:.12em !important; z-index:3 !important; }
@@ -36,8 +59,7 @@
 .target-resume-actions { display:flex !important; flex-wrap:wrap !important; gap:10px !important; margin-top:14px !important; }
 .target-resume-actions a { font-size:12px !important; }
 
-/* CONTENT TYPOGRAPHY
-   Increase readability without changing the hero or navigation scale. */
+/* CONTENT TYPOGRAPHY: readability only, without changing the hero or navigation scale. */
 .target-site .target-section-subtitle { font-size:14px !important; line-height:1.7 !important; }
 .target-site .target-about-main > p { font-size:14px !important; line-height:1.7 !important; }
 .target-site .target-about-copy p { font-size:16px !important; line-height:1.8 !important; }
@@ -61,8 +83,8 @@
 @media (max-width:700px) {
   .target-education-card > div:last-child { grid-template-columns:1fr !important; grid-template-areas:"institution" "degree" "period" "cgpa" !important; row-gap:8px !important; }
   .target-education-card > div:last-child > small { text-align:left !important; }
-  .target-language-card > div:first-child { align-items:flex-start !important; flex-direction:column !important; gap:6px !important; }
-  .target-language-card > div:first-child > b { margin-left:0 !important; padding-left:0 !important; border-left:0 !important; padding-top:5px !important; border-top:1px solid currentColor !important; width:100% !important; }
+  .target-language-card { grid-template-columns:1fr !important; row-gap:9px !important; align-items:start !important; }
+  .target-language-card > span { min-width:0 !important; width:100% !important; margin:0 !important; padding:7px 0 0 !important; border-left:0 !important; border-top:1px solid currentColor !important; }
   .target-site .target-project-card > p { font-size:14px !important; }
   .target-site .target-about-main > p { font-size:14px !important; }
   .target-site .target-about-copy p { font-size:15px !important; }
