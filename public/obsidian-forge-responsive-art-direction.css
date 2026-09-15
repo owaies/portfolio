@@ -10,6 +10,11 @@ body[data-ui-experience="obsidian-forge"] .forge-cinematic-portrait{position:abs
 body[data-ui-experience="obsidian-forge"] .forge-identity-card{position:absolute!important;box-sizing:border-box!important;z-index:14!important}
 body[data-ui-experience="obsidian-forge"] .forge-side-copy{z-index:11!important}
 
+/* Forge navbar: transparent so the cinematic background continues behind it. */
+body[data-ui-experience="obsidian-forge"] .target-nav,
+body[data-ui-experience="obsidian-forge"] .target-nav.is-compact,
+body[data-ui-experience="obsidian-forge"] .target-nav.obsidian-nav{background:transparent!important;background-color:transparent!important;border-color:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+
 /* Desktop/laptop >=1024: editorial horizontal composition. */
 @media (min-width:1024px){
  body[data-ui-experience="obsidian-forge"] .target-nav{position:absolute!important;inset:0 0 auto!important;z-index:90!important;min-height:78px!important}
@@ -64,8 +69,7 @@ body[data-ui-experience="obsidian-forge"] .forge-side-copy{z-index:11!important}
 }
 
 /* Android Chrome Desktop Site. IMPORTANT: no max-width wrapper. Chrome Desktop Site
-   can expose a CSS viewport around 980px, so a @media(max-width:900px) rule never runs.
-   The browser-mode class is the authoritative switch. */
+   can expose a CSS viewport around 980px, so the browser-mode class is the authoritative switch. */
 body.forge-desktop-site[data-ui-experience="obsidian-forge"] .target-hero{height:100svh!important;min-height:100svh!important;max-height:none!important;overflow:hidden!important}
 body.forge-desktop-site[data-ui-experience="obsidian-forge"] .target-hero-inner{display:none!important}
 body.forge-desktop-site[data-ui-experience="obsidian-forge"] .target-nav{position:absolute!important;top:0!important;left:0!important;right:0!important;height:78px!important;min-height:78px!important;z-index:90!important}
