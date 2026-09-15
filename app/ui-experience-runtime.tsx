@@ -11,60 +11,95 @@ const CHROME: Record<UIExperienceId, { theme: string; scheme: string }> = {
 }
 const ADMIN_CHROME = { theme: '#030407', scheme: 'dark' }
 
-function isAndroidChromeDesktopSite() {
-  const userAgent = navigator.userAgent
-  const userAgentData = (navigator as Navigator & {
-    userAgentData?: { mobile?: boolean; platform?: string }
-  }).userAgentData
-  const androidUA = /android/i.test(userAgent)
-  const androidPlatform = userAgentData?.platform?.toLowerCase() === 'android'
-  if (androidUA || androidPlatform) {
-    if (userAgentData?.mobile === false) return true
-    if (userAgentData?.mobile === undefined && !/mobile/i.test(userAgent)) return true
-  }
+function isMobileDesktopSite() {
+  if (typeof window === 'undefined') return false
 
-  // Chrome's Android "Desktop site" can intentionally remove Android/mobile
-  // markers from both legacy UA and UA-CH. Recover that state from the device
-  // itself, but only for a touch device whose physical screen is phone-sized
-  // while the browser exposes a desktop-sized layout viewport.
+  // Chrome/Chromium Desktop Site on a phone deliberately exposes a desktop
+  // layout viewport while the physical display is still phone-sized. Do not
+  // use the UA alone: Desktop Site can rewrite/remove mobile UA markers.
   const touchDevice = navigator.maxTouchPoints > 0
   const phoneSizedScreen = Math.min(screen.width, screen.height) <= 600
-  const desktopLayoutViewport = window.innerWidth >= 800
-  const chromeLike = /chrome|crios/i.test(userAgent) || !!userAgentData
-  return touchDevice && phoneSizedScreen && desktopLayoutViewport && chromeLike
+  const desktopLayoutViewport = window.innerWidth >= 768
+  const chromeLike = /chrome|crios|chromium/i.test(navigator.userAgent) ||
+    !!(navigator as Navigator & { userAgentData?: unknown }).userAgentData
+
+  if (touchDevice && phoneSizedScreen && desktopLayoutViewport && chromeLike) return true
+
+  // Fallback for browsers that expose the Android platform through UA-CH but
+  // hide the normal Android/mobile markers in Desktop Site mode.
+  const ua = navigator.userAgent
+  const uaData = (navigator as Navigator & {
+    userAgentData?: { mobile?: boolean; platform?: string }
+  }).userAgentData
+  const android = /android/i.test(ua) || uaData?.platform?.toLowerCase() === 'android'
+  return android && (uaData?.mobile === false || (!/mobile/i.test(ua) && desktopLayoutViewport))
 }
 
 export default function UIExperienceRuntime({ active }: { active: UIExperienceId }) {
   const activeRef = useRef<UIExperienceId>(active)
   useEffect(() => { activeRef.current = active }, [active])
+
   useEffect(() => {
     const applyChrome = (experience: UIExperienceId | 'admin') => {
       document.body.dataset.uiExperience = experience
       const forgeRoot = document.querySelector('main.target-site')
-      forgeRoot?.classList.toggle('obsidian-forge-experience', experience === 'obsidian-forge')
+      forgeRoot?.classList.toggle(
+        'obsidian-forge-experience',
+        experience === 'obsidian-forge',
+      )
       document.body.classList.toggle(
         'forge-desktop-site',
-        experience === 'obsidian-forge' && isAndroidChromeDesktopSite(),
+        experience === 'obsidian-forge' && isMobileDesktopSite(),
       )
+
       const chrome = experience === 'admin' ? ADMIN_CHROME : CHROME[experience]
       const themeMeta = document.querySelector('meta[name="theme-color"]') ?? document.createElement('meta')
-      themeMeta.setAttribute('name', 'theme-color'); themeMeta.setAttribute('content', chrome.theme)
+      themeMeta.setAttribute('name', 'theme-color')
+      themeMeta.setAttribute('content', chrome.theme)
       if (!themeMeta.parentElement) document.head.appendChild(themeMeta)
+
       const schemeMeta = document.querySelector('meta[name="color-scheme"]') ?? document.createElement('meta')
-      schemeMeta.setAttribute('name', 'color-scheme'); schemeMeta.setAttribute('content', chrome.scheme)
+      schemeMeta.setAttribute('name', 'color-scheme')
+      schemeMeta.setAttribute('content', chrome.scheme)
       if (!schemeMeta.parentElement) document.head.appendChild(schemeMeta)
     }
+
     const applyExperience = () => {
       const isAdmin = window.location.pathname.startsWith('/admin')
-      if (isAdmin) { applyChrome('admin'); return }
+      if (isAdmin) {
+        applyChrome('admin')
+        return
+      }
+
       const preview = new URLSearchParams(window.location.search).get('ui-preview')
-      if (preview === 'digital-architecture' || preview === 'organic-intelligence' || preview === 'neural-interface' || preview === 'obsidian-forge') applyChrome(preview)
-      else applyChrome(activeRef.current)
+      if (
+        preview === 'digital-architecture' ||
+        preview === 'organic-intelligence' ||
+        preview === 'neural-interface' ||
+        preview === 'obsidian-forge'
+      ) {
+        applyChrome(preview)
+      } else {
+        applyChrome(activeRef.current)
+      }
     }
+
     applyExperience()
-    const onPop = () => applyExperience()
-    window.addEventListener('popstate', onPop)
-    return () => window.removeEventListener('popstate', onPop)
+
+    // Desktop Site can be toggled by the browser without a React navigation.
+    // Re-apply the mode on viewport/orientation changes so the desktop canvas
+    // remains correct after rotation or Chrome UI changes.
+    const onViewportChange = () => applyExperience()
+    window.addEventListener('resize', onViewportChange, { passive: true })
+    window.addEventListener('orientationchange', onViewportChange, { passive: true })
+    window.addEventListener('popstate', applyExperience)
+
+    return () => {
+      window.removeEventListener('resize', onViewportChange)
+      window.removeEventListener('orientationchange', onViewportChange)
+      window.removeEventListener('popstate', applyExperience)
+    }
   }, [active])
+
   return null
 }
