@@ -11,269 +11,61 @@
   row-gap:9px !important;
   min-width:0 !important;
 }
-.target-education-card > div:last-child > strong {
-  grid-area:institution !important;
-  display:block !important;
-  min-width:0 !important;
-  font-size:14px !important;
-  line-height:1.4 !important;
-  overflow-wrap:anywhere !important;
-}
-.target-education-card > div:last-child > span {
-  grid-area:degree !important;
-  display:block !important;
-  min-width:0 !important;
-  margin:0 !important;
-  font-size:13px !important;
-  line-height:1.55 !important;
-  overflow-wrap:anywhere !important;
-}
-.target-education-card > div:last-child > small {
-  grid-area:period !important;
-  display:block !important;
-  margin:0 !important;
-  padding:3px 0 !important;
-  white-space:nowrap !important;
-  font-size:11px !important;
-  line-height:1.35 !important;
-  text-align:right !important;
-}
-.target-education-card > div:last-child > b {
-  grid-area:cgpa !important;
-  display:inline-flex !important;
-  align-items:center !important;
-  width:max-content !important;
-  margin:2px 0 0 !important;
-  padding:6px 10px !important;
-  border:1px solid rgba(17,223,255,.18) !important;
-  border-radius:999px !important;
-  font:700 11px/1 'JetBrains Mono',monospace !important;
-  letter-spacing:.04em !important;
-}
-.target-education-card > div:last-child > b::before {
-  content:"CGPA  " !important;
-  opacity:.55 !important;
-  font-weight:500 !important;
-}
+.target-education-card > div:last-child > strong { grid-area:institution !important; display:block !important; min-width:0 !important; font-size:14px !important; line-height:1.4 !important; overflow-wrap:anywhere !important; }
+.target-education-card > div:last-child > span { grid-area:degree !important; display:block !important; min-width:0 !important; margin:0 !important; font-size:13px !important; line-height:1.55 !important; overflow-wrap:anywhere !important; }
+.target-education-card > div:last-child > small { grid-area:period !important; display:block !important; margin:0 !important; padding:3px 0 !important; white-space:nowrap !important; font-size:11px !important; line-height:1.35 !important; text-align:right !important; }
+.target-education-card > div:last-child > b { grid-area:cgpa !important; display:inline-flex !important; align-items:center !important; width:max-content !important; margin:2px 0 0 !important; padding:6px 10px !important; border:1px solid rgba(17,223,255,.18) !important; border-radius:999px !important; font:700 11px/1 'JetBrains Mono',monospace !important; letter-spacing:.04em !important; }
+.target-education-card > div:last-child > b::before { content:"CGPA  " !important; opacity:.55 !important; font-weight:500 !important; }
 
 /* LANGUAGES
    Make the language name and proficiency two distinct pieces of information. */
-.target-language-card > div:first-child {
-  display:flex !important;
-  align-items:baseline !important;
-  justify-content:space-between !important;
-  gap:22px !important;
-  min-width:0 !important;
-}
-.target-language-card > div:first-child > span {
-  display:block !important;
-  min-width:0 !important;
-  margin-right:auto !important;
-  font-size:15px !important;
-  line-height:1.4 !important;
-  overflow-wrap:anywhere !important;
-}
-.target-language-card > div:first-child > b {
-  display:block !important;
-  flex:0 0 auto !important;
-  margin-left:12px !important;
-  padding-left:14px !important;
-  border-left:1px solid currentColor !important;
-  opacity:.92 !important;
-  white-space:nowrap !important;
-  font-size:12px !important;
-  line-height:1.4 !important;
-}
+.target-language-card > div:first-child { display:flex !important; align-items:baseline !important; justify-content:space-between !important; gap:22px !important; min-width:0 !important; }
+.target-language-card > div:first-child > span { display:block !important; min-width:0 !important; margin-right:auto !important; font-size:15px !important; line-height:1.4 !important; overflow-wrap:anywhere !important; }
+.target-language-card > div:first-child > b { display:block !important; flex:0 0 auto !important; margin-left:12px !important; padding-left:14px !important; border-left:1px solid currentColor !important; opacity:.92 !important; white-space:nowrap !important; font-size:12px !important; line-height:1.4 !important; }
 
 /* RESUME
    Present the document as an intentional preview instead of an empty loading box. */
-.target-resume-card {
-  position:relative !important;
-  overflow:hidden !important;
-}
-.target-resume-preview {
-  position:relative !important;
-  display:grid !important;
-  place-items:center !important;
-  min-height:320px !important;
-  overflow:hidden !important;
-  background:
-    radial-gradient(circle at 50% 40%,rgba(71,233,255,.07),transparent 42%),
-    linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.018)),
-    repeating-linear-gradient(0deg,transparent 0 20px,rgba(255,255,255,.026) 21px,transparent 22px) !important;
-  border:1px solid rgba(255,255,255,.11) !important;
-  border-radius:14px !important;
-}
-.target-resume-preview::before {
-  content:"RESUME  /  PDF DOCUMENT" !important;
-  position:absolute !important;
-  top:16px !important;
-  left:16px !important;
-  padding:6px 9px !important;
-  border:1px solid rgba(17,223,255,.22) !important;
-  border-radius:6px !important;
-  background:rgba(2,8,14,.78) !important;
-  color:#9defff !important;
-  font:600 9px/1 'JetBrains Mono',monospace !important;
-  letter-spacing:.12em !important;
-  z-index:3 !important;
-}
-.target-resume-preview::after {
-  content:"PDF  •  READY TO VIEW" !important;
-  position:absolute !important;
-  left:16px !important;
-  right:16px !important;
-  bottom:16px !important;
-  padding-top:11px !important;
-  border-top:1px solid rgba(255,255,255,.1) !important;
-  color:#9aa7ba !important;
-  font:500 9px/1.35 'JetBrains Mono',monospace !important;
-  letter-spacing:.08em !important;
-  z-index:3 !important;
-}
-.target-resume-preview img {
-  position:absolute !important;
-  left:50% !important;
-  top:50% !important;
-  width:min(360px,58%) !important;
-  height:88% !important;
-  max-width:none !important;
-  transform:translate(-50%,-50%) !important;
-  object-fit:contain !important;
-  object-position:center !important;
-  filter:drop-shadow(0 20px 32px rgba(0,0,0,.42)) !important;
-  z-index:1 !important;
-}
-.target-resume-preview > svg {
-  width:72px !important;
-  height:88px !important;
-  padding:20px !important;
-  box-sizing:content-box !important;
-  color:#9defff !important;
-  border:1px solid rgba(17,223,255,.2) !important;
-  border-radius:10px !important;
-  background:rgba(2,8,14,.68) !important;
-  filter:drop-shadow(0 18px 30px rgba(0,0,0,.4)) !important;
-  z-index:1 !important;
-}
-.target-resume-card h3 {
-  margin:14px 0 7px !important;
-  font-size:17px !important;
-  line-height:1.3 !important;
-}
-.target-resume-card > p {
-  margin:0 !important;
-  font-size:14px !important;
-  line-height:1.7 !important;
-}
-.target-resume-actions {
-  display:flex !important;
-  flex-wrap:wrap !important;
-  gap:10px !important;
-  margin-top:14px !important;
-}
-.target-resume-actions a {
-  font-size:12px !important;
-}
+.target-resume-card { position:relative !important; overflow:hidden !important; }
+.target-resume-preview { position:relative !important; display:grid !important; place-items:center !important; min-height:320px !important; overflow:hidden !important; background:radial-gradient(circle at 50% 40%,rgba(71,233,255,.07),transparent 42%),linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.018)),repeating-linear-gradient(0deg,transparent 0 20px,rgba(255,255,255,.026) 21px,transparent 22px) !important; border:1px solid rgba(255,255,255,.11) !important; border-radius:14px !important; }
+.target-resume-preview::before { content:"RESUME  /  PDF DOCUMENT" !important; position:absolute !important; top:16px !important; left:16px !important; padding:6px 9px !important; border:1px solid rgba(17,223,255,.22) !important; border-radius:6px !important; background:rgba(2,8,14,.78) !important; color:#9defff !important; font:600 9px/1 'JetBrains Mono',monospace !important; letter-spacing:.12em !important; z-index:3 !important; }
+.target-resume-preview::after { content:"PDF  •  READY TO VIEW" !important; position:absolute !important; left:16px !important; right:16px !important; bottom:16px !important; padding-top:11px !important; border-top:1px solid rgba(255,255,255,.1) !important; color:#9aa7ba !important; font:500 9px/1.35 'JetBrains Mono',monospace !important; letter-spacing:.08em !important; z-index:3 !important; }
+.target-resume-preview img { position:absolute !important; left:50% !important; top:50% !important; width:min(360px,58%) !important; height:88% !important; max-width:none !important; transform:translate(-50%,-50%) !important; object-fit:contain !important; object-position:center !important; filter:drop-shadow(0 20px 32px rgba(0,0,0,.42)) !important; z-index:1 !important; }
+.target-resume-preview > svg { width:72px !important; height:88px !important; padding:20px !important; box-sizing:content-box !important; color:#9defff !important; border:1px solid rgba(17,223,255,.2) !important; border-radius:10px !important; background:rgba(2,8,14,.68) !important; filter:drop-shadow(0 18px 30px rgba(0,0,0,.4)) !important; z-index:1 !important; }
+.target-resume-card h3 { margin:14px 0 7px !important; font-size:17px !important; line-height:1.3 !important; }
+.target-resume-card > p { margin:0 !important; font-size:14px !important; line-height:1.7 !important; }
+.target-resume-actions { display:flex !important; flex-wrap:wrap !important; gap:10px !important; margin-top:14px !important; }
+.target-resume-actions a { font-size:12px !important; }
 
 /* CONTENT TYPOGRAPHY
    Increase readability without changing the hero or navigation scale. */
-.target-site .target-section-subtitle {
-  font-size:14px !important;
-  line-height:1.7 !important;
-}
-.target-site .target-about-copy p {
-  font-size:16px !important;
-  line-height:1.8 !important;
-}
-.target-site .target-project-card > p {
-  font-size:14px !important;
-  line-height:1.7 !important;
-}
-.target-site .target-project-card h3 {
-  font-size:17px !important;
-  line-height:1.35 !important;
-}
-.target-site .target-project-tags span {
-  font-size:10px !important;
-  line-height:1.3 !important;
-}
-.target-site .target-project-links a {
-  font-size:12px !important;
-}
-.target-site .target-education-card {
-  min-height:170px !important;
-}
-.target-site .target-certificate-meta {
-  font-size:11px !important;
-}
-.target-site .target-certificate-meta small,
-.target-site .target-certificate-meta span {
-  font-size:11px !important;
-}
-.target-site .target-certificate-card h3 {
-  font-size:14px !important;
-  line-height:1.4 !important;
-}
-.target-site .target-certificate-card > div:last-child a {
-  font-size:11px !important;
-}
-.target-site .target-skill > div:first-child span {
-  font-size:13px !important;
-}
-.target-site .target-skill > div:first-child b {
-  font-size:11px !important;
-}
-.target-site .target-tech-stack > span {
-  font-size:10px !important;
-}
-.target-site .target-tech-stack b {
-  font-size:10px !important;
-}
-.target-site .target-facts small {
-  font-size:10px !important;
-}
-.target-site .target-facts b {
-  font-size:12px !important;
-  line-height:1.5 !important;
-}
-.target-site .target-traits span {
-  font-size:10px !important;
-}
+.target-site .target-section-subtitle { font-size:14px !important; line-height:1.7 !important; }
+.target-site .target-about-main > p { font-size:14px !important; line-height:1.7 !important; }
+.target-site .target-about-copy p { font-size:16px !important; line-height:1.8 !important; }
+.target-site .target-project-card > p { font-size:14px !important; line-height:1.7 !important; }
+.target-site .target-project-card h3 { font-size:17px !important; line-height:1.35 !important; }
+.target-site .target-project-tags span { font-size:10px !important; line-height:1.3 !important; }
+.target-site .target-project-links a { font-size:12px !important; }
+.target-site .target-education-card { min-height:170px !important; }
+.target-site .target-certificate-meta { font-size:11px !important; }
+.target-site .target-certificate-meta small, .target-site .target-certificate-meta span { font-size:11px !important; }
+.target-site .target-certificate-card h3 { font-size:14px !important; line-height:1.4 !important; }
+.target-site .target-certificate-card > div:last-child a { font-size:11px !important; }
+.target-site .target-skill > div:first-child span { font-size:13px !important; }
+.target-site .target-skill > div:first-child b { font-size:11px !important; }
+.target-site .target-tech-stack > span { font-size:10px !important; }
+.target-site .target-tech-stack b { font-size:10px !important; }
+.target-site .target-facts small { font-size:10px !important; }
+.target-site .target-facts b { font-size:12px !important; line-height:1.5 !important; }
+.target-site .target-traits span { font-size:10px !important; }
 
 @media (max-width:700px) {
-  .target-education-card > div:last-child {
-    grid-template-columns:1fr !important;
-    grid-template-areas:"institution" "degree" "period" "cgpa" !important;
-    row-gap:8px !important;
-  }
-  .target-education-card > div:last-child > small {
-    text-align:left !important;
-  }
-  .target-language-card > div:first-child {
-    align-items:flex-start !important;
-    flex-direction:column !important;
-    gap:6px !important;
-  }
-  .target-language-card > div:first-child > b {
-    margin-left:0 !important;
-    padding-left:0 !important;
-    border-left:0 !important;
-    padding-top:5px !important;
-    border-top:1px solid currentColor !important;
-    width:100% !important;
-  }
-  .target-site .target-project-card > p {
-    font-size:14px !important;
-  }
-  .target-site .target-about-copy p {
-    font-size:15px !important;
-  }
-  .target-resume-preview {
-    min-height:270px !important;
-  }
-  .target-resume-preview img {
-    width:min(250px,68%) !important;
-    height:84% !important;
-  }
+  .target-education-card > div:last-child { grid-template-columns:1fr !important; grid-template-areas:"institution" "degree" "period" "cgpa" !important; row-gap:8px !important; }
+  .target-education-card > div:last-child > small { text-align:left !important; }
+  .target-language-card > div:first-child { align-items:flex-start !important; flex-direction:column !important; gap:6px !important; }
+  .target-language-card > div:first-child > b { margin-left:0 !important; padding-left:0 !important; border-left:0 !important; padding-top:5px !important; border-top:1px solid currentColor !important; width:100% !important; }
+  .target-site .target-project-card > p { font-size:14px !important; }
+  .target-site .target-about-main > p { font-size:14px !important; }
+  .target-site .target-about-copy p { font-size:15px !important; }
+  .target-resume-preview { min-height:270px !important; }
+  .target-resume-preview img { width:min(250px,68%) !important; height:84% !important; }
 }
