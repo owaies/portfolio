@@ -76,13 +76,14 @@ body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{font-size:cla
  body[data-ui-experience="obsidian-forge"] .forge-identity-card{right:13%!important;bottom:22%!important;width:280px!important}
 }
 
-/* Android Chrome "Desktop site" only: one coherent 1360px PC canvas uniformly scaled to
-   Chrome's approximately 980px CSS layout viewport. Normal mobile and real desktop stay untouched. */
+/* Android Chrome "Desktop site" only. The PC composition is kept intact inside a
+   1360x835.84 reference canvas, matching the working desktop hero's ~1536x944 aspect
+   ratio. That complete canvas is then uniformly reduced to ~980 CSS px wide. */
 @media (max-width:900px){
- body.forge-desktop-site[data-ui-experience="obsidian-forge"] .target-hero{overflow:hidden!important}
- body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-cinematic-hero{position:absolute!important;width:1360px!important;height:calc(100% / .720588)!important;left:50%!important;right:auto!important;top:0!important;transform:translateX(-50%) scale(.720588)!important;transform-origin:top center!important}
+ body.forge-desktop-site[data-ui-experience="obsidian-forge"] .target-hero{height:602.3px!important;min-height:602.3px!important;overflow:hidden!important}
+ body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-cinematic-hero{position:absolute!important;width:1360px!important;height:835.84px!important;left:50%!important;right:auto!important;top:0!important;transform:translateX(-50%)!important;transform-origin:top center!important;zoom:.720588!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-cinematic-video{object-position:56% 49%!important;transform:none!important}
- body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-cinematic-content{width:1272px!important;height:100%!important}
+ body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-cinematic-content{width:1272px!important;height:835.84px!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-cinematic-copy{left:0!important;top:15.5%!important;width:610px!important;z-index:12!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{font-size:121px!important;line-height:.82!important;letter-spacing:-.055em!important;max-width:610px!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-eyebrow{margin-bottom:20px!important;font-size:10px!important;letter-spacing:.38em!important}
@@ -91,7 +92,7 @@ body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{font-size:cla
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-primary-action{min-height:48px!important;padding:0 20px!important;gap:20px!important;font-size:10px!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-story-action{gap:13px!important;font-size:9px!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-play{width:43px!important;height:43px!important;flex:0 0 43px!important}
- body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-cinematic-portrait{position:absolute!important;top:1%!important;right:7%!important;bottom:auto!important;width:802px!important;height:101%!important;z-index:7!important;object-position:center bottom!important}
+ body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-cinematic-portrait{top:1%!important;right:7%!important;bottom:auto!important;width:802px!important;height:101%!important;z-index:7!important;object-position:center bottom!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-identity-card{right:17%!important;bottom:23%!important;width:300px!important;min-height:92px!important;padding:16px 54px 15px 20px!important;z-index:14!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-identity-card strong{font-size:15px!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-identity-card span{margin-top:5px!important;font-size:11px!important}
@@ -101,7 +102,7 @@ body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{font-size:cla
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-side-bottom{right:0!important;bottom:8%!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .forge-hero-rule{left:0!important;bottom:5.5%!important;width:38%!important}
 
- body.forge-desktop-site[data-ui-experience="obsidian-forge"] .target-nav{left:50%!important;right:auto!important;top:0!important;width:1360px!important;height:78px!important;transform:translateX(-50%) scale(.720588)!important;transform-origin:top center!important}
+ body.forge-desktop-site[data-ui-experience="obsidian-forge"] .target-nav{left:50%!important;right:auto!important;top:0!important;width:1360px!important;height:78px!important;transform:translateX(-50%)!important;transform-origin:top center!important;zoom:.720588!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .target-nav-inner{width:1272px!important;min-height:78px!important;height:78px!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .target-brand{min-width:245px!important;gap:14px!important}
  body.forge-desktop-site[data-ui-experience="obsidian-forge"] .target-brand:before{font-size:34px!important}
