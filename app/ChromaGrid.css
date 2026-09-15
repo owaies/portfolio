@@ -1,0 +1,171 @@
+.chroma-grid {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 690px;
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 320px));
+  grid-template-rows: repeat(var(--rows, 2), minmax(0, 1fr));
+  justify-content: center;
+  align-items: stretch;
+  gap: 0.75rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  --x: 50%;
+  --y: 50%;
+  --r: 220px;
+}
+
+.chroma-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 330px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #333;
+  transition: border-color 0.3s ease, transform 0.35s ease;
+  background: var(--card-gradient);
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  --spotlight-color: rgba(255, 255, 255, 0.3);
+}
+
+.chroma-card:hover {
+  border-color: var(--card-border);
+  transform: translateY(-3px);
+}
+
+.chroma-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 2;
+}
+
+.chroma-card:hover::before {
+  opacity: 1;
+}
+
+.chroma-img-wrapper {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  min-height: 205px;
+  padding: 10px;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.chroma-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  min-height: 185px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+.chroma-info {
+  position: relative;
+  z-index: 1;
+  padding: 0.75rem 1rem 1rem;
+  color: #fff;
+  font-family: system-ui, sans-serif;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: 0.25rem;
+  column-gap: 0.75rem;
+}
+
+.chroma-info .name,
+.chroma-info .role,
+.chroma-info .handle,
+.chroma-info .location {
+  min-width: 0;
+}
+
+.chroma-info .name {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.25;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.chroma-info .role,
+.chroma-info .handle,
+.chroma-info .location {
+  margin: 0;
+  color: #aaa;
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.chroma-info .handle {
+  text-align: right;
+}
+
+.chroma-overlay,
+.chroma-fade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.001);
+}
+
+.chroma-overlay {
+  z-index: 3;
+  backdrop-filter: grayscale(1) brightness(0.78);
+  -webkit-backdrop-filter: grayscale(1) brightness(0.78);
+  mask-image: radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 15%, rgba(0,0,0,.1) 30%, rgba(0,0,0,.22) 45%, rgba(0,0,0,.35) 60%, rgba(0,0,0,.5) 75%, rgba(0,0,0,.68) 88%, white 100%);
+  -webkit-mask-image: radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 15%, rgba(0,0,0,.1) 30%, rgba(0,0,0,.22) 45%, rgba(0,0,0,.35) 60%, rgba(0,0,0,.5) 75%, rgba(0,0,0,.68) 88%, white 100%);
+}
+
+.chroma-fade {
+  z-index: 4;
+  backdrop-filter: grayscale(1) brightness(0.78);
+  -webkit-backdrop-filter: grayscale(1) brightness(0.78);
+  mask-image: radial-gradient(circle var(--r) at var(--x) var(--y), white 0%, white 15%, rgba(255,255,255,.9) 30%, rgba(255,255,255,.78) 45%, rgba(255,255,255,.65) 60%, rgba(255,255,255,.5) 75%, rgba(255,255,255,.32) 88%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle var(--r) at var(--x) var(--y), white 0%, white 15%, rgba(255,255,255,.9) 30%, rgba(255,255,255,.78) 45%, rgba(255,255,255,.65) 60%, rgba(255,255,255,.5) 75%, rgba(255,255,255,.32) 88%, transparent 100%);
+  opacity: 1;
+  transition: opacity 0.25s ease;
+}
+
+@media (max-width: 1124px) {
+  .chroma-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
+    grid-template-rows: none;
+    min-height: 0;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .chroma-grid {
+    grid-template-columns: minmax(0, 320px);
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .chroma-card {
+    min-height: 360px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chroma-card,
+  .chroma-fade {
+    transition: none;
+  }
+}
