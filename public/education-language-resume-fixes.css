@@ -1,0 +1,161 @@
+/* Public content readability fixes. Deliberately limited to Education, Languages and Resume. */
+
+/* Education: keep institution, qualification, period and CGPA as distinct visual rows. */
+.target-education-card > div:last-child {
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  grid-template-areas:"institution period" "degree degree" "cgpa cgpa" !important;
+  align-items:start !important;
+  column-gap:20px !important;
+  row-gap:7px !important;
+  min-width:0 !important;
+}
+.target-education-card > div:last-child > strong {
+  grid-area:institution !important;
+  display:block !important;
+  min-width:0 !important;
+  line-height:1.35 !important;
+  overflow-wrap:anywhere !important;
+}
+.target-education-card > div:last-child > span {
+  grid-area:degree !important;
+  display:block !important;
+  min-width:0 !important;
+  margin:0 !important;
+  line-height:1.45 !important;
+  overflow-wrap:anywhere !important;
+}
+.target-education-card > div:last-child > small {
+  grid-area:period !important;
+  display:block !important;
+  margin:0 !important;
+  white-space:nowrap !important;
+  line-height:1.35 !important;
+  text-align:right !important;
+}
+.target-education-card > div:last-child > b {
+  grid-area:cgpa !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  width:max-content !important;
+  margin:2px 0 0 !important;
+  padding:5px 9px !important;
+  border:1px solid rgba(17,223,255,.14) !important;
+  border-radius:999px !important;
+  font:600 8px/1 'JetBrains Mono',monospace !important;
+  letter-spacing:.04em !important;
+}
+.target-education-card > div:last-child > b::before {
+  content:"CGPA  " !important;
+  opacity:.55 !important;
+  font-weight:500 !important;
+}
+
+/* Languages: name and proficiency are separate visual fields, never adjacent text. */
+.target-language-card > div:first-child {
+  display:flex !important;
+  align-items:baseline !important;
+  justify-content:space-between !important;
+  gap:18px !important;
+  min-width:0 !important;
+}
+.target-language-card > div:first-child > span {
+  display:block !important;
+  min-width:0 !important;
+  margin-right:auto !important;
+  line-height:1.35 !important;
+  overflow-wrap:anywhere !important;
+}
+.target-language-card > div:first-child > b {
+  display:block !important;
+  flex:0 0 auto !important;
+  margin-left:12px !important;
+  padding-left:12px !important;
+  border-left:1px solid currentColor !important;
+  opacity:.9 !important;
+  white-space:nowrap !important;
+  line-height:1.35 !important;
+}
+.target-language-card > div:first-child > b::before {
+  content:"" !important;
+}
+
+/* Resume: make the card look intentionally ready even when no thumbnail was uploaded. */
+.target-resume-card {
+  position:relative !important;
+  overflow:hidden !important;
+}
+.target-resume-preview {
+  position:relative !important;
+  display:grid !important;
+  place-items:center !important;
+  overflow:hidden !important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.018)),
+    repeating-linear-gradient(0deg,transparent 0 17px,rgba(255,255,255,.028) 18px,transparent 19px) !important;
+  border:1px solid rgba(255,255,255,.1) !important;
+}
+.target-resume-preview::before {
+  content:"RESUME" !important;
+  position:absolute !important;
+  top:16px !important;
+  left:16px !important;
+  padding:5px 8px !important;
+  border:1px solid rgba(17,223,255,.22) !important;
+  border-radius:5px !important;
+  background:rgba(2,8,14,.72) !important;
+  color:#9defff !important;
+  font:600 7px/1 'JetBrains Mono',monospace !important;
+  letter-spacing:.16em !important;
+  z-index:2 !important;
+}
+.target-resume-preview::after {
+  content:"PDF • READY TO VIEW" !important;
+  position:absolute !important;
+  left:16px !important;
+  right:16px !important;
+  bottom:16px !important;
+  padding-top:10px !important;
+  border-top:1px solid rgba(255,255,255,.09) !important;
+  color:#7f8b9e !important;
+  font:500 7px/1.3 'JetBrains Mono',monospace !important;
+  letter-spacing:.08em !important;
+  z-index:2 !important;
+}
+.target-resume-card h3 { margin-bottom:8px !important; }
+.target-resume-card > p { line-height:1.7 !important; }
+.target-resume-actions { display:flex !important; flex-wrap:wrap !important; gap:9px !important; }
+
+@media (max-width:700px) {
+  .target-education-card > div:last-child {
+    grid-template-columns:1fr !important;
+    grid-template-areas:"institution" "degree" "period" "cgpa" !important;
+    row-gap:7px !important;
+  }
+  .target-education-card > div:last-child > small {
+    text-align:left !important;
+  }
+  .target-language-card > div:first-child {
+    align-items:flex-start !important;
+    flex-direction:column !important;
+    gap:5px !important;
+  }
+  .target-language-card > div:first-child > b {
+    margin-left:0 !important;
+    padding-left:0 !important;
+    border-left:0 !important;
+    padding-top:4px !important;
+    border-top:1px solid currentColor !important;
+    width:100% !important;
+  }
+  .target-resume-card {
+    min-height:0 !important;
+  }
+  .target-resume-preview {
+    min-height:210px !important;
+  }
+}
+
+@media (min-width:701px) {
+  .target-resume-preview { min-height:250px !important; }
+}
