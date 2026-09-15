@@ -10,7 +10,7 @@ type ChromaItem = {
   handle?: string
   borderColor?: string
   gradient?: string
-  url?: string
+  url?: string | null
   location?: string
 }
 
@@ -94,7 +94,7 @@ export default function ChromaGrid({
     card.style.setProperty('--mouse-y', `${event.clientY - rect.top}px`)
   }
 
-  const handleCardClick = (url?: string) => {
+  const handleCardClick = (url?: string | null) => {
     if (url) window.open(url, '_blank', 'noopener,noreferrer')
   }
 
