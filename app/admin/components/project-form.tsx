@@ -24,7 +24,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
   const [liveDemoUrl, setLiveDemoUrl] = useState(String(editing.live_demo_url ?? ''))
   const [tagColor, setTagColor] = useState<Project['tag_color']>(editing.tag_color ?? null)
   const [icon, setIcon] = useState<Project['icon']>(editing.icon ?? null)
-  const [accentColor, setAccentColor] = useState(editing.accent_color ?? '#00d4ff')
+  const [accentColor, setAccentColor] = useState(isHexColor(editing.accent_color ?? '') ? String(editing.accent_color) : '#00d4ff')
   const [technologies, setTechnologies] = useState(Array.isArray(editing.technologies) ? editing.technologies.join(', ') : '')
   const [displayOrder, setDisplayOrder] = useState(String(editing.display_order ?? 0))
   const [thumbnail, setThumbnail] = useState(String(editing.thumbnail ?? ''))
@@ -52,18 +52,9 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
 
   const handleImageChange = (file: File | null) => {
     setUploadError('')
-    if (!file) {
-      setSelectedImage(null)
-      return
-    }
-    if (!file.type.startsWith('image/')) {
-      setUploadError('Please select an image file.')
-      return
-    }
-    if (file.size > 10 * 1024 * 1024) {
-      setUploadError('Project images must be 10 MB or smaller.')
-      return
-    }
+    if (!file) return setSelectedImage(null)
+    if (!file.type.startsWith('image/')) return setUploadError('Please select an image file.')
+    if (file.size > 10 * 1024 * 1024) return setUploadError('Project images must be 10 MB or smaller.')
     setSelectedImage(file)
   }
 
@@ -93,13 +84,27 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
   }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); setSubmitError(''); setUploadError(''); if (!validate()) return
-    const formData = new FormData(); formData.set('table', 'projects')
+    event.preventDefault()
+    setSubmitError('')
+    setUploadError('')
+    if (!validate()) return
+
+    const formData = new FormData()
+    formData.set('table', 'projects')
     if (editing.id) formData.set('id', editing.id)
-    formData.set('title', title.trim()); formData.set('slug', editing.slug ?? slugify(title)); formData.set('detailed_description', description.trim())
-    formData.set('tag', tag.trim() || 'Project'); formData.set('deployment_type', deploymentType); formData.set('github_url', githubUrl.trim())
-    formData.set('live_demo_url', deploymentType === 'deployed' ? liveDemoUrl.trim() : ''); formData.set('tag_color', tagColor ?? ''); formData.set('icon', icon ?? '')
-    formData.set('accent_color', accentColor.toLowerCase()); formData.set('technologies', technologies); formData.set('display_order', displayOrder)
+    formData.set('title', title.trim())
+    formData.set('slug', editing.slug ?? slugify(title))
+    formData.set('detailed_description', description.trim())
+    formData.set('short_description', description.trim())
+    formData.set('tag', tag.trim() || 'Project')
+    formData.set('deployment_type', deploymentType)
+    formData.set('github_url', githubUrl.trim())
+    formData.set('live_demo_url', deploymentType === 'deployed' ? liveDemoUrl.trim() : '')
+    formData.set('tag_color', tagColor ?? '')
+    formData.set('icon', icon ?? '')
+    formData.set('accent_color', accentColor.toLowerCase())
+    formData.set('technologies', technologies)
+    formData.set('display_order', displayOrder)
 
     try {
       if (selectedImage) {
@@ -118,7 +123,9 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
         formData.set('thumbnail', thumbnail)
       }
       await onSubmit(formData)
-    } catch (error) { setSubmitError(error instanceof Error ? error.message : 'Unable to save project.') }
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Unable to save project.')
+    }
   }
 
   const fieldError = (field: ProjectField) => errors[field]
@@ -142,7 +149,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
           {deploymentType === 'deployed' && <label className={labelClass}><span className="font-mono">Live / Deployed URL</span><input className={fieldClass} name="live_demo_url" type="url" value={liveDemoUrl} onChange={e=>setLiveDemoUrl(e.target.value)} placeholder="Live / Deployed URL" inputMode="url" required/>{fieldError('live_demo_url')&&<small className="text-red-300">{fieldError('live_demo_url')}</small>}</label>}
           <label className={labelClass}><span className="font-mono">Tag Color</span><select className={fieldClass} name="tag_color" value={tagColor ?? ''} onChange={e=>setTagColor((e.target.value||null) as Project['tag_color'])}><option value="">Select...</option><option value="green">green</option><option value="blue">blue</option><option value="yellow">yellow</option></select>{fieldError('tag_color')&&<small className="text-red-300">{fieldError('tag_color')}</small>}</label>
           <label className={labelClass}><span className="font-mono break-words">Icon (Eye, Layers, Monitor, HelpCircle, Scissors, Code, Cpu, Boxes, Database)</span><input className={fieldClass} name="icon" value={icon ?? ''} onChange={e=>setIcon((e.target.value||null) as Project['icon'])} placeholder="Icon (Eye, Layers, Monitor, HelpCircle, Scissors, Code, Cpu, Boxes, Database)" list="project-icon-options"/><datalist id="project-icon-options">{ICONS.map(item=><option key={item} value={item}/>)}</datalist>{fieldError('icon')&&<small className="text-red-300">{fieldError('icon')}</small>}</label>
-          <label className={labelClass}><span className="font-mono">Accent Color</span><div className="flex min-w-0 gap-3"><input className="h-[58px] w-[58px] shrink-0 rounded-xl border border-white/10 bg-black/30 p-1" type="color" value={isHexColor(accentColor)?accentColor:'#00d4ff'} onChange={e=>setAccentColor(e.target.value)} aria-label="Choose accent color"/><input className={`${fieldClass} min-w-0`} name="accent_color" value={accentColor} onChange={e=>setAccentColor(e.target.value)} placeholder="#00d4ff" spellCheck={false}/></div>{fieldError('accent_color')&&<small className="text-red-300">{fieldError('accent_color')}</small>}</label>
+          <label className={labelClass}><span className="font-mono">Accent Color</span><div className="flex min-w-0 gap-3"><input className="h-[58px] w-[58px] shrink-0 rounded-xl border border-white/10 bg-black/30 p-1" type="color" value={accentColor} onChange={e=>setAccentColor(e.target.value)} aria-label="Choose accent color"/><input className={`${fieldClass} min-w-0`} name="accent_color" value={accentColor} onChange={e=>setAccentColor(e.target.value)} placeholder="#00d4ff" spellCheck={false}/></div>{fieldError('accent_color')&&<small className="text-red-300">{fieldError('accent_color')}</small>}</label>
           <label className={labelClass}><span className="font-mono">Tech Stack (comma-separated)</span><input className={fieldClass} name="technologies" value={technologies} onChange={e=>setTechnologies(e.target.value)} placeholder="comma, separated, values"/></label>
           <label className={labelClass}><span className="font-mono">Display Order</span><input className={fieldClass} name="display_order" type="number" min={0} step={1} value={displayOrder} onChange={e=>setDisplayOrder(e.target.value)}/>{fieldError('display_order')&&<small className="text-red-300">{fieldError('display_order')}</small>}</label>
           {submitError&&<div className="rounded-xl border border-red-400/20 bg-red-400/5 p-3 text-sm text-red-200" role="alert">{submitError}</div>}
