@@ -9,10 +9,9 @@ const tables = new Set(['projects','skills','languages','experience','education'
 const booleanFields = new Set(['featured','published','active','currently_working'])
 const numericFields = new Set(['proficiency','percentage','display_order'])
 const projectDeploymentTypes = new Set(['deployed', 'local'])
-const projectTagColors = new Set(['green', 'blue', 'yellow'])
 const projectIcons = new Set(['Eye', 'Layers', 'Monitor', 'HelpCircle', 'Scissors', 'Code', 'Cpu', 'Boxes', 'Database'])
 const allowedFields: Record<string, string[]> = {
-  projects:['title','slug','short_description','detailed_description','technologies','category','thumbnail','github_url','live_demo_url','tag','deployment_type','tag_color','icon','accent_color','display_order'],
+  projects:['title','slug','short_description','detailed_description','technologies','category','thumbnail','github_url','live_demo_url','tag','deployment_type','icon','display_order'],
   skills:['name','proficiency','category','accent_color','icon','display_order','active'],
   languages:['name','proficiency_level','percentage','accent_color','display_order','active'],
   experience:['company','role','period','description','technologies','location','currently_working','display_order','active'],
@@ -31,9 +30,7 @@ function validateProjectPayload(payload: Record<string, unknown>) {
   validateUrl(payload.github_url, 'GitHub URL')
   if (typeof payload.deployment_type !== 'string' || !projectDeploymentTypes.has(payload.deployment_type)) throw new Error('Deployment Type must be deployed or local.')
   if (payload.deployment_type === 'deployed') { if (typeof payload.live_demo_url !== 'string' || !payload.live_demo_url.trim()) throw new Error('Live / Deployed URL is required for deployed projects.'); validateUrl(payload.live_demo_url, 'Live / Deployed URL') } else payload.live_demo_url = ''
-  if (payload.tag_color && !projectTagColors.has(String(payload.tag_color))) throw new Error('Tag Color must be green, blue, or yellow.')
   if (payload.icon && !projectIcons.has(String(payload.icon))) throw new Error('Icon is not supported.')
-  if (typeof payload.accent_color !== 'string' || !/^#[0-9A-Fa-f]{6}$/.test(payload.accent_color)) throw new Error('Accent Color must be a valid 6-digit hexadecimal color.')
   if (typeof payload.display_order !== 'number' || !Number.isInteger(payload.display_order) || payload.display_order < 0) throw new Error('Display Order must be an integer greater than or equal to 0.')
 }
 async function requireAdmin(){
@@ -58,7 +55,7 @@ export async function saveRecord(formData: FormData){
   for(const key of allowedFields[table]){ if(!formData.has(key)) continue; const raw=String(formData.get(key) ?? ''); if(booleanFields.has(key)){ payload[key]=raw==='true'; continue } if(numericFields.has(key)){ const num=Number(raw); if(!Number.isFinite(num)) throw new Error(`${key} must be a number`); payload[key]=num; continue } if(key==='technologies'){ payload[key]=raw.split(',').map(x=>x.trim()).filter(Boolean); continue } payload[key]=raw.trim() }
   const id=String(formData.get('id')||'')
   if(table==='projects'){
-    const description=String(payload.detailed_description ?? '').trim(); payload.detailed_description=description; payload.short_description=description; payload.tag=String(payload.tag || 'Project').trim() || 'Project'; payload.deployment_type=String(payload.deployment_type || 'local'); payload.tag_color=String(payload.tag_color || '').trim() || null; payload.icon=String(payload.icon || '').trim() || null; payload.accent_color=String(payload.accent_color || '#00d4ff').trim(); payload.display_order=Number(payload.display_order ?? 0); payload.live_demo_url=String(payload.live_demo_url ?? '').trim(); validateProjectPayload(payload); const submittedSlug=String(payload.slug || '').trim(); payload.slug=submittedSlug || slugify(String(payload.title)); if(!payload.slug) throw new Error('A valid project title is required to generate the project URL.')
+    const description=String(payload.detailed_description ?? '').trim(); payload.detailed_description=description; payload.short_description=description; payload.tag=String(payload.tag || 'Project').trim() || 'Project'; payload.deployment_type=String(payload.deployment_type || 'local'); payload.icon=String(payload.icon || '').trim() || null; payload.display_order=Number(payload.display_order ?? 0); payload.live_demo_url=String(payload.live_demo_url ?? '').trim(); validateProjectPayload(payload); const submittedSlug=String(payload.slug || '').trim(); payload.slug=submittedSlug || slugify(String(payload.title)); if(!payload.slug) throw new Error('A valid project title is required to generate the project URL.')
   }
   if(table==='site_content' && !payload.key) throw new Error('Content key is required')
   payload.updated_at=new Date().toISOString()
