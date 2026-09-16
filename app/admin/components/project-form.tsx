@@ -6,7 +6,7 @@ import type { Project } from '@/types/portfolio'
 import { createClient } from '@/lib/supabase/client'
 
 type ProjectDraft = Partial<Project> & { id?: string }
-type ProjectField = 'title' | 'description' | 'tag' | 'deployment_type' | 'github_url' | 'live_demo_url' | 'tag_color' | 'icon' | 'accent_color' | 'technologies' | 'display_order'
+type ProjectField = 'description' | 'title' | 'tag' | 'deployment_type' | 'github_url' | 'live_demo_url' | 'tag_color' | 'icon' | 'accent_color' | 'display_order'
 type Props = { editing: ProjectDraft; onClose: () => void; onSubmit: (formData: FormData) => Promise<void>; busy: boolean }
 
 const ICONS: NonNullable<Project['icon']>[] = ['Eye', 'Layers', 'Monitor', 'HelpCircle', 'Scissors', 'Code', 'Cpu', 'Boxes', 'Database']
@@ -24,7 +24,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
   const [liveDemoUrl, setLiveDemoUrl] = useState(String(editing.live_demo_url ?? ''))
   const [tagColor, setTagColor] = useState<Project['tag_color']>(editing.tag_color ?? null)
   const [icon, setIcon] = useState<Project['icon']>(editing.icon ?? null)
-  const [accentColor, setAccentColor] = useState(isHexColor(editing.accent_color ?? '') ? String(editing.accent_color) : '#00d4ff')
+  const [accentColor, setAccentColor] = useState(isHexColor(String(editing.accent_color ?? '')) ? String(editing.accent_color) : '#00d4ff')
   const [technologies, setTechnologies] = useState(Array.isArray(editing.technologies) ? editing.technologies.join(', ') : '')
   const [displayOrder, setDisplayOrder] = useState(String(editing.display_order ?? 0))
   const [thumbnail, setThumbnail] = useState(String(editing.thumbnail ?? ''))
@@ -52,9 +52,18 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
 
   const handleImageChange = (file: File | null) => {
     setUploadError('')
-    if (!file) return setSelectedImage(null)
-    if (!file.type.startsWith('image/')) return setUploadError('Please select an image file.')
-    if (file.size > 10 * 1024 * 1024) return setUploadError('Project images must be 10 MB or smaller.')
+    if (!file) {
+      setSelectedImage(null)
+      return
+    }
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Please select an image file.')
+      return
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError('Project images must be 10 MB or smaller.')
+      return
+    }
     setSelectedImage(file)
   }
 
@@ -132,7 +141,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
   const fieldClass = 'w-full rounded-[18px] border border-white/10 bg-black/30 px-6 py-4 text-[17px] text-white outline-none placeholder:text-slate-600 focus:border-cyan-300/45 focus:ring-2 focus:ring-cyan-300/5'
   const labelClass = 'flex flex-col gap-3 text-[16px] text-slate-400'
 
-  return <div className="fixed inset-0 z-[100] grid place-items-center bg-black/80 p-3 backdrop-blur-md" role="presentation">
+  return <div className="fixed inset-0 z-[100] grid place-items-center bg-black/80 p-3 backdrop-blur-md">
     <div className="flex max-h-[92vh] w-full max-w-[760px] flex-col overflow-hidden rounded-[30px] border border-blue-400/20 bg-[#020617] shadow-[0_30px_100px_rgba(0,0,0,.65),0_0_50px_rgba(71,233,255,.06)]" role="dialog" aria-modal="true" aria-labelledby="project-editor-title">
       <div className="flex shrink-0 items-center justify-between border-b border-white/[.07] bg-[#020617] px-6 py-5 sm:px-8">
         <h3 id="project-editor-title" className="text-[28px] font-bold text-white sm:text-[32px]">{editing.id ? 'Edit Project' : 'Add New Projects'}</h3>
@@ -142,7 +151,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
         <div className="space-y-7">
           <label className={labelClass}><span>Title</span><input className={fieldClass} name="title" value={title} onChange={e=>setTitle(e.target.value)} placeholder="Title" required autoFocus/>{fieldError('title')&&<small className="text-red-300">{fieldError('title')}</small>}</label>
           <label className={labelClass}><span>Description</span><textarea className={`${fieldClass} min-h-[145px] resize-y`} name="detailed_description" value={description} onChange={e=>setDescription(e.target.value)} placeholder="Description" required rows={5}/>{fieldError('description')&&<small className="text-red-300">{fieldError('description')}</small>}</label>
-          <label className={labelClass}><span>Project Image</span><div className="rounded-[22px] border border-white/10 bg-black/20 p-4"><div className="relative aspect-[16/9] w-full overflow-hidden rounded-[16px] border border-white/10 bg-slate-950">{imagePreview ? <img src={imagePreview} alt="Project image preview" className="h-full w-full object-cover"/> : <div className="flex h-full flex-col items-center justify-center gap-2 text-slate-600"><ImageIcon size={34}/><span className="text-sm">No project image selected</span></div>}</div><label className="mt-4 flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-cyan-300/20 bg-cyan-300/5 px-4 py-3 text-sm font-semibold text-cyan-200 transition hover:border-cyan-300/35 hover:bg-cyan-300/10"><Upload size={17}/>{selectedImage ? 'Replace Project Image' : thumbnail ? 'Replace Project Image' : 'Upload Project Image'}<input type="file" accept="image/*" className="sr-only" onChange={e=>handleImageChange(e.target.files?.[0] ?? null)}/></label>{uploadError&&<small className="mt-2 block text-red-300">{uploadError}</small>}<p className="mt-2 text-xs text-slate-600">JPG, PNG, WEBP and other browser-supported images · max 10 MB</p></div></label>
+          <div className="flex flex-col gap-3 text-[16px] text-slate-400"><span>Project Image</span><div className="rounded-[22px] border border-white/10 bg-black/20 p-4"><div className="relative aspect-[16/9] w-full overflow-hidden rounded-[16px] border border-white/10 bg-slate-950">{imagePreview ? <img src={imagePreview} alt="Project image preview" className="h-full w-full object-cover"/> : <div className="flex h-full flex-col items-center justify-center gap-2 text-slate-600"><ImageIcon size={34}/><span className="text-sm">No project image selected</span></div>}</div><label className="mt-4 flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-cyan-300/20 bg-cyan-300/5 px-4 py-3 text-sm font-semibold text-cyan-200 transition hover:border-cyan-300/35 hover:bg-cyan-300/10"><Upload size={17}/>{selectedImage ? 'Replace Project Image' : thumbnail ? 'Replace Project Image' : 'Upload Project Image'}<input type="file" accept="image/*" className="sr-only" onChange={e=>handleImageChange(e.target.files?.[0] ?? null)}/></label>{uploadError&&<small className="mt-2 block text-red-300">{uploadError}</small>}<p className="mt-2 text-xs text-slate-600">JPG, PNG, WEBP and other browser-supported images · max 10 MB</p></div></div>
           <label className={labelClass}><span>Tag</span><input className={fieldClass} name="tag" value={tag} onChange={e=>setTag(e.target.value)} placeholder="Project"/></label>
           <label className={labelClass}><span className="font-mono">Deployment Type</span><select className={fieldClass} name="deployment_type" value={deploymentType} onChange={e=>setDeploymentType(e.target.value as NonNullable<Project['deployment_type']> | '')}><option value="">Select...</option><option value="deployed">deployed</option><option value="local">local</option></select>{fieldError('deployment_type')&&<small className="text-red-300">{fieldError('deployment_type')}</small>}</label>
           <label className={labelClass}><span>GitHub URL</span><input className={fieldClass} name="github_url" type="url" value={githubUrl} onChange={e=>setGithubUrl(e.target.value)} placeholder="GitHub URL" inputMode="url"/>{fieldError('github_url')&&<small className="text-red-300">{fieldError('github_url')}</small>}</label>
