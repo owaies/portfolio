@@ -6,7 +6,7 @@ import type { Project } from '@/types/portfolio'
 import { createClient } from '@/lib/supabase/client'
 
 type ProjectDraft = Partial<Project> & { id?: string }
-type ProjectField = 'description' | 'title' | 'tag' | 'deployment_type' | 'github_url' | 'live_demo_url' | 'icon' | 'display_order'
+type ProjectField = 'description' | 'title' | 'tag' | 'deployment_type' | 'github_url' | 'live_demo_url' | 'icon' | 'display_order' | 'forge_color'
 type Props = { editing: ProjectDraft; onClose: () => void; onSubmit: (formData: FormData) => Promise<void>; busy: boolean }
 
 const ICONS: NonNullable<Project['icon']>[] = ['Eye', 'Layers', 'Monitor', 'HelpCircle', 'Scissors', 'Code', 'Cpu', 'Boxes', 'Database']
@@ -24,6 +24,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
   const [technologies, setTechnologies] = useState(Array.isArray(editing.technologies) ? editing.technologies.join(', ') : '')
   const [displayOrder, setDisplayOrder] = useState(String(editing.display_order ?? 0))
   const [thumbnail, setThumbnail] = useState(String(editing.thumbnail ?? ''))
+  const [forgeColor, setForgeColor] = useState(String(editing.accent_color ?? '#00D4FF'))
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState(String(editing.thumbnail ?? ''))
   const [uploadError, setUploadError] = useState('')
@@ -73,6 +74,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
     if (icon !== null && !ICONS.includes(icon)) next.icon = 'Select one of the supported icons.'
     const order = Number(displayOrder)
     if (!Number.isInteger(order) || order < 0) next.display_order = 'Display Order must be an integer greater than or equal to 0.'
+    if (!/^#[0-9A-Fa-f]{6}$/.test(forgeColor)) next.forge_color = 'Use a 6-digit hex color such as #00D4FF.'
     setErrors(next)
     return Object.keys(next).length === 0
   }
@@ -97,6 +99,7 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
     formData.set('icon', icon ?? '')
     formData.set('technologies', technologies)
     formData.set('display_order', displayOrder)
+    formData.set('forge_color', forgeColor.toUpperCase())
 
     try {
       if (selectedImage) {
@@ -135,10 +138,11 @@ export default function ProjectForm({ editing, onClose, onSubmit, busy }: Props)
           <label className={labelClass}><span>Title</span><input className={fieldClass} name="title" value={title} onChange={e=>setTitle(e.target.value)} placeholder="Title" required autoFocus/>{fieldError('title')&&<small className="text-red-300">{fieldError('title')}</small>}</label>
           <label className={labelClass}><span>Description</span><textarea className={`${fieldClass} min-h-[145px] resize-y`} name="detailed_description" value={description} onChange={e=>setDescription(e.target.value)} placeholder="Description" required rows={5}/>{fieldError('description')&&<small className="text-red-300">{fieldError('description')}</small>}</label>
           <div className="flex flex-col gap-3 text-[16px] text-slate-400"><span>Project Image</span><div className="rounded-[22px] border border-white/10 bg-black/20 p-4"><div className="relative aspect-[16/9] w-full overflow-hidden rounded-[16px] border border-white/10 bg-slate-950">{imagePreview ? <img src={imagePreview} alt="Project image preview" className="h-full w-full object-cover"/> : <div className="flex h-full flex-col items-center justify-center gap-2 text-slate-600"><ImageIcon size={34}/><span className="text-sm">No project image selected</span></div>}</div><label className="mt-4 flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-cyan-300/20 bg-cyan-300/5 px-4 py-3 text-sm font-semibold text-cyan-200 transition hover:border-cyan-300/35 hover:bg-cyan-300/10"><Upload size={17}/>{selectedImage ? 'Replace Project Image' : thumbnail ? 'Replace Project Image' : 'Upload Project Image'}<input type="file" accept="image/*" className="sr-only" onChange={e=>handleImageChange(e.target.files?.[0] ?? null)}/></label>{uploadError&&<small className="mt-2 block text-red-300">{uploadError}</small>}<p className="mt-2 text-xs text-slate-600">JPG, PNG, WEBP and other browser-supported images · max 10 MB</p></div></div>
+          <div className="rounded-[22px] border border-fuchsia-400/15 bg-fuchsia-400/[.025] p-5"><div className="mb-4"><span className="font-mono text-[16px] text-fuchsia-200">Obsidian Forge · Project Grid Color</span><p className="mt-1 text-xs text-slate-500">Used only by the Obsidian Forge project grid. Other experiences ignore this color.</p></div><div className="flex flex-col gap-3 sm:flex-row sm:items-center"><div className="flex min-w-0 flex-1 items-center gap-3"><input aria-label="Obsidian Forge project grid color" type="color" value={forgeColor} onChange={e=>setForgeColor(e.target.value.toUpperCase())} className="h-14 w-16 shrink-0 cursor-pointer rounded-xl border border-white/10 bg-transparent p-1"/><input className={fieldClass} value={forgeColor} onChange={e=>setForgeColor(e.target.value.toUpperCase())} placeholder="#00D4FF" maxLength={7}/></div></div>{fieldError('forge_color')&&<small className="mt-2 block text-red-300">{fieldError('forge_color')}</small>}</div>
           <label className={labelClass}><span>Tag</span><input className={fieldClass} name="tag" value={tag} onChange={e=>setTag(e.target.value)} placeholder="Project"/></label>
           <label className={labelClass}><span className="font-mono">Deployment Type</span><select className={fieldClass} name="deployment_type" value={deploymentType} onChange={e=>setDeploymentType(e.target.value as NonNullable<Project['deployment_type']> | '')}><option value="">Select...</option><option value="deployed">deployed</option><option value="local">local</option></select>{fieldError('deployment_type')&&<small className="text-red-300">{fieldError('deployment_type')}</small>}</label>
-          <label className={labelClass}><span>GitHub URL</span><input className={fieldClass} name="github_url" type="url" value={githubUrl} onChange={e=>setGithubUrl(e.target.value)} placeholder="GitHub URL" inputMode="url"/>{fieldError('github_url')&&<small className="text-red-300">{fieldError('github_url')}</small>}</label>
           {deploymentType === 'deployed' && <label className={labelClass}><span className="font-mono">Live / Deployed URL</span><input className={fieldClass} name="live_demo_url" type="url" value={liveDemoUrl} onChange={e=>setLiveDemoUrl(e.target.value)} placeholder="Live / Deployed URL" inputMode="url" required/>{fieldError('live_demo_url')&&<small className="text-red-300">{fieldError('live_demo_url')}</small>}</label>}
+          <label className={labelClass}><span>GitHub URL</span><input className={fieldClass} name="github_url" type="url" value={githubUrl} onChange={e=>setGithubUrl(e.target.value)} placeholder="GitHub URL" inputMode="url"/>{fieldError('github_url')&&<small className="text-red-300">{fieldError('github_url')}</small>}</label>
           <label className={labelClass}><span className="font-mono break-words">Icon (Eye, Layers, Monitor, HelpCircle, Scissors, Code, Cpu, Boxes, Database)</span><input className={fieldClass} name="icon" value={icon ?? ''} onChange={e=>setIcon((e.target.value||null) as Project['icon'])} placeholder="Icon (Eye, Layers, Monitor, HelpCircle, Scissors, Code, Cpu, Boxes, Database)" list="project-icon-options"/><datalist id="project-icon-options">{ICONS.map(item=><option key={item} value={item}/>)}</datalist>{fieldError('icon')&&<small className="text-red-300">{fieldError('icon')}</small>}</label>
           <label className={labelClass}><span className="font-mono">Tech Stack (comma-separated)</span><input className={fieldClass} name="technologies" value={technologies} onChange={e=>setTechnologies(e.target.value)} placeholder="comma, separated, values"/></label>
           <label className={labelClass}><span className="font-mono">Display Order</span><input className={fieldClass} name="display_order" type="number" min={0} step={1} value={displayOrder} onChange={e=>setDisplayOrder(e.target.value)}/>{fieldError('display_order')&&<small className="text-red-300">{fieldError('display_order')}</small>}</label>
