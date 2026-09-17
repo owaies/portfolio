@@ -1,44 +1,81 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { DEFAULT_UI_EXPERIENCE, isUIExperienceId, type UIExperienceId } from '@/lib/ui-experiences'
-import { LOADING_EXPERIENCES } from '@/lib/loading-experiences'
+
+const LOADING_COPY: Record<UIExperienceId, { label: string; sublabel: string }> = {
+  'digital-architecture': { label: 'DIGITAL ARCHITECTURE', sublabel: 'Assembling the interface' },
+  'organic-intelligence': { label: 'ORGANIC INTELLIGENCE', sublabel: 'Growing the experience' },
+  'neural-interface': { label: 'NEURAL INTERFACE', sublabel: 'Synchronizing the network' },
+  'obsidian-forge': { label: 'OBSIDIAN FORGE', sublabel: 'Forging the interface' },
+}
 
 export default function ExperienceLoadingScreen() {
   const pathname = usePathname()
   const isAdminRoute = pathname.startsWith('/admin')
   const [visible, setVisible] = useState(() => !isAdminRoute)
   const [fading, setFading] = useState(false)
-  const videoRef = useRef<HTMLVideoElement | null>(null)
   const experience = useMemo<UIExperienceId>(() => {
     if (typeof window === 'undefined') return DEFAULT_UI_EXPERIENCE
     const preview = new URLSearchParams(window.location.search).get('ui-preview')
-    return isUIExperienceId(preview) ? preview : isUIExperienceId(document.body.dataset.uiExperience) ? document.body.dataset.uiExperience : DEFAULT_UI_EXPERIENCE
+    const runtimeExperience = document.body.dataset.uiExperience
+    return isUIExperienceId(preview) ? preview : isUIExperienceId(runtimeExperience) ? runtimeExperience : DEFAULT_UI_EXPERIENCE
   }, [])
-  useEffect(() => { if (isAdminRoute) setVisible(false) }, [isAdminRoute])
+
   useEffect(() => {
-    if (window.location.pathname.startsWith('/admin')) { setVisible(false); return }
-    const video = videoRef.current
-    if (!video) return
-    const source = LOADING_EXPERIENCES[experience]?.mobile && window.matchMedia('(max-width: 900px)').matches ? LOADING_EXPERIENCES[experience].mobile : LOADING_EXPERIENCES[experience].desktop
+    if (isAdminRoute) setVisible(false)
+  }, [isAdminRoute])
+
+  useEffect(() => {
+    if (window.location.pathname.startsWith('/admin')) {
+      setVisible(false)
+      return
+    }
+
     let disposed = false
-    let appReady = false
-    let videoFinished = false
-    let playbackStarted = false
-    const hide = () => { if (disposed) return; setFading(true); window.setTimeout(() => { if (!disposed) setVisible(false) }, 450) }
-    const maybeHide = () => { if (appReady && videoFinished) hide() }
-    const ended = () => { videoFinished = true; maybeHide() }
-    const playing = () => { playbackStarted = true }
-    const error = () => { videoFinished = true; appReady = true; hide() }
-    video.muted = true; video.defaultMuted = true; video.playsInline = true; video.preload = 'auto'; video.src = source; video.load()
-    video.addEventListener('ended', ended); video.addEventListener('playing', playing); video.addEventListener('error', error)
-    void video.play().catch(error)
-    const ready = () => { appReady = true; maybeHide(); if (!playbackStarted) window.setTimeout(() => { if (!playbackStarted && !disposed) hide() }, 4200) }
-    window.addEventListener('load', ready, { once: true }); if (document.readyState === 'complete') ready()
-    const hard = window.setTimeout(() => { appReady = true; videoFinished = true; hide() }, 9000)
-    return () => { disposed = true; video.pause(); video.removeAttribute('src'); video.load(); video.removeEventListener('ended', ended); video.removeEventListener('playing', playing); video.removeEventListener('error', error); window.removeEventListener('load', ready); window.clearTimeout(hard) }
+    let ready = false
+    const hide = () => {
+      if (disposed) return
+      setFading(true)
+      window.setTimeout(() => { if (!disposed) setVisible(false) }, 500)
+    }
+    const markReady = () => {
+      if (ready || disposed) return
+      ready = true
+      window.setTimeout(hide, 500)
+    }
+
+    if (document.readyState === 'complete') markReady()
+    else window.addEventListener('load', markReady, { once: true })
+
+    const safety = window.setTimeout(markReady, 2200)
+    return () => {
+      disposed = true
+      window.removeEventListener('load', markReady)
+      window.clearTimeout(safety)
+    }
   }, [experience])
+
   if (isAdminRoute || !visible) return null
-  return <div id="experience-loading-screen" className={`experience-loading-screen${fading ? ' is-fading' : ''}`} aria-hidden="true"><div className="experience-loading-poster" data-loading-poster data-experience={experience} /><video className="experience-loading-video" autoPlay muted playsInline preload="none" ref={videoRef} /></div>
+  const copy = LOADING_COPY[experience]
+
+  return (
+    <div id="experience-loading-screen" className={`experience-loading-screen experience-loading-${experience}${fading ? ' is-fading' : ''}`} aria-hidden="true">
+      <div className="experience-loader-noise" />
+      <div className="experience-loader-grid" />
+      <div className="experience-loader-art" aria-hidden="true">
+        {experience === 'digital-architecture' && <div className="architecture-loader"><span /><span /><span /><span /><span /></div>}
+        {experience === 'organic-intelligence' && <div className="organic-loader"><i /><i /><i /><i /><i /><i /></div>}
+        {experience === 'neural-interface' && <div className="neural-loader"><span /><span /><span /><span /><span /><span /><span /><span /></div>}
+        {experience === 'obsidian-forge' && <div className="forge-loader"><div /><div /><div /><div /></div>}
+      </div>
+      <div className="experience-loader-content">
+        <div className="experience-loader-mark">MO<span>·</span></div>
+        <div className="experience-loader-kicker">{copy.label}</div>
+        <div className="experience-loader-line"><span /></div>
+        <p>{copy.sublabel}</p>
+      </div>
+    </div>
+  )
 }
