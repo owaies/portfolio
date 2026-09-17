@@ -46,11 +46,14 @@ export default function ChromaGrid({
   useEffect(() => {
     const el = rootRef.current
     if (!el) return
-    const rect = el.getBoundingClientRect()
-    pos.current = { x: rect.width / 2, y: rect.height / 2 }
-    target.current = { ...pos.current }
-    el.style.setProperty('--x', `${pos.current.x}px`)
-    el.style.setProperty('--y', `${pos.current.y}px`)
+    const updateCenter = () => {
+      const rect = el.getBoundingClientRect()
+      pos.current = { x: rect.width / 2, y: rect.height / 2 }
+      target.current = { ...pos.current }
+      el.style.setProperty('--x', `${pos.current.x}px`)
+      el.style.setProperty('--y', `${pos.current.y}px`)
+    }
+    updateCenter()
     const tick = () => {
       const easing = Math.min(0.35, Math.max(0.06, damping))
       pos.current.x += (target.current.x - pos.current.x) * easing
@@ -60,9 +63,11 @@ export default function ChromaGrid({
       animationRef.current = window.requestAnimationFrame(tick)
     }
     animationRef.current = window.requestAnimationFrame(tick)
+    window.addEventListener('resize', updateCenter)
     return () => {
       if (animationRef.current !== null) window.cancelAnimationFrame(animationRef.current)
       if (fadeTimer.current !== null) window.clearTimeout(fadeTimer.current)
+      window.removeEventListener('resize', updateCenter)
     }
   }, [damping])
 
@@ -91,7 +96,7 @@ export default function ChromaGrid({
   return (
     <div ref={rootRef} className={`chroma-grid ${className}`} style={{ '--r': `${radius}px`, '--cols': columns, '--rows': rows } as React.CSSProperties} onPointerMove={handleMove} onPointerLeave={handleLeave}>
       {items?.map((card, index) => (
-        <article key={`${card.title}-${index}`} className="chroma-card" onMouseMove={handleCardMove} onClick={() => handleCardClick(card.url)} style={{ '--card-border': card.borderColor || 'transparent', '--card-gradient': card.gradient || 'linear-gradient(145deg, #222, #000)', cursor: card.url ? 'pointer' : 'default' } as React.CSSProperties}>
+        <article key={`${card.title}-${index}`} className="chroma-card" onMouseMove={handleCardMove} onClick={() => handleCardClick(card.url)} style={{ '--card-border': card.borderColor || 'transparent', '--card-gradient': card.gradient || 'linear-gradient(145deg, #222, #000)', '--card-glow': card.borderColor || 'transparent', cursor: card.url ? 'pointer' : 'default' } as React.CSSProperties}>
           <div className="chroma-img-wrapper"><img src={card.image} alt={card.title} loading="lazy" /></div>
           <footer className="chroma-info"><h3 className="name">{card.title}</h3>{card.handle && <span className="handle">{card.handle}</span>}<p className="role">{card.subtitle}</p>{card.location && <span className="location">{card.location}</span>}</footer>
         </article>
