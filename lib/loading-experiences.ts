@@ -5,8 +5,8 @@ export type LoadingExperienceAssets = {
   mobile: string
 }
 
-// Legacy video loading assets are intentionally disabled. Loading is now
-// rendered entirely with lightweight, experience-specific CSS/SVG-like art.
+// Kept only as a compatibility shape for existing imports. The actual loading
+// screen is now rendered with lightweight experience-specific CSS animations.
 export const LOADING_EXPERIENCES: Record<UIExperienceId, LoadingExperienceAssets> = {
   'organic-intelligence': { desktop: '', mobile: '' },
   'digital-architecture': { desktop: '', mobile: '' },
