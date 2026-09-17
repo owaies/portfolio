@@ -11,6 +11,7 @@ const EXPERIENCE_ORDER: UIExperienceId[] = [
   "neural-interface",
   "obsidian-forge",
 ]
+const SCROLL_RESET_KEY = "portfolio-ui-experience-scroll-reset"
 
 function readCookie() {
   if (typeof document === "undefined") return null
@@ -25,6 +26,16 @@ export default function UIExperienceSwitcher({ active }: { active: UIExperienceI
   useEffect(() => {
     const stored = readCookie()
     if (stored && EXPERIENCE_ORDER.includes(stored as UIExperienceId)) setCurrent(stored as UIExperienceId)
+
+    try {
+      if (window.sessionStorage.getItem(SCROLL_RESET_KEY) === "1") {
+        window.sessionStorage.removeItem(SCROLL_RESET_KEY)
+        window.history.scrollRestoration = "manual"
+        window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior }))
+      }
+    } catch {
+      // Storage can be unavailable in privacy-restricted browser contexts.
+    }
   }, [])
 
   useEffect(() => {
@@ -45,6 +56,13 @@ export default function UIExperienceSwitcher({ active }: { active: UIExperienceI
     const secure = window.location.protocol === "https:" ? "; Secure" : ""
     document.cookie = `${EXPERIENCE_COOKIE}=${experience}; Max-Age=31536000; Path=/; SameSite=Lax${secure}`
     window.localStorage.setItem(EXPERIENCE_COOKIE, experience)
+    try {
+      window.sessionStorage.setItem(SCROLL_RESET_KEY, "1")
+    } catch {
+      // Fall back to the normal reload if session storage is unavailable.
+    }
+    window.history.scrollRestoration = "manual"
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior })
     setCurrent(experience)
     setOpen(false)
     window.location.reload()
