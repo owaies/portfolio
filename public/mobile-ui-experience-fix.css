@@ -1,7 +1,7 @@
 /* Production mobile fixes identified from the 18 Sep 2026 device recording.
    Keep the four experience implementations intact; only correct shared mobile geometry. */
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   /* Digital Architecture and Neural Interface override the shared hero with
      desktop-sized two-column grids. On phones that leaves the copy column only
      a few pixels wide. Stack the shared hero into a deliberate mobile flow. */
