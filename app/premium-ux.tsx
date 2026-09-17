@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ArrowUp, Check, ChevronLeft, ChevronRight, Copy, X } from 'lucide-react'
+import { ArrowUp, ChevronLeft, ChevronRight, Copy, X } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 const EMAIL = 'owaies786@gmail.com'
@@ -9,31 +9,6 @@ const GITHUB = 'https://github.com/owaies'
 
 type ToastKind = 'success' | 'error' | 'info'
 type Toast = { id: number; kind: ToastKind; message: string }
-type Stage = { label: string; ready: boolean }
-
-const applePath = 'M116 31c-8 7-15 9-24 8-1-10 4-19 11-25 8-7 17-10 26-10 1 10-4 20-13 27ZM91 48c17 0 26 8 34 8 9 0 20-8 33-8 11 0 23 5 30 14-30 17-25 58 5 70-6 14-9 20-18 32-10 14-23 31-39 31-15 0-19-10-36-10-18 0-23 10-38 10-16 0-28-16-38-30C7 141-5 104 8 78c9-18 27-29 46-29 15 0 29 9 37 9Z'
-
-function AppleLoader({ stages }: { stages: Stage[] }) {
-  const completed = stages.filter(stage => stage.ready).length
-  const progress = Math.round((completed / stages.length) * 100)
-  return (
-    <div className="premium-loader" role="status" aria-live="polite" aria-label={`${stages.find(stage => !stage.ready)?.label ?? 'Interface ready'}. ${progress}% of loading stages complete.`}>
-      <div className="premium-loader-logo" aria-hidden="true">
-        <svg viewBox="0 0 180 190" className="premium-apple-svg">
-          <defs><clipPath id="apple-progress-clip"><path d={applePath} /></clipPath></defs>
-          <path className="premium-apple-track" d={applePath} />
-          <rect className="premium-apple-fill" x="0" y="0" width="180" height="190" transform={`translate(0 ${190 - progress * 1.9})`} clipPath="url(#apple-progress-clip)" />
-          <path className="premium-apple-shine" d="M116 31c-8 7-15 9-24 8-1-10 4-19 11-25 8-7 17-10 26-10 1 10-4 20-13 27Z" />
-        </svg>
-      </div>
-      <div className="premium-loader-percent mono">{progress}%</div>
-      <div className="premium-loader-stages" aria-hidden="true">
-        {stages.map(stage => <span key={stage.label} className={stage.ready ? 'ready' : ''}>{stage.ready ? <Check size={12} /> : <span className="stage-dot" />}{stage.label}</span>)}
-      </div>
-      <p className="premium-loader-caption">MO. · Preparing your portfolio</p>
-    </div>
-  )
-}
 
 export default function PremiumUX({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -41,13 +16,6 @@ export default function PremiumUX({ children }: { children: React.ReactNode }) {
   const [showTop, setShowTop] = useState(false)
   const [toasts, setToasts] = useState<Toast[]>([])
   const [lightbox, setLightbox] = useState<{ src: string; alt: string; index: number } | null>(null)
-  const [loaded, setLoaded] = useState(false)
-  const [stages, setStages] = useState<Stage[]>([
-    { label: 'Initialization', ready: false },
-    { label: 'Portfolio data', ready: false },
-    { label: 'Projects & media', ready: false },
-    { label: 'Interface preparation', ready: false },
-  ])
   const previousFocus = useRef<HTMLElement | null>(null)
   const toastId = useRef(0)
   const publicPage = !pathname.startsWith('/admin')
@@ -86,28 +54,6 @@ export default function PremiumUX({ children }: { children: React.ReactNode }) {
     setMotion()
     reduce.addEventListener?.('change', setMotion)
     return () => reduce.removeEventListener?.('change', setMotion)
-  }, [publicPage])
-
-  useEffect(() => {
-    if (!publicPage) return
-    let cancelled = false
-    const setStage = (index: number) => setStages(current => current.map((stage, i) => i <= index ? { ...stage, ready: true } : stage))
-    setStage(0)
-    const frame = window.requestAnimationFrame(() => { if (!cancelled) setStage(1) })
-    const media = Array.from(document.querySelectorAll<HTMLImageElement>('main.grid-bg img'))
-    const mediaPromise = Promise.all(media.map(image => image.complete ? Promise.resolve() : new Promise<void>(resolve => {
-      image.addEventListener('load', () => resolve(), { once: true })
-      image.addEventListener('error', () => resolve(), { once: true })
-    })))
-    void mediaPromise.then(async () => {
-      if (cancelled) return
-      setStage(2)
-      await document.fonts?.ready
-      if (cancelled) return
-      setStage(3)
-      window.requestAnimationFrame(() => { if (!cancelled) setLoaded(true) })
-    })
-    return () => { cancelled = true; window.cancelAnimationFrame(frame) }
   }, [publicPage])
 
   useEffect(() => {
@@ -168,8 +114,7 @@ export default function PremiumUX({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {!loaded && <div className="premium-loader-overlay"><AppleLoader stages={stages} /></div>}
-      <div className={loaded ? 'premium-content premium-content-ready' : 'premium-content'}>{children}</div>
+      <div className="premium-content premium-content-ready">{children}</div>
       <div className="premium-scroll-progress" aria-hidden="true"><span style={{ transform: `scaleX(${progress / 100})` }} /></div>
       <div className="premium-copy-actions" aria-label="Quick copy actions">{copyButton('Email', EMAIL)}{copyButton('GitHub URL', GITHUB)}</div>
       <button type="button" className={`premium-back-top ${showTop ? 'visible' : ''}`} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Back to top"><ArrowUp size={18} /></button>
