@@ -5,11 +5,11 @@
   overflow: hidden;
   display: grid;
   place-items: center;
-  background: #030407;
+  background: #07101a;
   isolation: isolate;
   opacity: 1;
   transform: scale(1);
-  transition: opacity 900ms cubic-bezier(.16,1,.3,1), filter 900ms cubic-bezier(.16,1,.3,1), transform 900ms cubic-bezier(.16,1,.3,1);
+  transition: opacity 560ms cubic-bezier(.16,1,.3,1), filter 560ms cubic-bezier(.16,1,.3,1), transform 560ms cubic-bezier(.16,1,.3,1);
 }
 
 #experience-loading-screen.is-fading {
@@ -32,7 +32,7 @@
 .experience-loader-atmosphere {
   z-index: 0;
   background:
-    radial-gradient(circle at 50% 45%, rgba(255,255,255,.08), transparent 24%),
+    radial-gradient(circle at 50% 45%, rgba(255,255,255,.12), transparent 24%),
     radial-gradient(circle at 16% 18%, rgba(255,255,255,.04), transparent 28%),
     radial-gradient(circle at 86% 78%, rgba(255,255,255,.04), transparent 30%);
   animation: loaderAtmosphere 3s ease-in-out infinite alternate;
@@ -40,7 +40,7 @@
 
 .experience-loader-grid {
   z-index: 1;
-  opacity: .5;
+  opacity: .72;
   background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
   background-size: 44px 44px;
   mask-image: radial-gradient(circle at center, black 0 44%, transparent 82%);
@@ -50,14 +50,14 @@
 
 .experience-loader-noise {
   z-index: 4;
-  opacity: .14;
+  opacity: .2;
   background: radial-gradient(circle at 20% 20%, rgba(255,255,255,.12), transparent 22%), radial-gradient(circle at 78% 72%, rgba(255,255,255,.08), transparent 26%);
   mix-blend-mode: screen;
 }
 
 .experience-loader-vignette {
   z-index: 6;
-  background: radial-gradient(circle at center, transparent 34%, rgba(0,0,0,.22) 100%);
+  background: radial-gradient(circle at center, transparent 34%, rgba(0,0,0,.12) 100%);
 }
 
 .experience-loader-scene,
@@ -93,7 +93,7 @@
 .experience-loader-line { position: relative; width: 200px; height: 2px; overflow: hidden; background: rgba(255,255,255,.1); }
 .experience-loader-line::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg, transparent, currentColor, transparent); opacity:.22; animation: loaderLineGlow 1.35s ease-in-out infinite; }
 .experience-loader-line span { display:block; width:34%; height:100%; transform:translateX(-140%); animation:loaderLine 1.35s cubic-bezier(.16,1,.3,1) infinite; background:currentColor; box-shadow:0 0 16px currentColor; }
-.experience-loader-content p { margin:0; color:#647084; font:500 11px/1.4 Inter,system-ui,sans-serif; letter-spacing:.05em; }
+.experience-loader-content p { margin:0; color:#8492a7; font:500 11px/1.4 Inter,system-ui,sans-serif; letter-spacing:.05em; }
 
 .experience-loader-progress { z-index:7; top:auto; height:2px; background:rgba(255,255,255,.05); }
 .experience-loader-progress span { display:block; width:0; height:100%; background:currentColor; box-shadow:0 0 20px currentColor; animation:loaderProgress 2.4s cubic-bezier(.65,0,.35,1) forwards; }
@@ -112,7 +112,7 @@
 .architecture-beam-a{left:8%;top:32%;width:84%;}.architecture-beam-b{left:18%;top:63%;width:66%;animation-delay:.8s;}
 
 /* Organic Intelligence */
-.experience-loading-organic-intelligence { background:radial-gradient(circle at center, rgba(56,207,139,.15), transparent 36%), #04150f; color:#45e0a0; }
+.experience-loading-organic-intelligence { background:radial-gradient(circle at center, rgba(56,207,139,.23), transparent 38%), #061b14; color:#45e0a0; }
 .experience-loading-organic-intelligence .experience-loader-grid { opacity:.18; background-image:radial-gradient(circle, rgba(95,230,164,.38) 1px, transparent 1.5px); background-size:30px 30px; }
 .experience-loading-organic-intelligence .experience-loader-kicker { color:#75dfb0; }
 .organic-loader { position:relative; width:90%; height:90%; }
@@ -123,7 +123,7 @@
 .organic-ring-a{width:45%;height:45%;animation:organicRing 2.8s ease-in-out infinite}.organic-ring-b{width:70%;height:70%;animation:organicRing 3.6s .3s ease-in-out infinite}
 
 /* Neural Interface */
-.experience-loading-neural-interface { background:radial-gradient(circle at center, rgba(77,114,255,.18), transparent 36%), #040a18; color:#6d8cff; }
+.experience-loading-neural-interface { background:radial-gradient(circle at center, rgba(77,114,255,.25), transparent 38%), #061027; color:#6d8cff; }
 .experience-loading-neural-interface .experience-loader-grid { opacity:.2; background-image:linear-gradient(rgba(109,140,255,.16) 1px, transparent 1px), linear-gradient(90deg, rgba(109,140,255,.16) 1px, transparent 1px); }
 .experience-loading-neural-interface .experience-loader-kicker { color:#8da3ff; }
 .neural-loader { position:relative; width:90%; height:90%; }
@@ -135,7 +135,7 @@
 .neural-ring-a{width:52%;height:52%;animation:neuralRing 3s linear infinite}.neural-ring-b{width:76%;height:76%;animation:neuralRing 4.8s linear infinite reverse}
 
 /* Obsidian Forge */
-.experience-loading-obsidian-forge { background:radial-gradient(circle at center, rgba(255,78,46,.17), transparent 36%), #08090b; color:#ff694d; }
+.experience-loading-obsidian-forge { background:radial-gradient(circle at center, rgba(255,78,46,.24), transparent 38%), #0d0e11; color:#ff694d; }
 .experience-loading-obsidian-forge .experience-loader-grid { opacity:.12; background-image:linear-gradient(rgba(255,120,70,.14) 1px, transparent 1px), linear-gradient(90deg, rgba(255,120,70,.14) 1px, transparent 1px); }
 .experience-loading-obsidian-forge .experience-loader-kicker { color:#ff987f; }
 .forge-loader { position:relative; width:90%; height:90%; transform-style:preserve-3d; }
