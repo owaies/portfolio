@@ -75,10 +75,10 @@ body[data-ui-experience="neural-interface"] .target-view-all{color:#65dfff!impor
 /* Identity / About */
 body[data-ui-experience="neural-interface"] .target-about-card{position:relative;background:linear-gradient(135deg,rgba(10,27,51,.88),rgba(6,16,32,.7))!important;border:1px solid rgba(105,194,255,.18)!important;border-radius:18px!important;box-shadow:0 25px 80px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.035)!important;backdrop-filter:blur(18px)!important}
 body[data-ui-experience="neural-interface"] .target-about-card:after{content:"IDENTITY // ACTIVE";position:absolute;right:18px;top:13px;color:#5dbfe9;font:500 6px 'JetBrains Mono',monospace;letter-spacing:.14em}
-body[data-ui-experience="neural-interface"] .target-about-icon,.target-education-icon{background:rgba(69,190,255,.06)!important;color:#64e7ff!important;border-color:rgba(89,211,255,.2)!important}
-body[data-ui-experience="neural-interface"] .target-about-top strong,.target-cgpa b,.target-about-copy strong{color:#eaf7ff!important}
-body[data-ui-experience="neural-interface"] .target-about-top span,.target-facts small{color:#6f91ad!important}
-body[data-ui-experience="neural-interface"] .target-about-main>p,.target-about-copy p{color:#a8bbce!important;line-height:1.85!important}
+body[data-ui-experience="neural-interface"] .target-about-icon,body[data-ui-experience="neural-interface"] .target-education-icon{background:rgba(69,190,255,.06)!important;color:#64e7ff!important;border-color:rgba(89,211,255,.2)!important}
+body[data-ui-experience="neural-interface"] .target-about-top strong,body[data-ui-experience="neural-interface"] .target-cgpa b,body[data-ui-experience="neural-interface"] .target-about-copy strong{color:#eaf7ff!important}
+body[data-ui-experience="neural-interface"] .target-about-top span,body[data-ui-experience="neural-interface"] .target-facts small{color:#6f91ad!important}
+body[data-ui-experience="neural-interface"] .target-about-main>p,body[data-ui-experience="neural-interface"] .target-about-copy p{color:#a8bbce!important;line-height:1.85!important}
 body[data-ui-experience="neural-interface"] .target-facts b{color:#c7d8e7!important}
 body[data-ui-experience="neural-interface"] .target-cgpa{background:rgba(3,13,27,.7)!important;border-color:rgba(89,208,255,.18)!important}
 body[data-ui-experience="neural-interface"] .target-cgpa small{color:#62839d!important}
@@ -132,7 +132,7 @@ body[data-ui-experience="neural-interface"] .target-education-icon{box-shadow:0 
 body[data-ui-experience="neural-interface"] .target-education-meta span{color:#72dfff!important}
 body[data-ui-experience="neural-interface"] .target-education-meta i{color:#66efb0!important}
 body[data-ui-experience="neural-interface"] .target-education-card h3{color:#eff7ff!important}
-body[data-ui-experience="neural-interface"] .target-education-card p,.target-education-card strong{color:#9cb2c5!important}
+body[data-ui-experience="neural-interface"] .target-education-card p,body[data-ui-experience="neural-interface"] .target-education-card strong{color:#9cb2c5!important}
 
 /* Certificates */
 body[data-ui-experience="neural-interface"] .target-certificate-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important}
@@ -171,7 +171,7 @@ body[data-ui-experience="neural-interface"] a:focus-visible,body[data-ui-experie
   body[data-ui-experience="neural-interface"] .target-stats b{font-size:14px!important}
   body[data-ui-experience="neural-interface"] .target-portrait-wrap{order:2;width:100%!important;height:340px!important;margin:28px 0 12px!important}
   body[data-ui-experience="neural-interface"] .target-portrait{width:235px!important;height:235px!important}
-  body[data-ui-experience="neural-interface"] .target-ring-a{inset:34px!important}.target-ring-b{inset:3px!important}
+  body[data-ui-experience="neural-interface"] .target-ring-a{inset:34px!important}body[data-ui-experience="neural-interface"] .target-ring-b{inset:3px!important}
   body[data-ui-experience="neural-interface"] .target-open{right:calc(50% - 142px)!important;bottom:28px!important}
   body[data-ui-experience="neural-interface"] .target-hero-quote{position:relative!important;order:3;right:auto;top:auto;width:100%!important;margin:5px 0 32px!important}
   body[data-ui-experience="neural-interface"] .target-scroll{position:relative!important;order:4;bottom:auto;left:auto;transform:none!important;margin:auto!important}
@@ -180,7 +180,7 @@ body[data-ui-experience="neural-interface"] a:focus-visible,body[data-ui-experie
   body[data-ui-experience="neural-interface"] .target-section-heading h2{font-size:clamp(1.7rem,8vw,2.2rem)!important}
   body[data-ui-experience="neural-interface"] .target-skill-groups{grid-template-columns:1fr!important}
   body[data-ui-experience="neural-interface"] .target-project-grid{grid-template-columns:1fr!important;gap:12px!important}
-  body[data-ui-experience="neural-interface"] .target-project-card,.target-project-card:nth-child(1),body[data-ui-experience="neural-interface"] .target-project-card:nth-child(4){grid-column:auto!important;min-height:325px!important}
+  body[data-ui-experience="neural-interface"] .target-project-card,body[data-ui-experience="neural-interface"] .target-project-card:nth-child(1),body[data-ui-experience="neural-interface"] .target-project-card:nth-child(4){grid-column:auto!important;min-height:325px!important}
   body[data-ui-experience="neural-interface"] .target-project-image{height:180px!important}
   body[data-ui-experience="neural-interface"] .target-certificate-grid{display:flex!important;overflow-x:auto!important;scroll-snap-type:x mandatory!important;gap:11px!important;padding:3px 2px 10px!important;scrollbar-width:none!important}
   body[data-ui-experience="neural-interface"] .target-certificate-grid::-webkit-scrollbar{display:none}
