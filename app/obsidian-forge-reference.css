@@ -344,3 +344,55 @@ body[data-ui-experience="obsidian-forge"] .target-site .target-footer a:hover {
     overflow-wrap:anywhere !important;
   }
 }
+
+
+/* Typography final override. This file loads after obsidian-forge.css, so keep the readability fix last. */
+body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{
+  font-family:"Roboto Condensed",Oswald,"Arial Narrow",sans-serif!important;
+  font-weight:900!important;
+  font-style:normal!important;
+  letter-spacing:-.025em!important;
+  line-height:.9!important;
+  height:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  white-space:normal!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+  text-rendering:geometricPrecision!important;
+}
+
+@media(min-width:1024px){
+  body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{
+    font-size:clamp(5.25rem,8vw,8.65rem)!important;
+    letter-spacing:-.025em!important;
+    line-height:.9!important;
+    max-width:100%!important;
+  }
+}
+
+@media(min-width:768px) and (max-width:1023px){
+  body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{
+    font-size:clamp(4rem,9vw,6.2rem)!important;
+    letter-spacing:-.02em!important;
+    line-height:.9!important;
+    max-width:100%!important;
+  }
+}
+
+@media(max-width:767px){
+  body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{
+    font-size:clamp(2.9rem,11.5vw,5.1rem)!important;
+    letter-spacing:-.015em!important;
+    line-height:.91!important;
+    max-width:100%!important;
+  }
+}
+
+@media(max-width:430px){
+  body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{
+    font-size:clamp(2.8rem,11.2vw,4.55rem)!important;
+    letter-spacing:-.01em!important;
+    line-height:.92!important;
+  }
+}
