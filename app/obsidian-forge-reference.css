@@ -396,3 +396,116 @@ body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{
     line-height:.92!important;
   }
 }
+
+
+/* Journey readability fix: the education markup has nested metadata, degree,
+   institution, details and CGPA. Keep every field visible and prevent low-contrast
+   inherited styles from swallowing the content. */
+body[data-ui-experience="obsidian-forge"] .target-site .target-timeline,
+body[data-ui-experience="obsidian-forge"] .target-site .target-education-card,
+body[data-ui-experience="obsidian-forge"] .target-site .target-education-card > div:last-child{
+  opacity:1!important;
+  visibility:visible!important;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-site .target-education-card > div:last-child{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  grid-template-areas:
+    "meta meta"
+    "degree institution"
+    "details details"
+    "cgpa cgpa"!important;
+  align-items:start!important;
+  column-gap:28px!important;
+  row-gap:10px!important;
+  color:#eeeae2!important;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-site .target-education-meta{
+  grid-area:meta!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:0 0 4px!important;
+  color:#9d9991!important;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-site .target-education-meta span{
+  display:block!important;
+  color:#8f9aa5!important;
+  opacity:1!important;
+  font:500 13px/1.4 'JetBrains Mono',monospace!important;
+  white-space:nowrap!important;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-site .target-education-meta i{
+  display:block!important;
+  color:#52d9b0!important;
+  opacity:1!important;
+  font:600 10px/1.4 'JetBrains Mono',monospace!important;
+  font-style:normal!important;
+  white-space:nowrap!important;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-site .target-education-card h3{
+  grid-area:degree!important;
+  margin:0!important;
+  color:#f1ede5!important;
+  opacity:1!important;
+  font:700 14px/1.45 Inter,system-ui,sans-serif!important;
+  overflow-wrap:anywhere!important;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-site .target-education-card p{
+  grid-area:institution!important;
+  margin:0!important;
+  color:#aaa59c!important;
+  opacity:1!important;
+  font:500 10px/1.5 Inter,system-ui,sans-serif!important;
+  text-align:right!important;
+  max-width:100%!important;
+  overflow-wrap:anywhere!important;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-site .target-education-card strong{
+  grid-area:details!important;
+  display:block!important;
+  margin:0!important;
+  color:#b9b4ac!important;
+  opacity:1!important;
+  font:600 13px/1.55 'JetBrains Mono',monospace!important;
+  letter-spacing:.01em!important;
+  overflow-wrap:anywhere!important;
+}
+
+body[data-ui-experience="obsidian-forge"] .target-site .target-education-card > div:last-child > b{
+  grid-area:cgpa!important;
+  justify-self:start!important;
+  display:inline-flex!important;
+  width:max-content!important;
+  margin:1px 0 0!important;
+  padding:5px 10px!important;
+  color:#d3b27b!important;
+  opacity:1!important;
+  border:1px solid rgba(211,178,123,.28)!important;
+  border-radius:999px!important;
+  background:rgba(211,178,123,.045)!important;
+  font:700 11px/1 'JetBrains Mono',monospace!important;
+}
+
+@media(max-width:700px){
+ body[data-ui-experience="obsidian-forge"] .target-site .target-education-card > div:last-child{
+   grid-template-columns:1fr!important;
+   grid-template-areas:"meta" "degree" "institution" "details" "cgpa"!important;
+   row-gap:9px!important;
+ }
+ body[data-ui-experience="obsidian-forge"] .target-site .target-education-meta{
+   align-items:flex-start!important;
+ }
+ body[data-ui-experience="obsidian-forge"] .target-site .target-education-card p{
+   text-align:left!important;
+ }
+}
