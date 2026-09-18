@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Roboto+Condensed:wght@700;900&display=swap');
 
 /* Forge-only hero styles. Never style shared sections. */
 body[data-ui-experience="obsidian-forge"] .target-nav{position:absolute!important;inset:0 0 auto!important;z-index:90!important;min-height:78px!important;background:linear-gradient(180deg,rgba(2,3,4,.62),transparent)!important;border:0!important;backdrop-filter:blur(5px)!important}
@@ -74,4 +74,43 @@ body[data-ui-experience="obsidian-forge"] .forge-cinematic-grain{position:absolu
  body[data-ui-experience="obsidian-forge"] .forge-description{max-width:64vw!important;font-size:10px!important}
  body[data-ui-experience="obsidian-forge"] .forge-cinematic-portrait{right:-6%!important;width:clamp(235px,65vw,330px)!important;height:55%!important}
  body[data-ui-experience="obsidian-forge"] .forge-identity-card{right:4%!important;bottom:14%!important;width:190px!important}
+}
+
+
+/* Final headline readability fix: keep the cinematic scale without glyph collisions/clipping. */
+body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{
+  font-family:"Roboto Condensed",Oswald,"Arial Narrow",sans-serif!important;
+  font-weight:900!important;
+  font-style:normal!important;
+  font-stretch:condensed!important;
+  letter-spacing:-.025em!important;
+  line-height:.9!important;
+  height:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  white-space:normal!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+  text-rendering:geometricPrecision!important;
+}
+
+body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1 br{
+  display:block!important;
+  content:""!important;
+}
+
+@media(max-width:1023px){
+  body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{
+    letter-spacing:-.02em!important;
+    line-height:.9!important;
+    max-width:100%!important;
+  }
+}
+
+@media(max-width:430px){
+  body[data-ui-experience="obsidian-forge"] .forge-cinematic-copy h1{
+    font-size:clamp(2.9rem,11.3vw,4.65rem)!important;
+    letter-spacing:-.015em!important;
+    line-height:.91!important;
+  }
 }
