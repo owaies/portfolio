@@ -5,7 +5,7 @@
 .target-certificate-meta{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:start!important;column-gap:14px!important;row-gap:5px!important;min-width:0!important}
 .target-certificate-meta>span,.target-certificate-meta>small{min-width:0!important}
 .target-certificate-meta>span:first-child,.target-certificate-meta>small:first-child{overflow-wrap:anywhere!important;word-break:normal!important;white-space:normal!important}
-.target-certificate-meta>span:last-child,.target-certificate-meta>small:last-child{white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;text-align:right!important}
+.target-certificate-meta>span:last-child,.target-certificate-meta>small:last-child,.target-certificate-meta>time{white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;text-align:right!important}
 .target-certificate-card>div:last-child{position:relative!important;z-index:8!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:8px!important;min-width:0!important;margin-top:auto!important}
 .target-certificate-card>div:last-child a{position:relative!important;flex:0 0 auto!important;min-width:max-content!important;max-width:100%!important;transform:none!important;white-space:nowrap!important;overflow:visible!important}
 .target-certificate-card>div:last-child a:hover{transform:translateY(-1px)!important}
@@ -34,7 +34,11 @@ body.ui-experience-transitioning[data-ui-experience="obsidian-forge"]::after{bac
 }
 @media(max-width:700px){
  .target-certificate-meta{grid-template-columns:minmax(0,1fr)!important}
- .target-certificate-meta>span:last-child,.target-certificate-meta>small:last-child{text-align:left!important}
+ .target-certificate-meta>span:last-child,.target-certificate-meta>small:last-child,.target-certificate-meta>time{text-align:left!important}
  .target-certificate-card>div:last-child{gap:7px!important}
 }
 @media(prefers-reduced-motion:reduce){body.ui-experience-transitioning::after{transition:none!important}}
+
+.target-certificate-actions{position:relative!important;z-index:8!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:8px!important;min-width:0!important;margin-top:auto!important;padding:12px 1rem 1rem!important}
+.target-certificate-actions a{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;min-height:32px!important;min-width:max-content!important;padding:0 11px!important;border-radius:999px!important;white-space:nowrap!important;overflow:visible!important}
+@media(max-width:700px){.target-certificate-actions{gap:7px!important;padding:11px .9rem .9rem!important}.target-certificate-actions a{min-height:34px!important}}
