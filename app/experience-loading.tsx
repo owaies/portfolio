@@ -36,8 +36,8 @@ export default function ExperienceLoadingScreen() {
     let disposed = false
     let ready = false
     const startedAt = performance.now()
-    const minDuration = 1550
-    const maxDuration = 3200
+    const minDuration = 900
+    const maxDuration = 2400
     let hideTimer: number | null = null
 
     const hide = () => {
