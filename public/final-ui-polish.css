@@ -2,8 +2,8 @@
 .target-footer-links{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:22px!important;margin-left:auto!important;min-width:0!important}
 .target-footer-links a{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;margin:0!important;white-space:nowrap!important;text-decoration:none!important}
 
-.target-certificate-meta{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:start!important;column-gap:14px!important;row-gap:5px!important;min-width:0!important}
-.target-certificate-meta>span,.target-certificate-meta>small{min-width:0!important}
+.target-certificate-meta{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;align-items:start!important;column-gap:10px!important;row-gap:5px!important;min-width:0!important}
+.target-certificate-meta>svg{flex:0 0 auto!important;margin-top:1px!important}.target-certificate-meta>span,.target-certificate-meta>small,.target-certificate-meta>time{min-width:0!important}
 .target-certificate-meta>span:first-child,.target-certificate-meta>small:first-child{overflow-wrap:anywhere!important;word-break:normal!important;white-space:normal!important}
 .target-certificate-meta>span:last-child,.target-certificate-meta>small:last-child,.target-certificate-meta>time{white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;text-align:right!important}
 .target-certificate-card>div:last-child{position:relative!important;z-index:8!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:8px!important;min-width:0!important;margin-top:auto!important}
@@ -33,7 +33,7 @@ body.ui-experience-transitioning[data-ui-experience="obsidian-forge"]::after{bac
  .target-footer-links a{min-width:0!important}
 }
 @media(max-width:700px){
- .target-certificate-meta{grid-template-columns:minmax(0,1fr)!important}
+ .target-certificate-meta{grid-template-columns:auto minmax(0,1fr) auto!important}
  .target-certificate-meta>span:last-child,.target-certificate-meta>small:last-child,.target-certificate-meta>time{text-align:left!important}
  .target-certificate-card>div:last-child{gap:7px!important}
 }
