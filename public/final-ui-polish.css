@@ -42,3 +42,230 @@ body.ui-experience-transitioning[data-ui-experience="obsidian-forge"]::after{bac
 .target-certificate-actions{position:relative!important;z-index:8!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:8px!important;min-width:0!important;margin-top:auto!important;padding:12px 1rem 1rem!important}
 .target-certificate-actions a{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;min-height:32px!important;min-width:max-content!important;padding:0 11px!important;border-radius:999px!important;white-space:nowrap!important;overflow:visible!important}
 @media(max-width:700px){.target-certificate-actions{gap:7px!important;padding:11px .9rem .9rem!important}.target-certificate-actions a{min-height:34px!important}}
+
+
+/* Resume + footer redesign: replace the oversized/empty composition with a compact
+   editorial panel and a clean portfolio footer. These overrides intentionally come last. */
+.target-site #resume .target-resume-card{
+  display:grid!important;
+  grid-template-columns:minmax(250px,340px) minmax(0,1fr)!important;
+  grid-template-areas:"preview content"!important;
+  align-items:center!important;
+  gap:48px!important;
+  width:100%!important;
+  max-width:1180px!important;
+  min-height:0!important;
+  margin:0 auto!important;
+  padding:38px!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+  border-radius:24px!important;
+  background:
+    radial-gradient(circle at 18% 30%,rgba(17,223,255,.07),transparent 34%),
+    radial-gradient(circle at 85% 70%,rgba(168,85,247,.06),transparent 34%),
+    linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018))!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.28)!important;
+  overflow:hidden!important;
+  text-align:left!important;
+}
+
+.target-site #resume .target-resume-preview{
+  grid-area:preview!important;
+  position:relative!important;
+  width:100%!important;
+  height:420px!important;
+  min-height:0!important;
+  margin:0!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  border-radius:16px!important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.025))!important;
+  box-shadow:0 22px 55px rgba(0,0,0,.38)!important;
+}
+
+.target-site #resume .target-resume-preview img{
+  left:50%!important;
+  top:50%!important;
+  width:78%!important;
+  height:88%!important;
+  transform:translate(-50%,-50%)!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  filter:drop-shadow(0 18px 28px rgba(0,0,0,.5))!important;
+}
+
+.target-site #resume .target-resume-preview::before{
+  top:14px!important;
+  left:14px!important;
+  font-size:9px!important;
+}
+
+.target-site #resume .target-resume-preview::after{
+  left:14px!important;
+  right:14px!important;
+  bottom:14px!important;
+}
+
+.target-site #resume .target-resume-card h3{
+  grid-area:content!important;
+  align-self:center!important;
+  margin:0!important;
+  padding-left:0!important;
+  font-size:clamp(30px,3vw,46px)!important;
+  line-height:1.05!important;
+  letter-spacing:-.025em!important;
+}
+
+.target-site #resume .target-resume-card > p{
+  grid-area:content!important;
+  align-self:center!important;
+  margin:58px 0 0!important;
+  max-width:560px!important;
+  font-size:16px!important;
+  line-height:1.75!important;
+  color:rgba(235,238,242,.68)!important;
+}
+
+.target-site #resume .target-resume-actions{
+  grid-area:content!important;
+  align-self:center!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:12px!important;
+  margin:126px 0 0!important;
+}
+
+.target-site #resume .target-resume-actions a{
+  min-height:42px!important;
+  padding:0 17px!important;
+  border-radius:999px!important;
+  font-size:12px!important;
+  font-weight:600!important;
+}
+
+.target-site .target-footer{
+  width:min(1180px,calc(100% - 48px))!important;
+  min-height:104px!important;
+  margin:72px auto 0!important;
+  padding:26px 0!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;
+  grid-template-areas:"brand copyright links"!important;
+  align-items:center!important;
+  gap:28px!important;
+  border-top:1px solid rgba(255,255,255,.10)!important;
+  background:transparent!important;
+}
+
+.target-site .target-footer > div:first-child{
+  grid-area:brand!important;
+  display:flex!important;
+  align-items:baseline!important;
+  gap:10px!important;
+  min-width:0!important;
+  color:#eef0f2!important;
+  font-size:20px!important;
+  font-weight:800!important;
+  letter-spacing:-.04em!important;
+}
+
+.target-site .target-footer > div:first-child span{color:#20dfff!important}
+.target-site .target-footer > div:first-child small{
+  color:rgba(170,180,192,.55)!important;
+  font:600 8px/1 'JetBrains Mono',monospace!important;
+  letter-spacing:.12em!important;
+  white-space:nowrap!important;
+}
+
+.target-site .target-footer > p{
+  grid-area:copyright!important;
+  margin:0!important;
+  color:rgba(170,180,192,.58)!important;
+  font:500 10px/1.4 'JetBrains Mono',monospace!important;
+  white-space:nowrap!important;
+  text-align:center!important;
+}
+
+.target-site .target-footer-links{
+  grid-area:links!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:26px!important;
+  margin:0!important;
+}
+
+.target-site .target-footer-links a{
+  color:rgba(222,228,235,.68)!important;
+  font:600 11px/1.2 Inter,system-ui,sans-serif!important;
+  letter-spacing:.01em!important;
+  transition:color .2s ease,transform .2s ease!important;
+}
+
+.target-site .target-footer-links a:hover{
+  color:#f2f5f7!important;
+  transform:translateY(-1px)!important;
+}
+
+@media(max-width:900px){
+  .target-site #resume .target-resume-card{
+    grid-template-columns:230px minmax(0,1fr)!important;
+    gap:28px!important;
+    padding:28px!important;
+  }
+  .target-site #resume .target-resume-preview{height:330px!important}
+  .target-site #resume .target-resume-card h3{font-size:32px!important}
+  .target-site #resume .target-resume-card > p{margin-top:46px!important;font-size:14px!important}
+  .target-site #resume .target-resume-actions{margin-top:108px!important}
+  .target-site .target-footer{
+    grid-template-columns:1fr auto!important;
+    grid-template-areas:"brand links" "copyright links"!important;
+    row-gap:16px!important;
+    margin-top:52px!important;
+  }
+  .target-site .target-footer > p{text-align:left!important}
+}
+
+@media(max-width:650px){
+  .target-site #resume .target-resume-card{
+    grid-template-columns:1fr!important;
+    grid-template-areas:"preview" "content"!important;
+    gap:24px!important;
+    padding:20px!important;
+    border-radius:18px!important;
+  }
+  .target-site #resume .target-resume-preview{
+    width:min(280px,100%)!important;
+    height:360px!important;
+    margin:0 auto!important;
+  }
+  .target-site #resume .target-resume-card h3{
+    margin:0!important;
+    font-size:30px!important;
+  }
+  .target-site #resume .target-resume-card > p{
+    margin:10px 0 0!important;
+    font-size:14px!important;
+    line-height:1.65!important;
+  }
+  .target-site #resume .target-resume-actions{
+    margin:18px 0 0!important;
+    gap:9px!important;
+  }
+  .target-site #resume .target-resume-actions a{
+    min-height:40px!important;
+    padding:0 14px!important;
+  }
+  .target-site .target-footer{
+    width:calc(100% - 32px)!important;
+    grid-template-columns:1fr!important;
+    grid-template-areas:"brand" "copyright" "links"!important;
+    gap:14px!important;
+    padding:24px 0!important;
+    margin-top:44px!important;
+  }
+  .target-site .target-footer-links{
+    justify-content:flex-start!important;
+    flex-wrap:wrap!important;
+    gap:12px 20px!important;
+  }
+}
