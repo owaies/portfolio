@@ -1,0 +1,40 @@
+/* Final production polish for the public portfolio. Loaded after every experience layer. */
+.target-footer-links{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:22px!important;margin-left:auto!important;min-width:0!important}
+.target-footer-links a{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;margin:0!important;white-space:nowrap!important;text-decoration:none!important}
+
+.target-certificate-meta{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:start!important;column-gap:14px!important;row-gap:5px!important;min-width:0!important}
+.target-certificate-meta>span,.target-certificate-meta>small{min-width:0!important}
+.target-certificate-meta>span:first-child,.target-certificate-meta>small:first-child{overflow-wrap:anywhere!important;word-break:normal!important;white-space:normal!important}
+.target-certificate-meta>span:last-child,.target-certificate-meta>small:last-child{white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;text-align:right!important}
+.target-certificate-card>div:last-child{position:relative!important;z-index:8!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:8px!important;min-width:0!important;margin-top:auto!important}
+.target-certificate-card>div:last-child a{position:relative!important;flex:0 0 auto!important;min-width:max-content!important;max-width:100%!important;transform:none!important;white-space:nowrap!important;overflow:visible!important}
+.target-certificate-card>div:last-child a:hover{transform:translateY(-1px)!important}
+.target-certificate-card{min-width:0!important}
+.target-certificate-card h3,.target-certificate-card p{overflow-wrap:anywhere!important;word-break:normal!important}
+
+.target-education-card>div:last-child>b::before{content:none!important}
+
+body[data-ui-experience="digital-architecture"] .target-hero-copy,
+body[data-ui-experience="digital-architecture"] .target-portrait-wrap{visibility:visible!important;opacity:1!important}
+
+body.ui-experience-transitioning{overflow:hidden!important}
+body.ui-experience-transitioning::after{content:""!important;position:fixed!important;inset:0!important;z-index:2147482999!important;pointer-events:all!important;background:#05070b!important}
+body.ui-experience-transitioning[data-ui-experience="digital-architecture"]::after{background:#f2f6fb!important}
+body.ui-experience-transitioning[data-ui-experience="organic-intelligence"]::after{background:#04150f!important}
+body.ui-experience-transitioning[data-ui-experience="neural-interface"]::after{background:#040a18!important}
+body.ui-experience-transitioning[data-ui-experience="obsidian-forge"]::after{background:#08090b!important}
+
+@media(min-width:901px){
+ body[data-ui-experience="obsidian-forge"] .target-certificate-grid{grid-template-columns:repeat(3,minmax(0,320px))!important;justify-content:center!important;gap:12px!important}
+ body[data-ui-experience="obsidian-forge"] .target-certificate-grid .target-certificate-card{width:320px!important;max-width:320px!important}
+}
+@media(max-width:900px){
+ .target-footer-links{justify-content:stretch!important;gap:8px!important;margin-left:0!important}
+ .target-footer-links a{min-width:0!important}
+}
+@media(max-width:700px){
+ .target-certificate-meta{grid-template-columns:minmax(0,1fr)!important}
+ .target-certificate-meta>span:last-child,.target-certificate-meta>small:last-child{text-align:left!important}
+ .target-certificate-card>div:last-child{gap:7px!important}
+}
+@media(prefers-reduced-motion:reduce){body.ui-experience-transitioning::after{transition:none!important}}
