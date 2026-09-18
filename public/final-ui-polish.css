@@ -269,3 +269,13 @@ body.ui-experience-transitioning[data-ui-experience="obsidian-forge"]::after{bac
     gap:12px 20px!important;
   }
 }
+
+/* Contact CTA: WhatsApp replaces the unreliable contact form. */
+.target-site .target-whatsapp-contact{position:relative!important;min-height:100%!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:22px!important;padding:42px!important;border:1px solid rgba(255,255,255,.10)!important;border-radius:24px!important;overflow:hidden!important;text-decoration:none!important;background:radial-gradient(circle at 80% 20%,rgba(37,211,102,.12),transparent 38%),radial-gradient(circle at 10% 90%,rgba(32,223,255,.07),transparent 38%),linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018))!important;box-shadow:0 24px 70px rgba(0,0,0,.24)!important;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease!important}
+.target-site .target-whatsapp-contact:hover{transform:translateY(-4px)!important;border-color:rgba(37,211,102,.38)!important;box-shadow:0 28px 80px rgba(0,0,0,.34),0 0 50px rgba(37,211,102,.07)!important}
+.target-site .target-whatsapp-contact-icon{width:58px!important;height:58px!important;display:grid!important;place-items:center!important;border-radius:16px!important;color:#25d366!important;border:1px solid rgba(37,211,102,.28)!important;background:rgba(37,211,102,.08)!important}
+.target-site .target-whatsapp-contact-copy span{color:#25d366!important;font:700 10px/1 'JetBrains Mono',monospace!important;letter-spacing:.16em!important}
+.target-site .target-whatsapp-contact-copy h3{margin:10px 0 0!important;color:#f1eee8!important;font:700 clamp(28px,3vw,42px)/1.05 Inter,system-ui,sans-serif!important;letter-spacing:-.03em!important}
+.target-site .target-whatsapp-contact-copy p{max-width:480px!important;margin:14px 0 0!important;color:rgba(230,233,238,.64)!important;font:400 15px/1.7 Inter,system-ui,sans-serif!important}
+.target-site .target-whatsapp-contact-arrow{position:absolute!important;right:28px!important;top:28px!important;width:42px!important;height:42px!important;display:grid!important;place-items:center!important;color:#dfe5ea!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:50%!important;background:rgba(255,255,255,.025)!important}
+@media(max-width:700px){.target-site .target-whatsapp-contact{min-height:300px!important;padding:28px!important;border-radius:20px!important}.target-site .target-whatsapp-contact-copy h3{font-size:30px!important}.target-site .target-whatsapp-contact-copy p{font-size:14px!important}}
