@@ -121,7 +121,7 @@
 
   const prepareCertificates = () => {
     document.querySelectorAll('.target-certificate-card').forEach((card) => {
-      const view = Array.from(card.querySelectorAll('a')).find((link) => link.textContent?.toLowerCase().includes('view pdf'))
+      const view = Array.from(card.querySelectorAll('a')).find((link) => { const label = link.textContent?.toLowerCase() || ''; return label.includes('view pdf') || label.includes('verify') })
       const download = Array.from(card.querySelectorAll('a')).find((link) => link.textContent?.toLowerCase().includes('download'))
       if (!view || !download) return
 
