@@ -56,11 +56,19 @@ export default function UIExperienceSwitcher({ active }: { active: UIExperienceI
     const secure = window.location.protocol === "https:" ? "; Secure" : ""
     document.cookie = `${EXPERIENCE_COOKIE}=${experience}; Max-Age=31536000; Path=/; SameSite=Lax${secure}`
     window.localStorage.setItem(EXPERIENCE_COOKIE, experience)
+
+    // Cover the current document before navigation. Without this, the browser
+    // can paint the old DOM for a frame while the new document is loading,
+    // making two experience systems appear to blend together.
+    document.body.dataset.uiExperience = experience
+    document.body.classList.add("ui-experience-transitioning")
+
     try {
       window.sessionStorage.setItem(SCROLL_RESET_KEY, "1")
     } catch {
       // Fall back to the normal reload if session storage is unavailable.
     }
+
     window.history.scrollRestoration = "manual"
     window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior })
     setCurrent(experience)
