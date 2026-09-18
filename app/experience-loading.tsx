@@ -11,17 +11,16 @@ const LOADING_COPY: Record<UIExperienceId, { label: string; sublabel: string }> 
   'obsidian-forge': { label: 'OBSIDIAN FORGE', sublabel: 'Igniting the forge' },
 }
 
-export default function ExperienceLoadingScreen() {
+export default function ExperienceLoadingScreen({ active }: { active: UIExperienceId }) {
   const pathname = usePathname()
   const isAdminRoute = pathname.startsWith('/admin')
   const [visible, setVisible] = useState(() => !isAdminRoute)
   const [fading, setFading] = useState(false)
   const experience = useMemo<UIExperienceId>(() => {
-    if (typeof window === 'undefined') return DEFAULT_UI_EXPERIENCE
+    if (typeof window === 'undefined') return active
     const preview = new URLSearchParams(window.location.search).get('ui-preview')
-    const runtimeExperience = document.body.dataset.uiExperience
-    return isUIExperienceId(preview) ? preview : isUIExperienceId(runtimeExperience) ? runtimeExperience : DEFAULT_UI_EXPERIENCE
-  }, [])
+    return isUIExperienceId(preview) ? preview : active
+  }, [active])
 
   useEffect(() => {
     if (isAdminRoute) setVisible(false)
