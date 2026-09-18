@@ -23,7 +23,7 @@ export default function ObsidianForgeCinematicHero() {
       <div className="forge-cinematic-content">
         <div className="forge-cinematic-copy">
           <p className="forge-eyebrow">• IDEAS × TECHNOLOGY × IMPACT</p>
-          <h1>BUILD<br />INTELLIGENT<br />SOLUTIONS.</h1>
+          <h1>BOLD<br />INTELLIGENT<br />SOLUTIONS</h1>
           <p className="forge-description">
             Transforming real-world problems<br className="forge-desktop-break" /> into meaningful AI solutions.
           </p>
