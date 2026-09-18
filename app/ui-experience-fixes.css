@@ -267,3 +267,336 @@ body[data-ui-experience="neural-interface"] .target-contact-card span { color: #
 }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Project section redesign for Digital Architecture + Neural Interface.
+   Keep the shared ProjectCard markup, but give each experience its own visual language
+   and a stable responsive grid. */
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-grid,
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:22px!important;
+  width:100%!important;
+  max-width:1240px!important;
+  margin:0 auto!important;
+  align-items:stretch!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-card,
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-card{
+  position:relative!important;
+  min-width:0!important;
+  min-height:430px!important;
+  height:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  overflow:hidden!important;
+  padding:24px!important;
+  border-radius:20px!important;
+  isolation:isolate!important;
+  transform:none!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-card{
+  border:1px solid rgba(42,73,108,.16)!important;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.98),rgba(247,250,253,.94))!important;
+  box-shadow:0 16px 45px rgba(38,65,94,.10)!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-card::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:-1!important;
+  background:
+    linear-gradient(rgba(53,105,160,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(53,105,160,.045) 1px,transparent 1px)!important;
+  background-size:22px 22px!important;
+  mask-image:linear-gradient(to bottom,black,transparent 72%)!important;
+  pointer-events:none!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-card::after{
+  content:""!important;
+  position:absolute!important;
+  top:0!important;
+  left:24px!important;
+  right:24px!important;
+  height:2px!important;
+  background:linear-gradient(90deg,#2675d9,rgba(38,117,217,0))!important;
+  opacity:.7!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-card:hover{
+  transform:translateY(-5px)!important;
+  border-color:rgba(38,117,217,.30)!important;
+  box-shadow:0 22px 55px rgba(38,65,94,.15)!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-icon{
+  width:38px!important;
+  height:38px!important;
+  flex:0 0 38px!important;
+  display:grid!important;
+  place-items:center!important;
+  border:1px solid rgba(38,117,217,.18)!important;
+  border-radius:11px!important;
+  background:rgba(38,117,217,.07)!important;
+  color:#2675d9!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-head{
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+  margin:0 0 22px!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-head > div{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:5px!important;
+  min-width:0!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-head small{
+  color:#2675d9!important;
+  font:700 9px/1.2 'JetBrains Mono',monospace!important;
+  letter-spacing:.10em!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-head em{
+  color:#75859a!important;
+  font:500 10px/1.2 'JetBrains Mono',monospace!important;
+  font-style:normal!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-card h3{
+  margin:0!important;
+  color:#15243a!important;
+  font:750 clamp(20px,2vw,28px)/1.12 Inter,system-ui,sans-serif!important;
+  letter-spacing:-.025em!important;
+  text-wrap:balance!important;
+  overflow-wrap:anywhere!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-card>p{
+  margin:15px 0 0!important;
+  color:#5b6c80!important;
+  font:400 14px/1.7 Inter,system-ui,sans-serif!important;
+  max-width:52ch!important;
+  overflow-wrap:anywhere!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-tags{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:7px!important;
+  margin-top:22px!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-tags span{
+  padding:6px 9px!important;
+  border:1px solid rgba(42,73,108,.13)!important;
+  border-radius:999px!important;
+  background:rgba(42,73,108,.035)!important;
+  color:#52657b!important;
+  font:600 9px/1.1 'JetBrains Mono',monospace!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-links{
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+  gap:9px!important;
+  margin-top:auto!important;
+  padding-top:25px!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-links a{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  padding:9px 12px!important;
+  border:1px solid rgba(38,117,217,.18)!important;
+  border-radius:999px!important;
+  color:#1f66c1!important;
+  background:rgba(38,117,217,.055)!important;
+  font:650 10px/1 Inter,system-ui,sans-serif!important;
+  text-decoration:none!important;
+}
+
+body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-links span{
+  margin-left:auto!important;
+  color:#8a98a8!important;
+  font:600 9px/1 'JetBrains Mono',monospace!important;
+}
+
+
+/* Neural Interface: dark, technical, information-dense project cards. */
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-card{
+  border:1px solid rgba(0,229,255,.15)!important;
+  background:
+    radial-gradient(circle at 90% 8%,rgba(0,229,255,.10),transparent 28%),
+    linear-gradient(145deg,rgba(10,20,28,.96),rgba(5,10,15,.98))!important;
+  box-shadow:0 18px 55px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-card::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:-1!important;
+  background:
+    linear-gradient(rgba(0,229,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,255,.035) 1px,transparent 1px)!important;
+  background-size:20px 20px!important;
+  mask-image:linear-gradient(to bottom,black,transparent 68%)!important;
+  pointer-events:none!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-card::after{
+  content:"01 / PROJECT"!important;
+  position:absolute!important;
+  top:22px!important;
+  right:22px!important;
+  color:rgba(0,229,255,.42)!important;
+  font:600 8px/1 'JetBrains Mono',monospace!important;
+  letter-spacing:.12em!important;
+  pointer-events:none!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-card:hover{
+  transform:translateY(-5px)!important;
+  border-color:rgba(0,229,255,.38)!important;
+  box-shadow:0 24px 65px rgba(0,0,0,.44),0 0 35px rgba(0,229,255,.055)!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-icon{
+  width:38px!important;
+  height:38px!important;
+  flex:0 0 38px!important;
+  display:grid!important;
+  place-items:center!important;
+  border:1px solid rgba(0,229,255,.22)!important;
+  border-radius:10px!important;
+  background:rgba(0,229,255,.055)!important;
+  color:#00e5ff!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-head{
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+  margin:0 0 22px!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-head>div{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:5px!important;
+  min-width:0!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-head small{
+  color:#00e5ff!important;
+  font:700 9px/1.2 'JetBrains Mono',monospace!important;
+  letter-spacing:.10em!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-head em{
+  color:#718493!important;
+  font:500 10px/1.2 'JetBrains Mono',monospace!important;
+  font-style:normal!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-card h3{
+  margin:0!important;
+  color:#edf8fb!important;
+  font:750 clamp(20px,2vw,27px)/1.12 Inter,system-ui,sans-serif!important;
+  letter-spacing:-.02em!important;
+  text-wrap:balance!important;
+  overflow-wrap:anywhere!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-card>p{
+  margin:15px 0 0!important;
+  color:#91a5b2!important;
+  font:400 14px/1.7 Inter,system-ui,sans-serif!important;
+  max-width:52ch!important;
+  overflow-wrap:anywhere!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-tags{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:7px!important;
+  margin-top:22px!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-tags span{
+  padding:6px 9px!important;
+  border:1px solid rgba(0,229,255,.12)!important;
+  border-radius:4px!important;
+  background:rgba(0,229,255,.035)!important;
+  color:#86dce6!important;
+  font:600 9px/1.1 'JetBrains Mono',monospace!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-links{
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+  gap:9px!important;
+  margin-top:auto!important;
+  padding-top:25px!important;
+  border-top:1px solid rgba(0,229,255,.08)!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-links a{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  padding:9px 12px!important;
+  border:1px solid rgba(0,229,255,.16)!important;
+  border-radius:4px!important;
+  color:#7ce8f1!important;
+  background:rgba(0,229,255,.045)!important;
+  font:650 10px/1 Inter,system-ui,sans-serif!important;
+  text-decoration:none!important;
+}
+
+body[data-ui-experience="neural-interface"] .target-site #projects .target-project-links span{
+  margin-left:auto!important;
+  color:#5f7683!important;
+  font:600 9px/1 'JetBrains Mono',monospace!important;
+}
+
+@media(max-width:1050px){
+ body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-grid,
+ body[data-ui-experience="neural-interface"] .target-site #projects .target-project-grid{
+   grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ }
+}
+
+@media(max-width:700px){
+ body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-grid,
+ body[data-ui-experience="neural-interface"] .target-site #projects .target-project-grid{
+   grid-template-columns:1fr!important;
+   gap:16px!important;
+ }
+ body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-card,
+ body[data-ui-experience="neural-interface"] .target-site #projects .target-project-card{
+   min-height:0!important;
+   padding:20px!important;
+ }
+ body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-card h3,
+ body[data-ui-experience="neural-interface"] .target-site #projects .target-project-card h3{
+   font-size:22px!important;
+ }
+ body[data-ui-experience="digital-architecture"] .target-site #projects .target-project-links span,
+ body[data-ui-experience="neural-interface"] .target-site #projects .target-project-links span{
+   margin-left:0!important;
+ }
+}
