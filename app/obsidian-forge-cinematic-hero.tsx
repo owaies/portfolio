@@ -15,7 +15,7 @@ export default function ObsidianForgeCinematicHero() {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="metadata"
       />
       <div className="forge-cinematic-grade" />
       <div className="forge-cinematic-atmosphere" />
