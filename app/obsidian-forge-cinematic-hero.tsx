@@ -38,7 +38,7 @@ export default function ObsidianForgeCinematicHero() {
           </div>
         </div>
 
-        <img className="forge-cinematic-portrait" src={PORTRAIT_SRC} alt="" draggable={false} />
+        <img className="forge-cinematic-portrait" src={PORTRAIT_SRC} alt="Mohammed Owaies" draggable={false} />
 
         <div className="forge-identity-card">
           <strong>MOHAMMED OWAIES</strong>
