@@ -1,14 +1,34 @@
 'use client'
 
 import { ArrowUpRight, Play } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 
 const VIDEO_SRC = '/herovideo.mp4'
 const PORTRAIT_SRC = '/herome.png'
 
 export default function ObsidianForgeCinematicHero() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const syncMotionPreference = () => {
+      if (!videoRef.current) return
+      if (media.matches) {
+        videoRef.current.pause()
+      } else {
+        videoRef.current.play().catch(() => {})
+      }
+    }
+
+    syncMotionPreference()
+    media.addEventListener('change', syncMotionPreference)
+    return () => media.removeEventListener('change', syncMotionPreference)
+  }, [])
+
   return (
     <div className="forge-cinematic-hero">
       <video
+        ref={videoRef}
         className="forge-cinematic-video"
         src={VIDEO_SRC}
         autoPlay
