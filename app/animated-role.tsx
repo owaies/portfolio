@@ -13,6 +13,8 @@ export default function AnimatedRole() {
   const [roleIndex, setRoleIndex] = useState(0)
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+
     const timer = window.setInterval(() => {
       setRoleIndex((index) => (index + 1) % roles.length)
     }, 2400)
