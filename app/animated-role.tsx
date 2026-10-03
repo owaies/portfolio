@@ -15,10 +15,30 @@ export default function AnimatedRole() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
-    const timer = window.setInterval(() => {
-      setRoleIndex((index) => (index + 1) % roles.length)
-    }, 2400)
-    return () => window.clearInterval(timer)
+    let timer: number | undefined
+    const start = () => {
+      if (timer !== undefined) return
+      timer = window.setInterval(() => {
+        setRoleIndex((index) => (index + 1) % roles.length)
+      }, 2400)
+    }
+    const stop = () => {
+      if (timer === undefined) return
+      window.clearInterval(timer)
+      timer = undefined
+    }
+
+    const handleVisibility = () => {
+      if (document.hidden) stop()
+      else start()
+    }
+
+    document.addEventListener("visibilitychange", handleVisibility)
+    start()
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility)
+      stop()
+    }
   }, [])
 
   return (
