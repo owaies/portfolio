@@ -1,11 +1,17 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
-const email=/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const email=/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/
 const limits={name:120,subject:180,message:5000}
 export async function POST(request:Request){
  try{
-  const form=await request.formData(); if(form.get('website'))return NextResponse.json({error:'Spam detected'},{status:400})
+  let form: FormData
+  try {
+   form = await request.formData()
+  } catch {
+   return NextResponse.json({error:'Invalid contact form submission.'},{status:400})
+  }
+  if(form.get('website'))return NextResponse.json({error:'Spam detected'},{status:400})
   const rawName = form.get('name')
   const rawEmail = form.get('email')
   const rawSubject = form.get('subject')
