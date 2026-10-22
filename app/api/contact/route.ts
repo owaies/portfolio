@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
-const email=/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/
+const email=/^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const limits={name:120,subject:180,message:5000}
 export async function POST(request:Request){
  try{
