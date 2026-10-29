@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { isUIExperienceId } from '@/lib/ui-experiences'
+import { MAX_PDF_BYTES, readResponseWithLimit } from '@/lib/read-limited-response'
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -14,7 +15,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   try {
     const response = await fetch(url, { cache: 'no-store' })
     if (!response.ok) return NextResponse.json({ error: 'PDF could not be loaded.' }, { status: 404 })
-    const body = await response.arrayBuffer()
+    const body = await readResponseWithLimit(response, MAX_PDF_BYTES)
+    if (!body) {
+      return NextResponse.json({ error: 'PDF exceeds the 20 MB download limit.' }, { status: 413 })
+    }
     const download = request.nextUrl.searchParams.get('download') === '1'
     const filename = `mohammed-owaies-${id}.pdf`
     return new NextResponse(body, {
@@ -23,6 +27,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         'Content-Type': 'application/pdf',
         'Content-Disposition': `${download ? 'attachment' : 'inline'}; filename="${filename}"`,
         'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+        'Content-Length': String(body.byteLength),
+        'X-Content-Type-Options': 'nosniff',
       },
     })
   } catch {

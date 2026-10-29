@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { MAX_PDF_BYTES, readResponseWithLimit } from '@/lib/read-limited-response'
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -28,12 +29,17 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     if (!response.ok) {
       return NextResponse.json({ error: 'Unable to download resume' }, { status: 502 })
     }
-    const body = await response.arrayBuffer()
+    const body = await readResponseWithLimit(response, MAX_PDF_BYTES)
+    if (!body) {
+      return NextResponse.json({ error: 'Resume exceeds the 20 MB download limit.' }, { status: 413 })
+    }
     return new NextResponse(body, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': 'attachment; filename="Mohammed-Owaies-Resume.pdf"',
         'Cache-Control': 'no-store',
+        'Content-Length': String(body.byteLength),
+        'X-Content-Type-Options': 'nosniff',
       },
     })
   }
