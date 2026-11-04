@@ -25,23 +25,27 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
   const url = new URL(request.url)
   if (url.searchParams.get('download') === '1') {
-    const response = await fetch(publicData.publicUrl, { cache: 'no-store' })
-    if (!response.ok) {
+    try {
+      const response = await fetch(publicData.publicUrl, { cache: 'no-store' })
+      if (!response.ok) {
+        return NextResponse.json({ error: 'Unable to download resume' }, { status: 502 })
+      }
+      const body = await readResponseWithLimit(response, MAX_PDF_BYTES)
+      if (!body) {
+        return NextResponse.json({ error: 'Resume exceeds the 20 MB download limit.' }, { status: 413 })
+      }
+      return new NextResponse(body, {
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': 'attachment; filename="Mohammed-Owaies-Resume.pdf"',
+          'Cache-Control': 'no-store',
+          'Content-Length': String(body.byteLength),
+          'X-Content-Type-Options': 'nosniff',
+        },
+      })
+    } catch {
       return NextResponse.json({ error: 'Unable to download resume' }, { status: 502 })
     }
-    const body = await readResponseWithLimit(response, MAX_PDF_BYTES)
-    if (!body) {
-      return NextResponse.json({ error: 'Resume exceeds the 20 MB download limit.' }, { status: 413 })
-    }
-    return new NextResponse(body, {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="Mohammed-Owaies-Resume.pdf"',
-        'Cache-Control': 'no-store',
-        'Content-Length': String(body.byteLength),
-        'X-Content-Type-Options': 'nosniff',
-      },
-    })
   }
 
   return NextResponse.redirect(publicData.publicUrl)
