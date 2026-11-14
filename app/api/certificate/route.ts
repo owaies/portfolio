@@ -13,7 +13,7 @@ function normalizeCertificatePath(value: string) {
     if (!raw) return ''
 
     if (!raw.includes('://')) {
-      const normalized = raw.replace(/^\\/+/, '')
+      const normalized = raw.replace(/^\/+/, '')
       return normalized && !normalized.includes('..') ? normalized : ''
     }
 
