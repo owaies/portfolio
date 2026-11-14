@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { MAX_PDF_BYTES, readResponseWithLimit } from '@/lib/read-limited-response'
-import { hasPdfSignature } from '@/lib/pdf-signature.cjs'
+import pdfSignature from '@/lib/pdf-signature.cjs'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -170,7 +170,7 @@ export async function GET(request: Request) {
     )
   }
 
-  if (!hasPdfSignature(body)) {
+  if (!pdfSignature.hasPdfSignature(body)) {
     return NextResponse.json(
       { error: 'The stored certificate is not a valid PDF response.' },
       { status: 502 },

@@ -1,1 +1,5 @@
-export function hasPdfSignature(value: ArrayBuffer | ArrayBufferView): boolean;
+declare const pdfSignature: {
+  hasPdfSignature(value: ArrayBuffer | ArrayBufferView): boolean;
+};
+
+export = pdfSignature;
