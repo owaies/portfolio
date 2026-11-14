@@ -19,6 +19,8 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm install
+      - name: Certificate PDF signature tests
+        run: npm run test:pdf
       - name: Type check
         run: npm run typecheck
       - name: Lint
