@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { MAX_PDF_BYTES, readResponseWithLimit } from '@/lib/read-limited-response'
+import { hasPdfSignature } from '@/lib/pdf-signature.cjs'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -11,7 +13,7 @@ function normalizeCertificatePath(value: string) {
     if (!raw) return ''
 
     if (!raw.includes('://')) {
-      const normalized = raw.replace(/^\/+/, '')
+      const normalized = raw.replace(/^\\/+/, '')
       return normalized && !normalized.includes('..') ? normalized : ''
     }
 
@@ -62,6 +64,7 @@ async function fetchCertificatePdf(
     const response = await fetch(publicData.publicUrl, {
       cache: 'no-store',
       headers: { Accept: 'application/pdf' },
+      signal: AbortSignal.timeout(15_000),
     })
 
     if (response.ok) {
@@ -126,7 +129,16 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Certificate not found.' }, { status: 404 })
   }
 
-  const result = await fetchCertificatePdf(supabase, candidatePaths(path))
+  let result: Awaited<ReturnType<typeof fetchCertificatePdf>>
+  try {
+    result = await fetchCertificatePdf(supabase, candidatePaths(path))
+  } catch {
+    return NextResponse.json(
+      { error: 'Certificate PDF is temporarily unavailable.' },
+      { status: 502 },
+    )
+  }
+
   if (!result) {
     return NextResponse.json(
       { error: 'Certificate PDF is unavailable.' },
@@ -134,18 +146,47 @@ export async function GET(request: Request) {
     )
   }
 
+  if (!result.response.body) {
+    return NextResponse.json(
+      { error: 'Certificate PDF response was empty.' },
+      { status: 502 },
+    )
+  }
+
+  let body: ArrayBuffer | null
+  try {
+    body = await readResponseWithLimit(result.response, MAX_PDF_BYTES)
+  } catch {
+    return NextResponse.json(
+      { error: 'Certificate PDF could not be read.' },
+      { status: 502 },
+    )
+  }
+
+  if (!body) {
+    return NextResponse.json(
+      { error: 'Certificate PDF exceeds the 20 MB response limit.' },
+      { status: 413 },
+    )
+  }
+
+  if (!hasPdfSignature(body)) {
+    return NextResponse.json(
+      { error: 'The stored certificate is not a valid PDF response.' },
+      { status: 502 },
+    )
+  }
+
   const outputFilename = result.path.split('/').pop()?.replace(/[^a-zA-Z0-9._-]/g, '-') || 'certificate.pdf'
   const download = url.searchParams.get('download') === '1'
-  const contentType = result.response.headers.get('content-type') || 'application/pdf'
-  const contentLength = result.response.headers.get('content-length')
 
-  return new Response(result.response.body, {
+  return new Response(body, {
     status: 200,
     headers: {
-      'Content-Type': contentType,
-      ...(contentLength ? { 'Content-Length': contentLength } : {}),
+      'Content-Type': 'application/pdf',
       'Content-Disposition': `${download ? 'attachment' : 'inline'}; filename="${outputFilename}"`,
       'Cache-Control': 'no-store, max-age=0',
+      'Content-Length': String(body.byteLength),
       'X-Content-Type-Options': 'nosniff',
     },
   })
